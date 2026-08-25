@@ -1,0 +1,16 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /bodaRsvps/{docId} {
+      allow create: if request.resource.data.nombres is string
+        && request.resource.data.nombres.size() > 0
+        && request.resource.data.nombres.size() < 500
+        && request.resource.data.confirmacion is string
+        && request.resource.data.telefono is string
+        && request.resource.data.grupoInvitados is string;
+      allow read: if true;
+      allow update, delete: if false;
+    }
+  }
+}

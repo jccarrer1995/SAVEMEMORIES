@@ -1,0 +1,156 @@
+.boda-site {
+  font-family: 'Outfit', system-ui, sans-serif;
+  color: #2c2c2c;
+  background: #f4efe6;
+  color-scheme: light;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.boda-site h1,
+.boda-site h2,
+.boda-site h3,
+.boda-serif {
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+}
+
+.boda-script {
+  font-family: 'Great Vibes', cursive;
+}
+
+.boda-paper {
+  background-color: #24344d;
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.07), transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(0, 0, 0, 0.22), transparent 46%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+}
+
+.boda-flap {
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  background-color: #24344d;
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.08), transparent 50%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+}
+
+.boda-flap-top {
+  clip-path: polygon(0 0, 100% 0, 50% 52%);
+  transform-origin: 50% 0%;
+  z-index: 5;
+  filter: brightness(1.06);
+}
+
+.boda-flap-left {
+  clip-path: polygon(0 0, 50% 52%, 0 100%);
+  z-index: 3;
+  filter: brightness(0.92);
+}
+
+.boda-flap-right {
+  clip-path: polygon(100% 0, 100% 100%, 50% 52%);
+  z-index: 3;
+  filter: brightness(0.9);
+}
+
+.boda-flap-bottom {
+  clip-path: polygon(0 100%, 50% 52%, 100% 100%);
+  z-index: 4;
+  filter: brightness(0.98);
+}
+
+.boda-liner {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #f3e6d4 0%, #e6d5bc 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 56%);
+  z-index: 1;
+}
+
+.boda-hero-bg {
+  background:
+    linear-gradient(180deg, rgba(18, 28, 48, 0.15) 0%, rgba(18, 28, 48, 0.55) 42%, rgba(244, 239, 230, 0.92) 72%, #f4efe6 100%),
+    radial-gradient(ellipse at 50% 0%, #1b2a44 0%, #121c30 55%);
+}
+
+.boda-cream {
+  background-color: #f4efe6;
+}
+
+.boda-cream-warm {
+  background-color: #efe6d6;
+}
+
+.boda-bluegray {
+  background-color: #d8dee6;
+}
+
+.boda-quote-bg {
+  background-color: #d5dbe3;
+}
+
+.boda-map-btn {
+  background: #5c5c5c;
+  color: #fff;
+}
+
+.boda-map-btn-light {
+  background: #cbbba3;
+  color: #3a3228;
+}
+
+.boda-notes span {
+  animation: boda-float-note 4.8s ease-in-out infinite;
+}
+
+.boda-notes span:nth-child(2) {
+  animation-delay: 0.8s;
+}
+
+.boda-notes span:nth-child(3) {
+  animation-delay: 1.6s;
+}
+
+@keyframes boda-float-note {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.7);
+  }
+  25% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-46px) translateX(10px) scale(1);
+  }
+}
+
+.boda-photo-fade {
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+}
+
+.boda-input {
+  width: 100%;
+  border-radius: 0.55rem;
+  border: 1px solid #e4e4e4;
+  background: #f3f3f3;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.92rem;
+  color: #2c2c2c;
+  outline: none;
+}
+
+.boda-input:focus {
+  border-color: #b9a48a;
+  background: #fff;
+}
+
+.boda-site select.boda-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  padding-right: 2rem;
+}

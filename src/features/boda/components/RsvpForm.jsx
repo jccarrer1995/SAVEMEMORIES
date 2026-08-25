@@ -65,9 +65,10 @@ export function RsvpForm({ grupoInvitados, cupos }) {
           required
         >
           <option value="">Selecciona</option>
-          <option value="Asistiremos">Asistiremos</option>
           <option value="No podremos asistir">No podremos asistir</option>
-          <option value="Asistirán algunos">Asistirán algunos</option>
+          <option value="Solo irá 1">Solo irá 1</option>
+          <option value="Solo iremos 2">Solo iremos 2</option>
+          <option value="Asistiremos todos">Asistiremos todos</option>
         </select>
       </label>
 

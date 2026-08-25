@@ -68,10 +68,46 @@
   z-index: 1;
 }
 
-.boda-hero-bg {
+.boda-hero-veil {
   background:
-    linear-gradient(180deg, rgba(18, 28, 48, 0.15) 0%, rgba(18, 28, 48, 0.55) 42%, rgba(244, 239, 230, 0.92) 72%, #f4efe6 100%),
-    radial-gradient(ellipse at 50% 0%, #1b2a44 0%, #121c30 55%);
+    linear-gradient(
+      180deg,
+      rgba(16, 18, 14, 0.58) 0%,
+      rgba(16, 18, 14, 0.28) 26%,
+      rgba(16, 18, 14, 0.08) 50%,
+      rgba(244, 239, 230, 0.22) 78%,
+      #f4efe6 100%
+    );
+}
+
+.boda-hero-kicker {
+  font-family: Cinzel, 'Cormorant Garamond', serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.52em;
+  text-transform: uppercase;
+  color: #f4ead8;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+}
+
+.boda-hero-name {
+  font-family: Allura, 'Great Vibes', cursive;
+  font-size: clamp(3.6rem, 15vw, 5.8rem);
+  font-weight: 400;
+  line-height: 0.92;
+  color: #f8f2e8;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.18),
+    0 8px 24px rgba(0, 0, 0, 0.38);
+}
+
+.boda-hero-amp {
+  font-family: Allura, 'Great Vibes', cursive;
+  margin: 0.15rem 0 0.35rem;
+  font-size: 2.5rem;
+  line-height: 1;
+  color: #e6d3ae;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .boda-cream {

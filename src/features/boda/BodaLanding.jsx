@@ -27,36 +27,21 @@ export function BodaLanding({ grupoInvitados, cupos }) {
 
 function HeroSection() {
   return (
-    <section className="boda-hero-bg relative min-h-[100dvh] overflow-hidden px-6 pb-10 pt-16 text-center">
-      <FloralMotif className="pointer-events-none absolute -left-10 -top-6 w-52 opacity-80" />
-      <FloralMotif className="pointer-events-none absolute -right-8 top-24 w-40 rotate-12 opacity-70" />
-      <p className="relative text-[11px] tracking-[0.42em] text-[#d9dee8]">NUESTRA BODA</p>
-      <h1
-        className="boda-serif relative mt-8 text-[52px] leading-none"
-        style={{
-          backgroundImage: 'linear-gradient(180deg, #f4f1ea 0%, #b7c0cc 55%, #e8edf3 100%)',
-          WebkitBackgroundClip: 'text',
-          backgroundClip: 'text',
-          color: 'transparent',
-        }}
-      >
-        {BODA.novio.toUpperCase()}
-      </h1>
-      <p className="boda-script relative my-1 text-4xl text-white">and</p>
-      <h1
-        className="boda-serif relative text-[52px] leading-none"
-        style={{
-          backgroundImage: 'linear-gradient(180deg, #f4f1ea 0%, #b7c0cc 55%, #e8edf3 100%)',
-          WebkitBackgroundClip: 'text',
-          backgroundClip: 'text',
-          color: 'transparent',
-        }}
-      >
-        {BODA.novia.toUpperCase()}
-      </h1>
-      <div className="relative mt-[28vh]">
-        <p className="boda-serif text-[28px] text-[#3a3228]">Save the Date</p>
-        <Countdown className="mt-4 text-[22px]" />
+    <section className="relative isolate min-h-[100dvh] overflow-hidden text-center">
+      <img
+        src={BODA.fotos.hero}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+      <div className="boda-hero-veil pointer-events-none absolute inset-0" />
+      <FloralMotif className="pointer-events-none absolute -left-12 -top-8 z-10 w-52 opacity-40 brightness-[2.4]" />
+      <FloralMotif className="pointer-events-none absolute -right-10 top-16 z-10 w-40 rotate-12 opacity-30 brightness-[2.4]" />
+
+      <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-6 pb-28 pt-[14vh]">
+        <p className="boda-hero-kicker">Nuestra Boda</p>
+        <h1 className="boda-hero-name mt-6">{BODA.novio}</h1>
+        <p className="boda-hero-amp">&</p>
+        <h1 className="boda-hero-name">{BODA.novia}</h1>
       </div>
     </section>
   )
@@ -64,18 +49,11 @@ function HeroSection() {
 
 function SaveTheDateSection() {
   return (
-    <section className="boda-cream px-6 pb-0 pt-10 text-center">
+    <section className="boda-cream px-6 py-12 text-center">
       <FadeInOnScroll>
-        <p className="boda-serif text-[32px] text-[#2c2c2c]">Save the Date</p>
+        <p className="boda-serif text-[32px] text-[#2c2c2c]">Nuestra Boda</p>
         <Countdown className="mt-3 text-[20px]" />
         <p className="mt-3 text-sm text-[#5c5c5c]">{BODA.fechaLabel}</p>
-      </FadeInOnScroll>
-      <FadeInOnScroll delay={0.12} className="mt-8">
-        <img
-          src={BODA.fotos.hero}
-          alt={`${BODA.novio} y ${BODA.novia}`}
-          className="boda-photo-fade mx-auto aspect-[3/4] w-full max-w-md object-cover"
-        />
       </FadeInOnScroll>
     </section>
   )
@@ -96,7 +74,7 @@ function QuoteAndParents() {
           <h2 className="boda-serif text-[34px] text-[#2c2c2c]">Nuestros Padres</h2>
           <div className="relative z-10 mt-8 space-y-6 text-sm text-[#3a3a3a]">
             <div>
-              <p className="mb-2 text-[11px] tracking-[0.2em] text-[#7a7368]">NOVIO</p>
+              <p className="mb-2 text-[11px] tracking-[0.2em] text-[#7a7368]">PADRES DEL NOVIO</p>
               {BODA.padres.novio.map((name) => (
                 <p key={name} className="leading-7">
                   {name}
@@ -104,7 +82,7 @@ function QuoteAndParents() {
               ))}
             </div>
             <div>
-              <p className="mb-2 text-[11px] tracking-[0.2em] text-[#7a7368]">NOVIA</p>
+              <p className="mb-2 text-[11px] tracking-[0.2em] text-[#7a7368]">PADRES DE LA NOVIA</p>
               {BODA.padres.novia.map((name) => (
                 <p key={name} className="leading-7">
                   {name}
@@ -199,15 +177,6 @@ function GiftsSection() {
           <Gift className="mx-auto h-10 w-10 text-[#2c2c2c]" strokeWidth={1.3} />
           <h2 className="boda-serif mt-4 text-[30px] text-[#2c2c2c]">Mesa de Regalos</h2>
           <p className="mt-4 text-[13px] leading-relaxed text-[#6b645c]">{BODA.regalos.texto}</p>
-          <a
-            href={BODA.regalos.url}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-6 inline-flex rounded-lg bg-[#d8d4ce] px-8 py-2.5 text-sm text-[#2c2c2c]"
-          >
-            {BODA.regalos.tienda}
-          </a>
-          <p className="mt-3 text-xs text-[#7a7368]">{BODA.regalos.numero}</p>
         </div>
       </FadeInOnScroll>
     </section>

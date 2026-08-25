@@ -1,6 +1,6 @@
-# Invitación digital
+# SAVEMEMORIES
 
-Proyecto independiente (boda / XV / eventos). No forma parte de QUEHAYHOY.
+App de eventos para llevar el control de invitados. Invitación digital (boda / XV / eventos).
 
 ## Cómo correrlo
 

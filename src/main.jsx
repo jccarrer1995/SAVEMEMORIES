@@ -6,9 +6,11 @@ import { BodaPage } from './features/boda/BodaPage.jsx'
 import { BodaRespuestasPage } from './features/boda/BodaRespuestasPage.jsx'
 import './index.css'
 
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Toaster position="top-center" richColors />
       <Routes>
         <Route path="/" element={<BodaPage />} />

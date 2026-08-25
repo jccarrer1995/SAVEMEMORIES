@@ -1,5 +1,9 @@
 /** Contenido de la invitación. Más adelante se personaliza por grupo de invitados. */
 
+function publicUrl(path) {
+  return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`
+}
+
 export const BODA = {
   novio: 'Juan Carlos',
   novia: 'Jessica',
@@ -53,11 +57,15 @@ export const BODA = {
     cupos: 2,
   },
   fotos: {
-    hero: '/boda/hero-couple.jpg',
-    galeria: ['/boda/couple-1.jpg', '/boda/couple-2.jpg', '/boda/couple-3.jpg'],
+    hero: publicUrl('/boda/hero-couple.jpg'),
+    galeria: [
+      publicUrl('/boda/couple-1.jpg'),
+      publicUrl('/boda/couple-2.jpg'),
+      publicUrl('/boda/couple-3.jpg'),
+    ],
   },
   /** Coloca el archivo en `public/boda/musica.mp3`. */
-  musicaSrc: '/boda/musica.mp3',
+  musicaSrc: publicUrl('/boda/musica.mp3'),
 }
 
 /**

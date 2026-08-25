@@ -2,7 +2,7 @@ import { Gift, Music2, Users, Wine } from 'lucide-react'
 import { BODA } from './data.js'
 import { Countdown } from './components/Countdown.jsx'
 import { FadeInOnScroll } from './components/FadeInOnScroll.jsx'
-import { FloralMotif, OrnamentLine } from './components/FloralMotif.jsx'
+import { FloralMotif, FrameLine, OrnamentLine } from './components/FloralMotif.jsx'
 import { RsvpForm } from './components/RsvpForm.jsx'
 
 /**
@@ -31,7 +31,7 @@ function HeroSection() {
       <img
         src={BODA.fotos.hero}
         alt=""
-        className="absolute inset-0 h-full w-full object-cover object-center"
+        className="boda-hero-photo absolute inset-0 h-full w-full object-cover object-center"
       />
       <div className="boda-hero-veil pointer-events-none absolute inset-0" />
       <FloralMotif className="pointer-events-none absolute -left-12 -top-8 z-10 w-52 opacity-40 brightness-[2.4]" />
@@ -51,9 +51,11 @@ function SaveTheDateSection() {
   return (
     <section className="boda-cream px-6 py-12 text-center">
       <FadeInOnScroll>
+        <FrameLine className="mx-auto mb-6 w-64" />
         <p className="boda-serif text-[32px] text-[#2c2c2c]">Nuestra Boda</p>
         <Countdown className="mt-3 text-[20px]" />
         <p className="mt-3 text-sm text-[#5c5c5c]">{BODA.fechaLabel}</p>
+        <FrameLine className="mx-auto mt-6 w-64" />
       </FadeInOnScroll>
     </section>
   )
@@ -150,19 +152,19 @@ function VenueSection({ venue, icon, darkButton = false, floral = 'left' }) {
 function TimelineSection() {
   return (
     <section className="boda-bluegray px-6 py-16">
-      <div className="relative mx-auto max-w-xs">
-        <div className="absolute bottom-4 left-1/2 top-4 w-px -translate-x-1/2 bg-[#b7bdc6]" />
-        <div className="relative space-y-12 text-center">
-          {BODA.cronograma.map((item, index) => (
-            <FadeInOnScroll key={item.id} delay={index * 0.05}>
-              <div className="flex flex-col items-center">
-                <TimelineIcon type={item.icon} />
-                <p className="boda-serif mt-3 text-[26px] text-[#2c2c2c]">{item.hora}</p>
-                <p className="mt-1 text-[12px] tracking-[0.28em] text-[#4a4a4a]">{item.label}</p>
-              </div>
-            </FadeInOnScroll>
-          ))}
-        </div>
+      <div className="mx-auto flex max-w-xs flex-col items-center">
+        {BODA.cronograma.map((item, index) => (
+          <FadeInOnScroll key={item.id} delay={index * 0.05} className="flex w-full flex-col items-center">
+            <div className="flex flex-col items-center">
+              <TimelineIcon type={item.icon} />
+              <p className="boda-serif mt-3 text-[26px] text-[#2c2c2c]">{item.hora}</p>
+              <p className="mt-1 text-[12px] tracking-[0.28em] text-[#4a4a4a]">{item.label}</p>
+            </div>
+            {index < BODA.cronograma.length - 1 ? (
+              <div className="my-5 h-8 w-px bg-[#b7bdc6]" aria-hidden />
+            ) : null}
+          </FadeInOnScroll>
+        ))}
       </div>
     </section>
   )

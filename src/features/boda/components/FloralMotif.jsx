@@ -61,3 +61,43 @@ export function OrnamentLine({ className = '' }) {
     </div>
   )
 }
+
+export function FrameLine({ className = '' }) {
+  return (
+    <svg viewBox="0 0 280 28" className={className} fill="none" aria-hidden>
+      <path d="M12 14h90" stroke="#b7a48a" strokeWidth="1" />
+      <path d="M178 14h90" stroke="#b7a48a" strokeWidth="1" />
+      <path d="M20 17.5h74" stroke="#d4c4ae" strokeWidth="0.7" />
+      <path d="M186 17.5h74" stroke="#d4c4ae" strokeWidth="0.7" />
+      <path d="M8 14h8M264 14h8" stroke="#8a7a66" strokeWidth="1.1" strokeLinecap="square" />
+      <rect
+        x="105.2"
+        y="10.2"
+        width="7.6"
+        height="7.6"
+        transform="rotate(45 109 14)"
+        stroke="#8a7a66"
+        strokeWidth="0.9"
+      />
+      <rect
+        x="167.2"
+        y="10.2"
+        width="7.6"
+        height="7.6"
+        transform="rotate(45 171 14)"
+        stroke="#8a7a66"
+        strokeWidth="0.9"
+      />
+      <rect
+        x="132.8"
+        y="6.8"
+        width="14.4"
+        height="14.4"
+        transform="rotate(45 140 14)"
+        stroke="#8a7a66"
+        strokeWidth="1.05"
+      />
+      <rect x="137.2" y="11.2" width="5.6" height="5.6" transform="rotate(45 140 14)" fill="#8a7a66" />
+    </svg>
+  )
+}

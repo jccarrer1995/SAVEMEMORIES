@@ -7,7 +7,7 @@ function publicUrl(path) {
 export const BODA = {
   novio: 'Juan Carlos',
   novia: 'Jessica',
-  iniciales: 'JC&J',
+  iniciales: 'JC & JG',
   fechaLabel: 'Sábado 21 de noviembre, 2026',
   /** Inicio de ceremonia (zona Guadalajara). */
   fechaIso: '2026-11-21T19:00:00-06:00',

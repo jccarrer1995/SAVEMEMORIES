@@ -68,16 +68,12 @@
   z-index: 1;
 }
 
+.boda-hero-photo {
+  filter: brightness(0.62) saturate(0.92);
+}
+
 .boda-hero-veil {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(16, 18, 14, 0.58) 0%,
-      rgba(16, 18, 14, 0.28) 26%,
-      rgba(16, 18, 14, 0.08) 50%,
-      rgba(244, 239, 230, 0.22) 78%,
-      #f4efe6 100%
-    );
+  background: rgba(12, 14, 12, 0.48);
 }
 
 .boda-hero-kicker {

@@ -67,7 +67,7 @@ export function EnvelopeScene({ onOpened, onOpenStart }) {
       </motion.div>
 
       <p
-        className="boda-serif absolute left-1/2 top-[56%] z-20 -translate-x-1/2 text-[42px] tracking-[0.18em] text-[#e8eef6]"
+        className="boda-serif absolute left-1/2 top-[56%] z-20 -translate-x-1/2 whitespace-nowrap text-[36px] tracking-[0.14em] text-[#e8eef6]"
         style={{ textShadow: '0 1px 0 rgba(255,255,255,0.18), 0 8px 16px rgba(0,0,0,0.25)' }}
       >
         {BODA.iniciales}

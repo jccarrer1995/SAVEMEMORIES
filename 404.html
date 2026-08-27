@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+  <head><script type="text/javascript">
+  var pathSegmentsToKeep = 1;
+  var l = window.location;
+  l.replace(
+    l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+    l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+    l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+    (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+    l.hash
+  );
+</script>
+    <meta charset="UTF-8" />
+    <script type="text/javascript">
+      (function (location) {
+        if (location.search[1] === '/') {
+          var decoded = location.search
+            .slice(1)
+            .split('&')
+            .map(function (segment) {
+              return segment.replace(/~and~/g, '&')
+            })
+            .join('?')
+          window.history.replaceState(null, null, location.pathname.slice(0, -1) + decoded + location.hash)
+        }
+      })(window.location)
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#24344d" />
+    <meta name="description" content="Invitación digital — Juan Carlos & Jessica" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Juan Carlos & Jessica</title>
+    <script type="module" crossorigin src="/SAVEMEMORIES/assets/index-BRXQfvMr.js"></script>
+    <link rel="stylesheet" crossorigin href="/SAVEMEMORIES/assets/index-DC15cC8l.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

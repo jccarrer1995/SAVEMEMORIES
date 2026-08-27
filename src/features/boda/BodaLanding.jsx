@@ -15,7 +15,6 @@ export function BodaLanding({ grupoInvitados, cupos }) {
       <SaveTheDateSection />
       <QuoteAndParents />
       <GallerySection />
-      <VenueSection venue={BODA.ceremonia} icon={<ChurchIcon />} darkButton />
       <VenueSection venue={BODA.recepcion} floral="right" />
       <TimelineSection />
       <GiftsSection />
@@ -116,7 +115,7 @@ function GallerySection() {
 }
 
 /**
- * @param {{ venue: typeof BODA.ceremonia, icon?: import('react').ReactNode, darkButton?: boolean, floral?: 'left' | 'right' }} props
+ * @param {{ venue: typeof BODA.recepcion, icon?: import('react').ReactNode, darkButton?: boolean, floral?: 'left' | 'right' }} props
  */
 function VenueSection({ venue, icon, darkButton = false, floral = 'left' }) {
   return (
@@ -178,7 +177,9 @@ function GiftsSection() {
         <div className="relative mx-auto max-w-sm bg-white px-6 py-10 text-center shadow-[0_12px_30px_rgba(0,0,0,0.08)]">
           <Gift className="mx-auto h-10 w-10 text-[#2c2c2c]" strokeWidth={1.3} />
           <h2 className="boda-serif mt-4 text-[30px] text-[#2c2c2c]">Mesa de Regalos</h2>
-          <p className="mt-4 text-[13px] leading-relaxed text-[#6b645c]">{BODA.regalos.texto}</p>
+          <p className="mt-4 whitespace-pre-line text-[13px] leading-relaxed text-[#6b645c]">
+            {BODA.regalos.texto}
+          </p>
         </div>
       </FadeInOnScroll>
     </section>

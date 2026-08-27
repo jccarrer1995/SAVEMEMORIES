@@ -1,22 +1,32 @@
 import { Link } from 'react-router-dom'
 import '../../marketing/styles/marketing.css'
 import { LEGACY_BODA_PROJECT_ID } from '../../../app/router/routes.js'
-import { getProjectById } from '../core/registry/projectRegistry.js'
+import { useProjectLoader } from '../core/hooks/useProjectLoader.js'
 import { BodaInvitationView } from '../templates/boda/pages/BodaInvitationView.jsx'
 import { BodaResponsesView } from '../templates/boda/pages/BodaResponsesView.jsx'
+
+function ProjectLoadingScreen() {
+  return (
+    <div className="marketing-page flex min-h-screen items-center justify-center px-6">
+      <p className="marketing-muted text-sm">Cargando invitación…</p>
+    </div>
+  )
+}
 
 /**
  * @param {{ projectId: string }} props
  */
 export function InvitationPage({ projectId }) {
-  const registered = getProjectById(projectId)
+  const { loading, project } = useProjectLoader(projectId, 'public')
 
-  if (!registered) {
+  if (loading) return <ProjectLoadingScreen />
+
+  if (!project) {
     return <InvalidInvitationPage reason="El proyecto no existe o fue desactivado." />
   }
 
-  if (registered.templateId === 'boda') {
-    return <BodaInvitationView project={registered.config} />
+  if (project.templateId === 'boda') {
+    return <BodaInvitationView project={project.config} />
   }
 
   return <InvalidInvitationPage reason="Plantilla no disponible." />
@@ -26,14 +36,16 @@ export function InvitationPage({ projectId }) {
  * @param {{ projectId: string }} props
  */
 export function ProjectResponsesPage({ projectId }) {
-  const registered = getProjectById(projectId)
+  const { loading, project } = useProjectLoader(projectId, 'responses')
 
-  if (!registered) {
+  if (loading) return <ProjectLoadingScreen />
+
+  if (!project) {
     return <InvalidInvitationPage reason="El proyecto no existe." />
   }
 
-  if (registered.templateId === 'boda') {
-    return <BodaResponsesView project={registered.config} />
+  if (project.templateId === 'boda') {
+    return <BodaResponsesView project={project.config} />
   }
 
   return <InvalidInvitationPage reason="Plantilla no disponible." />

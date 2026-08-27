@@ -57,12 +57,14 @@ Si el usuario existe en Auth pero **no** tiene documento en `users`, el login fa
 | Ruta | Rol requerido |
 |------|----------------|
 | `/admin` | `admin` |
+| `/admin/proyectos` | `admin` |
 | `/cliente` | `client` |
 
 ## Reglas Firestore
 
 - Cada usuario solo puede **leer** su propio documento `users/{uid}`.
-- Escritura de roles: solo desde consola Firebase (etapa 4+ podrá hacerlo el admin desde la app).
+- Colección `projects`: lectura pública solo si `status == 'active'`; admin puede leer/escribir todo.
+- Escritura de roles: solo desde consola Firebase (etapa posterior podrá hacerlo el admin desde la app).
 
 ## Desarrollo local
 

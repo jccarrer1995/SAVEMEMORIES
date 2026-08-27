@@ -22,7 +22,9 @@ export function PanelSidebar({ items, roleLabel, email }) {
 
       <nav className="flex flex-col gap-1 px-3 pb-6">
         {items.map((item) => {
-          const isActive = location.pathname === item.href
+          const isActive =
+            location.pathname === item.href ||
+            (item.href !== '/admin' && item.href !== '/cliente' && location.pathname.startsWith(`${item.href}/`))
           if (item.disabled) {
             return (
               <span key={item.href} className="panel-nav-item is-disabled" aria-disabled="true">

@@ -1,5 +1,7 @@
 import { Route, Routes, useParams } from 'react-router-dom'
 import { AdminDashboardPage } from '../../features/admin/pages/AdminDashboardPage.jsx'
+import { AdminProjectEditPage, AdminProjectNewPage } from '../../features/admin/pages/AdminProjectFormPage.jsx'
+import { AdminProjectsListPage } from '../../features/admin/pages/AdminProjectsListPage.jsx'
 import { ProtectedRoute } from '../../features/auth/components/ProtectedRoute.jsx'
 import { LoginPage } from '../../features/auth/pages/LoginPage.jsx'
 import { ClientDashboardPage } from '../../features/client/pages/ClientDashboardPage.jsx'
@@ -38,6 +40,30 @@ export function AppRouter() {
         element={
           <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
             <AdminDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/proyectos"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+            <AdminProjectsListPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/proyectos/nuevo"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+            <AdminProjectNewPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/proyectos/:projectId"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+            <AdminProjectEditPage />
           </ProtectedRoute>
         }
       />

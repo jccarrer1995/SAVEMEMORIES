@@ -23,6 +23,13 @@ service cloud.firestore {
       allow create, update, delete: if false;
     }
 
+    match /projects/{projectId} {
+      allow get: if resource.data.status == 'active' || isAdmin();
+      allow list: if isAdmin();
+      allow create, update: if isAdmin();
+      allow delete: if false;
+    }
+
     match /bodaRsvps/{docId} {
       allow create: if request.resource.data.nombres is string
         && request.resource.data.nombres.size() > 0

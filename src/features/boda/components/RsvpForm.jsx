@@ -3,6 +3,21 @@ import { toast } from 'sonner'
 import { saveRsvp } from '../saveRsvp.js'
 
 /**
+ * @param {number} cupos
+ */
+function confirmationOptions(cupos) {
+  if (cupos === 1) {
+    return ['Confirmo mi asistencia', 'No podré asistir']
+  }
+
+  if (cupos === 2) {
+    return ['No podremos asistir', 'Solo irá 1', 'Asistiremos los 2']
+  }
+
+  return ['No podremos asistir', 'Solo irá 1', 'Solo iremos 2', 'Asistiremos todos']
+}
+
+/**
  * @param {{ grupoInvitados: string, cupos: number }} props
  */
 export function RsvpForm({ grupoInvitados, cupos }) {
@@ -65,10 +80,11 @@ export function RsvpForm({ grupoInvitados, cupos }) {
           required
         >
           <option value="">Selecciona</option>
-          <option value="No podremos asistir">No podremos asistir</option>
-          <option value="Solo irá 1">Solo irá 1</option>
-          <option value="Solo iremos 2">Solo iremos 2</option>
-          <option value="Asistiremos todos">Asistiremos todos</option>
+          {confirmationOptions(cupos).map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
         </select>
       </label>
 

@@ -45,11 +45,11 @@ export const BODA = {
     cupos: 3,
   },
   fotos: {
-    hero: publicUrl('/boda/hero-couple.jpg'),
+    hero: publicUrl('/boda/Pareja1.jpeg'),
     galeria: [
-      publicUrl('/boda/couple-1.jpg'),
-      publicUrl('/boda/couple-2.jpg'),
-      publicUrl('/boda/couple-3.jpg'),
+      publicUrl('/boda/Pareja2.jpeg'),
+      publicUrl('/boda/Pareja3.jpeg'),
+      publicUrl('/boda/Pareja4.jpeg'),
     ],
   },
   /** Coloca el archivo en `public/boda/musica.mp3`. */

@@ -18,8 +18,24 @@ service cloud.firestore {
       return isSignedIn() && userRole() == 'admin';
     }
 
+    function isClient() {
+      return isSignedIn() && userRole() == 'client';
+    }
+
+    function projectData(projectId) {
+      return get(/databases/$(database)/documents/projects/$(projectId)).data;
+    }
+
+    function isProjectOwner(projectId) {
+      return isSignedIn() && projectData(projectId).ownerId == request.auth.uid;
+    }
+
+    function canManageProject(projectId) {
+      return isAdmin() || isProjectOwner(projectId);
+    }
+
     function activeProject(projectId) {
-      return get(/databases/$(database)/documents/projects/$(projectId)).data.status == 'active';
+      return projectData(projectId).status == 'active';
     }
 
     match /users/{uid} {
@@ -28,24 +44,25 @@ service cloud.firestore {
     }
 
     match /projects/{projectId} {
-      allow get: if resource.data.status == 'active' || isAdmin();
-      allow list: if isAdmin();
+      allow get: if resource.data.status == 'active' || isAdmin() || isProjectOwner(projectId);
+      allow list: if isAdmin() || (isClient() && resource.data.ownerId == request.auth.uid);
       allow create, update: if isAdmin();
       allow delete: if false;
 
       match /links/{linkCode} {
         allow get: if isAdmin()
+          || isProjectOwner(projectId)
           || (resource != null
               && resource.data.active == true
               && activeProject(projectId));
-        allow list: if isAdmin();
-        allow create: if isAdmin()
+        allow list: if canManageProject(projectId);
+        allow create: if canManageProject(projectId)
           && request.resource.data.guestLabel is string
           && request.resource.data.guestLabel.size() > 0
           && request.resource.data.cupos is number
           && request.resource.data.cupos >= 1
           && request.resource.data.active == true;
-        allow update: if isAdmin();
+        allow update: if canManageProject(projectId);
         allow delete: if false;
       }
     }

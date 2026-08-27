@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, orderBy, query, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, getDocs, orderBy, query, serverTimestamp, where } from 'firebase/firestore'
 import { db } from '../../../../../lib/firebase/index.js'
 
 export const BODA_RSVP_COLLECTION = 'bodaRsvps'
@@ -111,20 +111,40 @@ export async function listRsvps(projectId) {
   if (!db) return local
 
   try {
-    const snap = await getDocs(query(collection(db, BODA_RSVP_COLLECTION), orderBy('createdAt', 'desc')))
-    const remote = snap.docs
-      .map((docSnap) => {
-        const data = docSnap.data()
-        const createdAt = data.createdAt?.toDate?.() instanceof Date
-          ? data.createdAt.toDate().toISOString()
-          : data.createdAt ?? ''
-        return { id: docSnap.id, ...data, createdAt }
-      })
-      .filter((row) => !row.projectId || row.projectId === projectId)
+    const snap = await getDocs(
+      query(
+        collection(db, BODA_RSVP_COLLECTION),
+        where('projectId', '==', projectId),
+        orderBy('createdAt', 'desc'),
+      ),
+    )
+    const remote = snap.docs.map((docSnap) => {
+      const data = docSnap.data()
+      const createdAt = data.createdAt?.toDate?.() instanceof Date
+        ? data.createdAt.toDate().toISOString()
+        : data.createdAt ?? ''
+      return { id: docSnap.id, ...data, createdAt }
+    })
 
     if (remote.length > 0) return remote
   } catch (error) {
     console.warn('[invitation] No se pudieron leer RSVPs remotos:', error)
+    try {
+      const snap = await getDocs(query(collection(db, BODA_RSVP_COLLECTION), orderBy('createdAt', 'desc')))
+      const remote = snap.docs
+        .map((docSnap) => {
+          const data = docSnap.data()
+          const createdAt = data.createdAt?.toDate?.() instanceof Date
+            ? data.createdAt.toDate().toISOString()
+            : data.createdAt ?? ''
+          return { id: docSnap.id, ...data, createdAt }
+        })
+        .filter((row) => !row.projectId || row.projectId === projectId)
+
+      if (remote.length > 0) return remote
+    } catch {
+      // fallback to local
+    }
   }
 
   return local

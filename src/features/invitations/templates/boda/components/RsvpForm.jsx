@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { saveRsvp } from '../saveRsvp.js'
+import { useInvitationProject } from '../../../core/hooks/useInvitationProject.js'
+import { saveRsvp } from '../services/saveRsvp.js'
 
 /**
  * @param {number} cupos
@@ -21,6 +22,7 @@ function confirmationOptions(cupos) {
  * @param {{ grupoInvitados: string, cupos: number }} props
  */
 export function RsvpForm({ grupoInvitados, cupos }) {
+  const project = useInvitationProject()
   const [confirmacion, setConfirmacion] = useState('')
   const [nombres, setNombres] = useState('')
   const [telefono, setTelefono] = useState('')
@@ -40,7 +42,7 @@ export function RsvpForm({ grupoInvitados, cupos }) {
 
     setSubmitting(true)
     try {
-      await saveRsvp({
+      await saveRsvp(project.id, {
         confirmacion,
         nombres: nombres.trim(),
         telefono: telefono.trim(),

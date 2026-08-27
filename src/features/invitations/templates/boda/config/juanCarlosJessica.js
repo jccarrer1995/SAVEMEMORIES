@@ -1,15 +1,14 @@
-/** Contenido de la invitación. Más adelante se personaliza por grupo de invitados. */
+import { publicUrl } from '../../../core/utils/publicUrl.js'
 
-function publicUrl(path) {
-  return `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`
-}
-
-export const BODA = {
+/** @type {import('../../../core/types/invitationProject.js').InvitationProjectConfig} */
+export const juanCarlosJessicaProject = {
+  id: 'juan-carlos-jessica',
+  templateId: 'boda',
+  title: 'Juan Carlos & Jessica',
   novio: 'Juan Carlos',
   novia: 'Jessica',
   iniciales: 'JC & JG',
   fechaLabel: 'Sábado 21 de noviembre, 2026',
-  /** Inicio de la recepción (zona Guayaquil). */
   fechaIso: '2026-11-21T19:00:00-05:00',
   cita: 'Con tu emoción y entusiasmo complementarás un día demasiado especial y esperado en nuestras vidas.',
   padres: {
@@ -52,22 +51,5 @@ export const BODA = {
       publicUrl('/boda/Pareja4.jpeg'),
     ],
   },
-  /** Coloca el archivo en `public/boda/musica.mp3`. */
   musicaSrc: publicUrl('/boda/musica.mp3'),
-}
-
-/**
- * Personalización por grupo: `/?invitados=Fam.%20Pérez&cupos=4`
- * @param {string} search
- */
-export function getInviteFromSearch(search) {
-  const params = new URLSearchParams(search)
-  const nombre = params.get('invitados')?.trim()
-  const cuposRaw = params.get('cupos')
-  const cupos = cuposRaw ? Number.parseInt(cuposRaw, 10) : NaN
-
-  return {
-    nombre: nombre || BODA.invitadosPorDefecto.nombre,
-    cupos: Number.isFinite(cupos) && cupos > 0 ? cupos : BODA.invitadosPorDefecto.cupos,
-  }
 }

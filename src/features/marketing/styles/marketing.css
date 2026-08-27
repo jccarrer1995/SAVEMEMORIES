@@ -1,0 +1,76 @@
+.marketing-page {
+  --mkt-cream: #faf6f1;
+  --mkt-blush: #fdeee4;
+  --mkt-peach: #f9ddd0;
+  --mkt-sage: #e8ebe0;
+  --mkt-text: #5c3a2e;
+  --mkt-text-soft: #8b5e4b;
+  --mkt-accent: #c97b5c;
+  --mkt-accent-deep: #7a4a32;
+  --mkt-card: rgba(255, 252, 248, 0.82);
+  --mkt-border: rgba(201, 123, 92, 0.2);
+
+  min-height: 100dvh;
+  color: var(--mkt-text);
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 0%, var(--mkt-blush) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 90% 10%, var(--mkt-peach) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, var(--mkt-sage) 0%, transparent 45%),
+    linear-gradient(165deg, var(--mkt-cream) 0%, #fff9f4 45%, #fdf0e8 100%);
+}
+
+.marketing-serif {
+  font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+}
+
+.marketing-kicker {
+  color: var(--mkt-accent-deep);
+  letter-spacing: 0.28em;
+}
+
+.marketing-muted {
+  color: var(--mkt-text-soft);
+}
+
+.marketing-card {
+  border: 1px solid var(--mkt-border);
+  background: var(--mkt-card);
+  box-shadow: 0 12px 40px rgba(122, 74, 50, 0.06);
+  backdrop-filter: blur(6px);
+}
+
+.marketing-btn-primary {
+  background: linear-gradient(135deg, #d4926f 0%, var(--mkt-accent) 100%);
+  color: #fffaf6;
+  box-shadow: 0 8px 24px rgba(201, 123, 92, 0.28);
+}
+
+.marketing-btn-primary:hover {
+  filter: brightness(1.04);
+}
+
+.marketing-btn-secondary {
+  border: 1px solid rgba(122, 74, 50, 0.28);
+  background: rgba(255, 252, 248, 0.6);
+  color: var(--mkt-accent-deep);
+}
+
+.marketing-btn-secondary:hover {
+  background: rgba(255, 252, 248, 0.95);
+}
+
+.marketing-link {
+  color: var(--mkt-accent-deep);
+}
+
+.marketing-link:hover {
+  color: var(--mkt-accent);
+}
+
+.marketing-blob {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(48px);
+  opacity: 0.55;
+}

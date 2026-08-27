@@ -1,8 +1,7 @@
 import { addDoc, collection, getDocs, orderBy, query, serverTimestamp } from 'firebase/firestore'
-import { db } from '../../lib/firebase.js'
+import { db } from '../../../../../lib/firebase/index.js'
 
 export const BODA_RSVP_COLLECTION = 'bodaRsvps'
-const LOCAL_KEY = 'boda-rsvps-v1'
 
 /**
  * @typedef {object} RsvpPayload
@@ -15,10 +14,19 @@ const LOCAL_KEY = 'boda-rsvps-v1'
  */
 
 /**
- * @param {RsvpPayload} payload
+ * @param {string} projectId
  */
-function toRow(payload) {
+function localStorageKey(projectId) {
+  return `invitation-rsvps-${projectId}-v1`
+}
+
+/**
+ * @param {RsvpPayload} payload
+ * @param {string} projectId
+ */
+function toRow(payload, projectId) {
   return {
+    projectId,
     confirmacion: payload.confirmacion,
     nombres: payload.nombres,
     telefono: payload.telefono,
@@ -30,11 +38,12 @@ function toRow(payload) {
 }
 
 /**
+ * @param {string} projectId
  * @returns {Array<Record<string, unknown>>}
  */
-export function readLocalRsvps() {
+export function readLocalRsvps(projectId) {
   try {
-    const raw = window.localStorage.getItem(LOCAL_KEY)
+    const raw = window.localStorage.getItem(localStorageKey(projectId))
     if (!raw) return []
     const parsed = JSON.parse(raw)
     return Array.isArray(parsed) ? parsed : []
@@ -44,23 +53,22 @@ export function readLocalRsvps() {
 }
 
 /**
+ * @param {string} projectId
  * @param {Record<string, unknown>} row
  */
-function persistLocal(row) {
-  const next = [...readLocalRsvps(), row]
-  window.localStorage.setItem(LOCAL_KEY, JSON.stringify(next))
+function persistLocal(projectId, row) {
+  const next = [...readLocalRsvps(projectId), row]
+  window.localStorage.setItem(localStorageKey(projectId), JSON.stringify(next))
 }
 
 /**
- * Guarda la confirmación en Firestore (tabla persistente) y, si existe
- * VITE_BODA_SHEETS_WEBHOOK, también la envía a Google Sheets / Excel Online.
- *
+ * @param {string} projectId
  * @param {RsvpPayload} payload
  * @returns {Promise<{ firestore: boolean, sheets: boolean }>}
  */
-export async function saveRsvp(payload) {
-  const row = toRow(payload)
-  persistLocal(row)
+export async function saveRsvp(projectId, payload) {
+  const row = toRow(payload, projectId)
+  persistLocal(projectId, row)
 
   let firestore = false
   let sheets = false
@@ -73,7 +81,7 @@ export async function saveRsvp(payload) {
       })
       firestore = true
     } catch (error) {
-      console.warn('[boda] No se pudo guardar en Firestore:', error)
+      console.warn('[invitation] No se pudo guardar en Firestore:', error)
     }
   }
 
@@ -87,7 +95,7 @@ export async function saveRsvp(payload) {
       })
       sheets = true
     } catch (error) {
-      console.warn('[boda] No se pudo enviar a Sheets:', error)
+      console.warn('[invitation] No se pudo enviar a Sheets:', error)
     }
   }
 
@@ -95,32 +103,39 @@ export async function saveRsvp(payload) {
 }
 
 /**
+ * @param {string} projectId
  * @returns {Promise<Array<Record<string, unknown>>>}
  */
-export async function listRsvps() {
-  const local = readLocalRsvps()
+export async function listRsvps(projectId) {
+  const local = readLocalRsvps(projectId)
   if (!db) return local
 
   try {
     const snap = await getDocs(query(collection(db, BODA_RSVP_COLLECTION), orderBy('createdAt', 'desc')))
-    const remote = snap.docs.map((docSnap) => {
-      const data = docSnap.data()
-      const createdAt = data.createdAt?.toDate?.() instanceof Date
-        ? data.createdAt.toDate().toISOString()
-        : data.createdAt ?? ''
-      return { id: docSnap.id, ...data, createdAt }
-    })
+    const remote = snap.docs
+      .map((docSnap) => {
+        const data = docSnap.data()
+        const createdAt = data.createdAt?.toDate?.() instanceof Date
+          ? data.createdAt.toDate().toISOString()
+          : data.createdAt ?? ''
+        return { id: docSnap.id, ...data, createdAt }
+      })
+      .filter((row) => !row.projectId || row.projectId === projectId)
+
     if (remote.length > 0) return remote
   } catch (error) {
-    console.warn('[boda] No se pudieron leer RSVPs remotos:', error)
+    console.warn('[invitation] No se pudieron leer RSVPs remotos:', error)
   }
+
   return local
 }
 
 /**
+ * @param {string} projectId
+ * @param {string} fileLabel
  * @param {Array<Record<string, unknown>>} rows
  */
-export async function downloadRsvpsExcel(rows) {
+export async function downloadRsvpsExcel(projectId, fileLabel, rows) {
   const XLSX = await import('xlsx')
   const sheetRows = rows.map((row) => ({
     Fecha: formatExcelDate(row.createdAt),
@@ -149,7 +164,7 @@ export async function downloadRsvpsExcel(rows) {
   )
   const workbook = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Confirmaciones')
-  XLSX.writeFile(workbook, 'confirmaciones-boda-juan-carlos-jessica.xlsx')
+  XLSX.writeFile(workbook, `confirmaciones-${fileLabel || projectId}.xlsx`)
 }
 
 /**

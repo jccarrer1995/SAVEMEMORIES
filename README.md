@@ -1,22 +1,41 @@
 # SAVEMEMORIES
 
-App de eventos para llevar el control de invitados. Invitación digital (boda / XV / eventos).
+Plataforma de invitaciones digitales (boda, XV, baby shower y más).
 
 Sitio publicado: https://jccarrer1995.github.io/SAVEMEMORIES/
 
 ## Cómo correrlo
 
 ```bash
-cd invitacion-digital
 npm install
 npm run dev
 ```
 
-- Invitación: http://localhost:5174/
-- Confirmaciones + Excel: http://localhost:5174/respuestas
-- Link por familia: `http://localhost:5174/?invitados=Fam.%20Pérez&cupos=4`
+## Rutas principales
 
-Textos, fecha, mapas y regalos: `src/features/boda/data.js`  
-Fotos y música: `public/boda/`
+| Ruta | Descripción |
+|------|-------------|
+| `/` | Home comercial (cotización) |
+| `/invitacion/juan-carlos-jessica` | Demo boda Juan Carlos & Jessica |
+| `/demo/boda` | Alias legacy de la demo |
+| `/respuestas/juan-carlos-jessica` | Confirmaciones del proyecto |
+| `/login` | Acceso (etapa 3) |
+| `/admin` | Panel administrador (etapa 4) |
+| `/cliente` | Panel cliente (etapa 6) |
 
-Firebase es opcional. Sin `.env`, el RSVP queda en el navegador y se descarga a Excel.
+Link por familia (mismo formato de siempre):
+
+`https://jccarrer1995.github.io/SAVEMEMORIES/?invitados=Fam.%20Pérez&cupos=4`
+
+También funciona en:
+
+`/invitacion/juan-carlos-jessica?invitados=...&cupos=...` o `/demo/boda?invitados=...&cupos=...`
+
+## Estructura
+
+Ver reglas y etapas en [`docs/DESARROLLO.md`](docs/DESARROLLO.md).
+
+Config del proyecto demo: `src/features/invitations/templates/boda/config/juanCarlosJessica.js`  
+Assets: `public/boda/`
+
+Firebase es opcional en local. Sin `.env`, el RSVP queda en el navegador.

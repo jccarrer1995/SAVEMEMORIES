@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { BODA } from '../data.js'
 
 function pad(value) {
   return String(value).padStart(2, '0')
@@ -16,8 +15,11 @@ function getRemaining(targetMs) {
   }
 }
 
-export function Countdown({ className = '' }) {
-  const targetMs = new Date(BODA.fechaIso).getTime()
+/**
+ * @param {{ className?: string, targetIso: string }} props
+ */
+export function Countdown({ className = '', targetIso }) {
+  const targetMs = new Date(targetIso).getTime()
   const [time, setTime] = useState(() => getRemaining(targetMs))
 
   useEffect(() => {

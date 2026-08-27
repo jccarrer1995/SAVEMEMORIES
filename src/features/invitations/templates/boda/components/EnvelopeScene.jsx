@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import { BODA } from '../data.js'
+import { useInvitationProject } from '../../../core/hooks/useInvitationProject.js'
 
 /**
  * @param {{ onOpened: () => void, onOpenStart?: () => void }} props
  */
 export function EnvelopeScene({ onOpened, onOpenStart }) {
+  const project = useInvitationProject()
   const [started, setStarted] = useState(false)
   const [opened, setOpened] = useState(false)
   const timersRef = useRef(/** @type {number[]} */ ([]))
@@ -64,7 +65,7 @@ export function EnvelopeScene({ onOpened, onOpenStart }) {
           <WaxSeal />
         </motion.div>
 
-        <p className="boda-envelope-initials">{BODA.iniciales}</p>
+        <p className="boda-envelope-initials">{project.iniciales}</p>
       </div>
 
       {!started ? (

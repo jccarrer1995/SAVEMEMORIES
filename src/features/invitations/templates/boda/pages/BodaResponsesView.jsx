@@ -1,23 +1,38 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BODA } from './data.js'
-import { downloadRsvpsExcel, listRsvps } from './saveRsvp.js'
+import { InvitationProjectProvider } from '../../../core/context/InvitationProjectProvider.jsx'
+import { useInvitationProject } from '../../../core/hooks/useInvitationProject.js'
+import { downloadRsvpsExcel, listRsvps } from '../services/saveRsvp.js'
 
-export function BodaRespuestasPage() {
+/**
+ * @param {{ project: import('../../../core/types/invitationProject.js').InvitationProjectConfig }} props
+ */
+export function BodaResponsesView({ project }) {
+  return (
+    <InvitationProjectProvider project={project}>
+      <ResponsesContent />
+    </InvitationProjectProvider>
+  )
+}
+
+function ResponsesContent() {
+  const project = useInvitationProject()
   const [rows, setRows] = useState(/** @type {Array<Record<string, unknown>>} */ ([]))
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    document.title = `Confirmaciones · ${BODA.novio} & ${BODA.novia}`
+    document.title = `Confirmaciones · ${project.title}`
     let cancelled = false
 
-    listRsvps()
+    listRsvps(project.id)
       .then((data) => {
         if (!cancelled) setRows(data)
       })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : 'No se pudieron cargar las respuestas.')
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'No se pudieron cargar las respuestas.')
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
@@ -26,24 +41,25 @@ export function BodaRespuestasPage() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [project.id, project.title])
 
   return (
     <div className="mx-auto min-h-screen max-w-3xl bg-[#f4efe6] px-4 py-8 text-[#2c2c2c]">
       <p className="text-sm">
-        <Link to="/" className="underline">
+        <Link to={`/invitacion/${project.id}`} className="underline">
           Volver a la invitación
         </Link>
       </p>
       <h1 className="mt-4 text-2xl font-semibold">Confirmaciones</h1>
       <p className="mt-1 text-sm text-[#6b645c]">
-        Las respuestas se guardan en este dispositivo (y en Firestore si configuraste .env) y se pueden descargar como Excel.
+        Proyecto: {project.title}. Las respuestas se guardan en Firestore (si hay .env) o en este
+        dispositivo.
       </p>
 
       <button
         type="button"
         onClick={() => {
-          void downloadRsvpsExcel(rows)
+          void downloadRsvpsExcel(project.id, project.id, rows)
         }}
         disabled={loading}
         className="mt-4 rounded-lg bg-[#2c2c2c] px-4 py-2 text-sm text-white disabled:opacity-50"

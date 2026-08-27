@@ -27,62 +27,58 @@ export function EnvelopeScene({ onOpened, onOpenStart }) {
   return (
     <button
       type="button"
-      className="boda-paper relative h-[100dvh] w-full cursor-pointer overflow-hidden border-0 p-0"
+      className="boda-envelope-stage"
       onClick={start}
       aria-label="Abrir invitación"
     >
-      <motion.div
-        className="boda-liner"
-        animate={opened ? { opacity: 1 } : { opacity: 0.35 }}
-        transition={{ duration: 0.8 }}
-      />
+      <div className="boda-envelope">
+        <div className="boda-envelope-body" />
+        <motion.div
+          className="boda-letter"
+          animate={opened ? { y: '-38%' } : { y: '22%' }}
+          transition={{ duration: 1.1, ease: [0.22, 0.8, 0.28, 1] }}
+        />
 
-      <div className="boda-flap boda-flap-left" />
-      <div className="boda-flap boda-flap-right" />
-      <div className="boda-flap boda-flap-bottom" />
+        <div className="boda-flap boda-flap-left" />
+        <div className="boda-flap boda-flap-right" />
+        <div className="boda-flap boda-flap-bottom" />
 
-      <svg className="pointer-events-none absolute inset-0 z-[6] h-full w-full" aria-hidden>
-        <line x1="0" y1="0" x2="50%" y2="52%" stroke="rgba(255,255,255,0.14)" strokeWidth="1" />
-        <line x1="100%" y1="0" x2="50%" y2="52%" stroke="rgba(0,0,0,0.18)" strokeWidth="1" />
-        <line x1="0" y1="100%" x2="50%" y2="52%" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-        <line x1="100%" y1="100%" x2="50%" y2="52%" stroke="rgba(0,0,0,0.16)" strokeWidth="1" />
-      </svg>
+        <svg className="pointer-events-none absolute inset-0 z-[6] h-full w-full" aria-hidden>
+          <line x1="0" y1="0" x2="50%" y2="58%" stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
+          <line x1="100%" y1="0" x2="50%" y2="58%" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
+          <line x1="0" y1="100%" x2="50%" y2="58%" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+          <line x1="100%" y1="100%" x2="50%" y2="58%" stroke="rgba(0,0,0,0.16)" strokeWidth="1" />
+        </svg>
 
-      <motion.div
-        className="boda-flap boda-flap-top origin-top"
-        animate={
-          opened
-            ? { y: '-62%', opacity: 0.2 }
-            : { y: '0%', opacity: 1 }
-        }
-        transition={{ duration: 1.2, ease: [0.22, 0.8, 0.28, 1] }}
-      />
+        <motion.div
+          className="boda-flap boda-flap-top origin-top"
+          animate={opened ? { rotateX: -168 } : { rotateX: 0 }}
+          transition={{ duration: 1.15, ease: [0.22, 0.8, 0.28, 1] }}
+        />
 
-      <motion.div
-        className="absolute left-1/2 z-20 -translate-x-1/2"
-        animate={opened ? { top: '8%', scale: 0.9 } : { top: '41%', scale: 1 }}
-        transition={{ duration: 1.15, ease: [0.22, 0.8, 0.28, 1] }}
-      >
-        <WaxSeal />
-      </motion.div>
+        <motion.div
+          className="absolute left-1/2 z-20 -translate-x-1/2"
+          animate={opened ? { top: '-18%', scale: 0.86, opacity: 0.35 } : { top: '46%', scale: 1, opacity: 1 }}
+          transition={{ duration: 1.15, ease: [0.22, 0.8, 0.28, 1] }}
+        >
+          <WaxSeal />
+        </motion.div>
 
-      <p
-        className="boda-serif absolute left-1/2 top-[56%] z-20 -translate-x-1/2 whitespace-nowrap text-[36px] tracking-[0.14em] text-[#e8eef6]"
-        style={{ textShadow: '0 1px 0 rgba(255,255,255,0.18), 0 8px 16px rgba(0,0,0,0.25)' }}
-      >
-        {BODA.iniciales}
-      </p>
+        <p className="boda-envelope-initials">{BODA.iniciales}</p>
+      </div>
 
       {!started ? (
         <motion.p
-          className="absolute bottom-24 left-0 right-0 text-center text-[11px] tracking-[0.35em] text-white/70 uppercase"
+          className="boda-envelope-hint"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.45 }}
         >
           Toca para abrir
         </motion.p>
-      ) : null}
+      ) : (
+        <span className="boda-envelope-hint opacity-0">Toca para abrir</span>
+      )}
     </button>
   )
 }
@@ -90,7 +86,7 @@ export function EnvelopeScene({ onOpened, onOpenStart }) {
 function WaxSeal() {
   return (
     <div
-      className="relative h-[92px] w-[92px] rounded-full"
+      className="relative h-[72px] w-[72px] rounded-full"
       style={{
         background:
           'radial-gradient(circle at 35% 30%, #4a6284 0%, #2b405c 42%, #1a2a40 78%)',

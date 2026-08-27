@@ -4,6 +4,7 @@ import { LEGACY_BODA_PROJECT_ID } from '../../../app/router/routes.js'
 import { useGuestLinkValidation } from '../core/hooks/useGuestLinkValidation.js'
 import { useProjectLoader } from '../core/hooks/useProjectLoader.js'
 import { getDefaultGuestInvite } from '../core/utils/guestInvite.js'
+import { BabyShowerInvitationView } from '../templates/baby-shower/pages/BabyShowerInvitationView.jsx'
 import { BodaInvitationView } from '../templates/boda/pages/BodaInvitationView.jsx'
 import { BodaResponsesView } from '../templates/boda/pages/BodaResponsesView.jsx'
 
@@ -13,6 +14,29 @@ function ProjectLoadingScreen() {
       <p className="marketing-muted text-sm">Cargando invitación…</p>
     </div>
   )
+}
+
+/**
+ * @param {{
+ *   project: import('../core/types/invitationProject.js').RegisteredProject,
+ *   validatedInvite: import('../core/types/invitationProject.js').GuestInvite | null,
+ *   linkCode?: string,
+ *   allowQueryParams?: boolean,
+ * }} props
+ */
+function TemplateInvitationView({ project, validatedInvite, linkCode, allowQueryParams = false }) {
+  const guestInvite = linkCode && validatedInvite ? validatedInvite : getDefaultGuestInvite(project.config)
+  const viewProps = {
+    project: project.config,
+    guestInvite,
+    allowQueryParams: allowQueryParams && !linkCode,
+  }
+
+  if (project.templateId === 'babyshower') {
+    return <BabyShowerInvitationView {...viewProps} />
+  }
+
+  return <BodaInvitationView {...viewProps} />
 }
 
 /**
@@ -40,14 +64,13 @@ export function InvitationPage({ projectId, linkCode, allowQueryParams = false }
     return <InvalidInvitationPage reason={linkError} />
   }
 
-  if (project.templateId === 'boda') {
-    const guestInvite = linkCode && validatedInvite ? validatedInvite : getDefaultGuestInvite(project.config)
-
+  if (project.templateId === 'boda' || project.templateId === 'babyshower') {
     return (
-      <BodaInvitationView
-        project={project.config}
-        guestInvite={guestInvite}
-        allowQueryParams={allowQueryParams && !linkCode}
+      <TemplateInvitationView
+        project={project}
+        validatedInvite={validatedInvite}
+        linkCode={linkCode}
+        allowQueryParams={allowQueryParams}
       />
     )
   }
@@ -67,7 +90,7 @@ export function ProjectResponsesPage({ projectId }) {
     return <InvalidInvitationPage reason="El proyecto no existe." />
   }
 
-  if (project.templateId === 'boda') {
+  if (project.templateId === 'boda' || project.templateId === 'babyshower') {
     return <BodaResponsesView project={project.config} />
   }
 
@@ -76,6 +99,10 @@ export function ProjectResponsesPage({ projectId }) {
 
 export function LegacyBodaPage() {
   return <InvitationPage projectId={LEGACY_BODA_PROJECT_ID} allowQueryParams />
+}
+
+export function LegacyBabyShowerPage() {
+  return <InvitationPage projectId="demo-baby-shower" allowQueryParams />
 }
 
 export function LegacyResponsesPage() {

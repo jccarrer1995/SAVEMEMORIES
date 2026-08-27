@@ -48,8 +48,9 @@ export const TEMPLATES = [
   {
     id: 'baby',
     name: 'Baby shower',
-    description: 'Tono dulce y cercano, ideal para celebraciones íntimas.',
-    available: false,
+    description: 'Tonos pasteles, sobre animado y confirmación de asistencia.',
+    demoPath: '/demo/baby-shower',
+    available: true,
   },
 ]
 

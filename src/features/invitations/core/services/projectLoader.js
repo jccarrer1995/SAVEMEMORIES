@@ -1,3 +1,4 @@
+import { isSupportedTemplateId } from '../constants/supportedTemplates.js'
 import { fetchProjectRecord } from '../../../../lib/firebase/projectStore.js'
 import { getProjectById as getRegistryProject } from '../registry/projectRegistry.js'
 
@@ -6,7 +7,7 @@ import { getProjectById as getRegistryProject } from '../registry/projectRegistr
  * @returns {import('../types/invitationProject.js').RegisteredProject | null}
  */
 function mapRecordToRegistered(record) {
-  if (record.templateId !== 'boda') return null
+  if (!isSupportedTemplateId(record.templateId)) return null
 
   return {
     templateId: record.templateId,

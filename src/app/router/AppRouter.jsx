@@ -13,6 +13,7 @@ import {
   InvalidInvitationPage,
   InvitationPage,
   LegacyBodaPage,
+  LegacyBabyShowerPage,
   LegacyResponsesPage,
   ProjectResponsesPage,
 } from '../../features/invitations/pages/InvitationPage.jsx'
@@ -113,6 +114,7 @@ export function AppRouter() {
       <Route path="/invitacion/:projectId/:linkCode?" element={<InvitationRoute />} />
       <Route path="/respuestas/:projectId" element={<ProjectResponsesRoute />} />
       <Route path="/demo/boda" element={<LegacyBodaPage />} />
+      <Route path="/demo/baby-shower" element={<LegacyBabyShowerPage />} />
       <Route path="/respuestas" element={<LegacyResponsesPage />} />
       <Route path="*" element={<InvalidInvitationPage reason="Página no encontrada." />} />
     </Routes>

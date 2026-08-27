@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { EventDateTimeFields } from './EventDateTimeFields.jsx'
 import { ClientOwnerField } from './ClientOwnerField.jsx'
-import { TEMPLATE_OPTIONS } from '../data/templateOptions.js'
+import { TEMPLATE_OPTIONS, getProjectFieldLabels } from '../data/templateOptions.js'
 import { panelFieldClass } from '../utils/panelFieldClass.js'
 import { slugify } from '../utils/slugify.js'
 import {
@@ -28,6 +28,7 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
   const [fieldErrors, setFieldErrors] = useState(/** @type {Record<string, string>} */ ({}))
 
   const previewUrl = useMemo(() => `/invitacion/${values.slug || 'slug'}`, [values.slug])
+  const fieldLabels = useMemo(() => getProjectFieldLabels(values.templateId), [values.templateId])
 
   function updateField(field, value) {
     setValues((prev) => ({ ...prev, [field]: value }))
@@ -62,7 +63,7 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
     const validation = validateProjectForm(values)
     if (!validation.valid) {
       setFieldErrors(validation.fieldErrors)
-      const summary = summarizeFieldErrors(validation.fieldErrors)
+      const summary = summarizeFieldErrors(validation.fieldErrors, values.templateId)
       setError(summary)
       toast.error(summary)
       scrollToFirstInvalidField()
@@ -158,15 +159,15 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
       </section>
 
       <section className="panel-form-section">
-        <h2 className="panel-form-heading">Pareja y fecha</h2>
+        <h2 className="panel-form-heading">{fieldLabels.coupleSection}</h2>
         <div className="panel-form-grid">
           <label className={panelFieldClass(fieldErrors, 'novio')}>
-            <span>Novio</span>
+            <span>{fieldLabels.novio}</span>
             <input type="text" value={values.novio} onChange={(e) => updateField('novio', e.target.value)} />
             {fieldErrors.novio ? <span className="panel-field-error">{fieldErrors.novio}</span> : null}
           </label>
           <label className={panelFieldClass(fieldErrors, 'novia')}>
-            <span>Novia</span>
+            <span>{fieldLabels.novia}</span>
             <input type="text" value={values.novia} onChange={(e) => updateField('novia', e.target.value)} />
             {fieldErrors.novia ? <span className="panel-field-error">{fieldErrors.novia}</span> : null}
           </label>

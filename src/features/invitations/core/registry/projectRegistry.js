@@ -1,10 +1,15 @@
 import { juanCarlosJessicaProject } from '../../templates/boda/config/juanCarlosJessica.js'
+import { demoBabyShowerProject } from '../../templates/baby-shower/config/demoBabyShower.js'
 
 /** @type {Record<string, import('../types/invitationProject.js').RegisteredProject>} */
 const PROJECTS = {
   [juanCarlosJessicaProject.id]: {
     templateId: juanCarlosJessicaProject.templateId,
     config: juanCarlosJessicaProject,
+  },
+  [demoBabyShowerProject.id]: {
+    templateId: demoBabyShowerProject.templateId,
+    config: demoBabyShowerProject,
   },
 }
 

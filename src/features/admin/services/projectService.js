@@ -5,6 +5,7 @@ import {
   persistProjectRecord,
 } from '../../../lib/firebase/projectStore.js'
 import { asText } from '../../../shared/utils/asText.js'
+import { createDefaultBabyShowerContent } from '../data/defaultBabyShowerContent.js'
 import { createDefaultBodaContent } from '../data/defaultBodaContent.js'
 import { joinFechaIso, splitFechaIso } from '../utils/eventDateTime.js'
 
@@ -30,7 +31,7 @@ function buildContentFromForm(values) {
       direccion: values.recepcionDireccion.trim(),
       mapsUrl: values.recepcionMapsUrl.trim(),
     },
-    cronograma: createDefaultBodaContent().cronograma,
+    cronograma: getDefaultContentForTemplate(values.templateId).cronograma,
     regalos: { texto: values.regalosTexto.trim() },
     dressCode: {
       estilo: values.dressCodeEstilo.trim(),
@@ -96,13 +97,19 @@ export function projectToFormValues(project) {
   }
 }
 
+/** @param {string} templateId */
+function getDefaultContentForTemplate(templateId) {
+  if (templateId === 'babyshower') return createDefaultBabyShowerContent()
+  return createDefaultBodaContent()
+}
+
 /** @returns {import('../types/projectRecord.js').ProjectFormValues} */
-export function createEmptyProjectForm() {
-  const content = createDefaultBodaContent()
+export function createEmptyProjectForm(templateId = 'boda') {
+  const content = getDefaultContentForTemplate(templateId)
   return projectToFormValues({
     id: '',
     slug: '',
-    templateId: 'boda',
+    templateId,
     status: 'draft',
     title: '',
     ownerId: '',

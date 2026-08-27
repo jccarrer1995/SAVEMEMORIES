@@ -33,6 +33,25 @@ jobs:
         run: npm run build
         env:
           VITE_BASE: /SAVEMEMORIES/
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+      - name: Verify Firebase config in build
+        run: |
+          if [ -z "$VITE_FIREBASE_API_KEY" ]; then
+            echo "::warning::Firebase secrets are missing — login will not work in production."
+          elif ! grep -q "$VITE_FIREBASE_PROJECT_ID" dist/assets/index-*.js; then
+            echo "::error::Firebase project id not found in built bundle. Check repository secrets."
+            exit 1
+          else
+            echo "Firebase config embedded in production build."
+          fi
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
       - name: SPA fallback for GitHub Pages
         run: |
           cp dist/index.html dist/404.html

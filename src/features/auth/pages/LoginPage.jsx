@@ -48,8 +48,9 @@ export function LoginPage() {
 
           {!isConfigured ? (
             <p className="marketing-muted mt-6 rounded-xl border border-dashed border-[rgba(201,123,92,0.35)] bg-white/50 p-4 text-sm">
-              Firebase no está configurado. Agrega las variables en <code>.env</code> para habilitar
-              el acceso.
+              Firebase no está configurado en este entorno. En local usa <code>.env</code>; en
+              producción configura los secrets <code>VITE_FIREBASE_*</code> en GitHub y vuelve a
+              desplegar.
             </p>
           ) : (
             <div className="mt-8">

@@ -1,5 +1,6 @@
 import { Route, Routes, useParams } from 'react-router-dom'
 import { AdminDashboardPage } from '../../features/admin/pages/AdminDashboardPage.jsx'
+import { AdminProjectLinksPage } from '../../features/admin/pages/AdminProjectLinksPage.jsx'
 import { AdminProjectEditPage, AdminProjectNewPage } from '../../features/admin/pages/AdminProjectFormPage.jsx'
 import { AdminProjectsListPage } from '../../features/admin/pages/AdminProjectsListPage.jsx'
 import { ProtectedRoute } from '../../features/auth/components/ProtectedRoute.jsx'
@@ -18,10 +19,7 @@ import { ROLES } from '../../shared/constants/roles.js'
 function InvitationRoute() {
   const { projectId, linkCode } = useParams()
   if (!projectId) return <InvalidInvitationPage />
-  if (linkCode) {
-    // Etapa 5: validar linkCode en Firestore.
-  }
-  return <InvitationPage projectId={projectId} />
+  return <InvitationPage projectId={projectId} linkCode={linkCode} />
 }
 
 function ProjectResponsesRoute() {
@@ -56,6 +54,14 @@ export function AppRouter() {
         element={
           <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
             <AdminProjectNewPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/proyectos/:projectId/enlaces"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+            <AdminProjectLinksPage />
           </ProtectedRoute>
         }
       />

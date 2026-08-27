@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { InvitationProjectProvider } from '../../../core/context/InvitationProjectProvider.jsx'
-import { getGuestInviteFromSearch } from '../../../core/utils/guestInvite.js'
+import { getDefaultGuestInvite, getGuestInviteFromSearch } from '../../../core/utils/guestInvite.js'
 import { BodaLanding } from '../BodaLanding.jsx'
 import { EnvelopeScene } from '../components/EnvelopeScene.jsx'
 import { MusicToggle } from '../components/MusicToggle.jsx'
@@ -13,11 +13,19 @@ const FONT_HREF =
   'https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Great+Vibes&family=Outfit:wght@300;400;500&display=swap'
 
 /**
- * @param {{ project: import('../../features/invitations/core/types/invitationProject.js').InvitationProjectConfig }} props
+ * @param {{
+ *   project: import('../../features/invitations/core/types/invitationProject.js').InvitationProjectConfig,
+ *   guestInvite?: import('../../features/invitations/core/types/invitationProject.js').GuestInvite,
+ *   allowQueryParams?: boolean,
+ * }} props
  */
-export function BodaInvitationView({ project }) {
+export function BodaInvitationView({ project, guestInvite, allowQueryParams = false }) {
   const [searchParams] = useSearchParams()
-  const invite = getGuestInviteFromSearch(project, `?${searchParams.toString()}`)
+  const invite =
+    guestInvite ??
+    (allowQueryParams
+      ? getGuestInviteFromSearch(project, `?${searchParams.toString()}`)
+      : getDefaultGuestInvite(project))
   const [opened, setOpened] = useState(false)
   const { musicPlaying, playMusic, toggleMusic } = useInvitationMusic(project.musicaSrc)
 

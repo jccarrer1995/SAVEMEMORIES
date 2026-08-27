@@ -1,5 +1,16 @@
 /**
  * @param {import('../types/invitationProject.js').InvitationProjectConfig} project
+ * @returns {import('../types/invitationProject.js').GuestInvite}
+ */
+export function getDefaultGuestInvite(project) {
+  return {
+    nombre: project.invitadosPorDefecto.nombre,
+    cupos: project.invitadosPorDefecto.cupos,
+  }
+}
+
+/**
+ * @param {import('../types/invitationProject.js').InvitationProjectConfig} project
  * @param {string} search
  * @returns {import('../types/invitationProject.js').GuestInvite}
  */

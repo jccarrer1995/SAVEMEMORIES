@@ -303,6 +303,10 @@
   gap: 0.75rem;
 }
 
+.panel-form-section .panel-form-actions {
+  margin-top: 1.25rem;
+}
+
 a.panel-btn-primary,
 button.panel-btn-primary {
   display: inline-flex;

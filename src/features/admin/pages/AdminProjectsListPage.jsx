@@ -80,6 +80,9 @@ export function AdminProjectsListPage() {
                 </td>
                 <td>{project.linkLimit}</td>
                 <td className="panel-table-actions">
+                  <Link to={`/admin/proyectos/${project.slug}/enlaces`} className="marketing-link text-sm">
+                    Enlaces
+                  </Link>
                   <Link to={`/admin/proyectos/${project.slug}`} className="marketing-link text-sm">
                     Editar
                   </Link>

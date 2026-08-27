@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ProjectForm } from '../components/ProjectForm.jsx'
 import { ADMIN_NAV } from '../data/adminNav.js'
 import {
@@ -88,6 +88,12 @@ export function AdminProjectEditPage() {
       subtitle={initialValues.title || initialValues.slug}
       navItems={ADMIN_NAV}
     >
+      <p className="panel-notice mb-4">
+        <Link to={`/admin/proyectos/${projectId}/enlaces`} className="marketing-link font-medium">
+          Gestionar enlaces de invitados
+        </Link>{' '}
+        con códigos únicos y cupos validados en la nube.
+      </p>
       <ProjectForm initialValues={initialValues} isNew={false} onSubmit={handleSubmit} />
     </PanelShell>
   )

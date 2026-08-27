@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
 import '../../marketing/styles/marketing.css'
 import { LEGACY_BODA_PROJECT_ID } from '../../../app/router/routes.js'
+import { useGuestLinkValidation } from '../core/hooks/useGuestLinkValidation.js'
 import { useProjectLoader } from '../core/hooks/useProjectLoader.js'
+import { getDefaultGuestInvite } from '../core/utils/guestInvite.js'
 import { BodaInvitationView } from '../templates/boda/pages/BodaInvitationView.jsx'
 import { BodaResponsesView } from '../templates/boda/pages/BodaResponsesView.jsx'
 
@@ -14,19 +16,40 @@ function ProjectLoadingScreen() {
 }
 
 /**
- * @param {{ projectId: string }} props
+ * @param {{
+ *   projectId: string,
+ *   linkCode?: string,
+ *   allowQueryParams?: boolean,
+ * }} props
  */
-export function InvitationPage({ projectId }) {
+export function InvitationPage({ projectId, linkCode, allowQueryParams = false }) {
   const { loading, project } = useProjectLoader(projectId, 'public')
+  const {
+    loading: linkLoading,
+    guestInvite: validatedInvite,
+    error: linkError,
+  } = useGuestLinkValidation(projectId, linkCode)
 
-  if (loading) return <ProjectLoadingScreen />
+  if (loading || (linkCode && linkLoading)) return <ProjectLoadingScreen />
 
   if (!project) {
     return <InvalidInvitationPage reason="El proyecto no existe o fue desactivado." />
   }
 
+  if (linkCode && linkError) {
+    return <InvalidInvitationPage reason={linkError} />
+  }
+
   if (project.templateId === 'boda') {
-    return <BodaInvitationView project={project.config} />
+    const guestInvite = linkCode && validatedInvite ? validatedInvite : getDefaultGuestInvite(project.config)
+
+    return (
+      <BodaInvitationView
+        project={project.config}
+        guestInvite={guestInvite}
+        allowQueryParams={allowQueryParams && !linkCode}
+      />
+    )
   }
 
   return <InvalidInvitationPage reason="Plantilla no disponible." />
@@ -52,7 +75,7 @@ export function ProjectResponsesPage({ projectId }) {
 }
 
 export function LegacyBodaPage() {
-  return <InvitationPage projectId={LEGACY_BODA_PROJECT_ID} />
+  return <InvitationPage projectId={LEGACY_BODA_PROJECT_ID} allowQueryParams />
 }
 
 export function LegacyResponsesPage() {

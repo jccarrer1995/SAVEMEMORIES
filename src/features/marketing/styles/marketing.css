@@ -67,6 +67,43 @@
   color: var(--mkt-accent);
 }
 
+.marketing-header {
+  border-bottom: 1px solid rgba(201, 123, 92, 0.12);
+  background: rgba(255, 252, 248, 0.78);
+  backdrop-filter: blur(10px);
+}
+
+.marketing-nav-link {
+  font-size: 0.875rem;
+  color: var(--mkt-text-soft);
+  transition: color 0.15s ease;
+}
+
+.marketing-nav-link:hover {
+  color: var(--mkt-accent-deep);
+}
+
+.marketing-template-card {
+  position: relative;
+  min-height: 220px;
+}
+
+.marketing-template-badge {
+  display: inline-flex;
+  border-radius: 9999px;
+  background: rgba(122, 74, 50, 0.1);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mkt-text-soft);
+}
+
+.marketing-template-badge.is-live {
+  background: rgba(201, 123, 92, 0.16);
+  color: var(--mkt-accent-deep);
+}
+
 .marketing-blob {
   pointer-events: none;
   position: absolute;

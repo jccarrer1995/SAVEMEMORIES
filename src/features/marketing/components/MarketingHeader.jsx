@@ -1,14 +1,48 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { NAV_LINKS, SITE } from '../data/siteContent.js'
+import { scrollToSection } from '../hooks/useMarketingFonts.js'
+
+function NavAnchor({ id, label }) {
+  const location = useLocation()
+  const isHome = location.pathname === '/'
+
+  if (isHome) {
+    return (
+      <button
+        type="button"
+        onClick={() => scrollToSection(id)}
+        className="marketing-nav-link"
+      >
+        {label}
+      </button>
+    )
+  }
+
+  return (
+    <Link to={`/#${id}`} className="marketing-nav-link">
+      {label}
+    </Link>
+  )
+}
 
 export function MarketingHeader() {
   return (
-    <header className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-6 py-6">
-      <p className="marketing-serif text-xl tracking-[0.2em] text-[#7a4a32]">SAVEMEMORIES</p>
-      <nav className="flex gap-4 text-sm">
-        <Link to="/login" className="marketing-link font-medium transition-colors">
-          Acceso clientes
+    <header className="marketing-header sticky top-0 z-20">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
+        <Link to="/" className="marketing-serif text-xl tracking-[0.18em] text-[#7a4a32]">
+          {SITE.name}
         </Link>
-      </nav>
+
+        <nav className="hidden items-center gap-5 md:flex">
+          {NAV_LINKS.map((link) => (
+            <NavAnchor key={link.id} id={link.id} label={link.label} />
+          ))}
+        </nav>
+
+        <Link to="/login" className="marketing-btn-secondary rounded-full px-4 py-2 text-xs font-medium md:text-sm">
+          Acceso
+        </Link>
+      </div>
     </header>
   )
 }

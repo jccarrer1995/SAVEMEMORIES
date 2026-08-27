@@ -1,0 +1,130 @@
+.panel-shell {
+  display: grid;
+  min-height: 100dvh;
+  color: #5c3a2e;
+  background: linear-gradient(160deg, #faf6f1 0%, #fff9f4 50%, #fdeee4 100%);
+}
+
+@media (min-width: 900px) {
+  .panel-shell {
+    grid-template-columns: 260px 1fr;
+  }
+}
+
+.panel-sidebar {
+  border-bottom: 1px solid rgba(201, 123, 92, 0.15);
+  background: rgba(255, 252, 248, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+@media (min-width: 900px) {
+  .panel-sidebar {
+    border-bottom: none;
+    border-right: 1px solid rgba(201, 123, 92, 0.15);
+    min-height: 100dvh;
+  }
+}
+
+.panel-role-badge {
+  display: inline-flex;
+  border-radius: 9999px;
+  background: rgba(201, 123, 92, 0.12);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7a4a32;
+}
+
+.panel-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.875rem;
+  color: #6b3f2a;
+  transition: background 0.15s ease;
+}
+
+.panel-nav-item:hover {
+  background: rgba(201, 123, 92, 0.08);
+}
+
+.panel-nav-item.is-active {
+  background: rgba(201, 123, 92, 0.14);
+  font-weight: 500;
+}
+
+.panel-nav-item.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.panel-soon {
+  border-radius: 9999px;
+  background: rgba(122, 74, 50, 0.08);
+  padding: 0.1rem 0.45rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panel-main {
+  min-width: 0;
+}
+
+.panel-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(201, 123, 92, 0.12);
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 252, 248, 0.5);
+}
+
+.panel-content {
+  padding: 1.5rem;
+}
+
+.panel-stat-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 700px) {
+  .panel-stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.panel-stat-card {
+  border: 1px solid rgba(201, 123, 92, 0.2);
+  border-radius: 1rem;
+  background: rgba(255, 252, 248, 0.85);
+  padding: 1rem 1.1rem;
+}
+
+.panel-stat-value {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.75rem;
+  color: #6b3f2a;
+}
+
+.panel-stat-label {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #8b5e4b;
+}
+
+.panel-notice {
+  margin-top: 1.25rem;
+  border-radius: 1rem;
+  border: 1px dashed rgba(201, 123, 92, 0.35);
+  background: rgba(255, 252, 248, 0.7);
+  padding: 1rem 1.1rem;
+  font-size: 0.875rem;
+  color: #8b5e4b;
+}

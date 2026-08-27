@@ -1,19 +1,34 @@
-import { Link } from 'react-router-dom'
-import { MarketingShell } from '../../marketing/components/MarketingShell.jsx'
+import { ADMIN_NAV } from '../data/adminNav.js'
+import { PanelShell } from '../../../shared/layouts/PanelShell.jsx'
 import { ROLES } from '../../../shared/constants/roles.js'
 
 export function AdminDashboardPage() {
   return (
-    <MarketingShell title="Panel administrador">
-      <div className="marketing-card rounded-2xl p-6">
-        <p className="marketing-kicker text-xs uppercase">Rol: {ROLES.ADMIN}</p>
-        <p className="marketing-muted mt-4 text-sm leading-relaxed">
-          Etapa 4: crear proyectos, asignar plantillas, clientes y cuotas de enlaces.
-        </p>
-        <Link to="/" className="marketing-link mt-6 inline-block text-sm font-medium underline-offset-2 hover:underline">
-          Volver al inicio
-        </Link>
+    <PanelShell
+      roleLabel={`Rol ${ROLES.ADMIN}`}
+      title="Panel administrador"
+      subtitle="Gestiona proyectos, clientes y plantillas."
+      navItems={ADMIN_NAV}
+    >
+      <div className="panel-stat-grid">
+        <article className="panel-stat-card">
+          <p className="panel-stat-value">0</p>
+          <p className="panel-stat-label">Proyectos activos</p>
+        </article>
+        <article className="panel-stat-card">
+          <p className="panel-stat-value">0</p>
+          <p className="panel-stat-label">Clientes</p>
+        </article>
+        <article className="panel-stat-card">
+          <p className="panel-stat-value">1</p>
+          <p className="panel-stat-label">Plantilla demo</p>
+        </article>
       </div>
-    </MarketingShell>
+
+      <p className="panel-notice">
+        Etapa 4: aquí podrás crear proyectos, asignar plantillas (boda, XV, baby shower),
+        configurar contenido y definir cuántos enlaces puede generar cada cliente.
+      </p>
+    </PanelShell>
   )
 }

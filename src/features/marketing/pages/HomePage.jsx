@@ -1,34 +1,31 @@
-import { useEffect } from 'react'
-import { MarketingDecor } from '../components/MarketingDecor.jsx'
+import { MarketingContact } from '../components/MarketingContact.jsx'
+import { MarketingFaq } from '../components/MarketingFaq.jsx'
 import { MarketingFeatures } from '../components/MarketingFeatures.jsx'
-import { MarketingHeader } from '../components/MarketingHeader.jsx'
 import { MarketingHero } from '../components/MarketingHero.jsx'
-import '../styles/marketing.css'
-
-const FONT_HREF =
-  'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500&display=swap'
+import { MarketingLayout } from '../components/MarketingLayout.jsx'
+import { MarketingProcess } from '../components/MarketingProcess.jsx'
+import { MarketingTemplates } from '../components/MarketingTemplates.jsx'
+import { scrollToSection, useMarketingFonts } from '../hooks/useMarketingFonts.js'
+import { useEffect } from 'react'
 
 export function HomePage() {
-  useEffect(() => {
-    document.title = 'SAVEMEMORIES · Invitaciones digitales'
+  useMarketingFonts('SAVEMEMORIES · Invitaciones digitales')
 
-    if (!document.getElementById('marketing-fonts')) {
-      const link = document.createElement('link')
-      link.id = 'marketing-fonts'
-      link.rel = 'stylesheet'
-      link.href = FONT_HREF
-      document.head.appendChild(link)
-    }
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '')
+    if (!hash) return
+    const timer = window.setTimeout(() => scrollToSection(hash), 120)
+    return () => window.clearTimeout(timer)
   }, [])
 
   return (
-    <div className="marketing-page relative overflow-hidden font-[Outfit,sans-serif]">
-      <MarketingDecor />
-      <MarketingHeader />
-      <main>
-        <MarketingHero />
-        <MarketingFeatures />
-      </main>
-    </div>
+    <MarketingLayout>
+      <MarketingHero />
+      <MarketingFeatures />
+      <MarketingTemplates />
+      <MarketingProcess />
+      <MarketingFaq />
+      <MarketingContact />
+    </MarketingLayout>
   )
 }

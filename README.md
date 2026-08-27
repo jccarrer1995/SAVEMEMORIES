@@ -15,7 +15,7 @@ npm run dev
 
 | Ruta | Descripción |
 |------|-------------|
-| `/` | Home comercial (cotización) |
+| `/` | Home comercial con secciones, FAQ y contacto |
 | `/invitacion/juan-carlos-jessica` | Demo boda Juan Carlos & Jessica |
 | `/demo/boda` | Alias legacy de la demo |
 | `/respuestas/juan-carlos-jessica` | Confirmaciones del proyecto |
@@ -36,6 +36,7 @@ También funciona en:
 Ver reglas y etapas en [`docs/DESARROLLO.md`](docs/DESARROLLO.md).
 
 Config del proyecto demo: `src/features/invitations/templates/boda/config/juanCarlosJessica.js`  
+Textos del sitio comercial (WhatsApp, email): `src/features/marketing/data/siteContent.js`  
 Assets: `public/boda/`
 
 Firebase es opcional en local. Sin `.env`, el RSVP queda en el navegador.

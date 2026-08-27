@@ -19,7 +19,9 @@ npm run dev
 | `/invitacion/juan-carlos-jessica` | Demo boda Juan Carlos & Jessica |
 | `/demo/boda` | Alias legacy de la demo |
 | `/respuestas/juan-carlos-jessica` | Confirmaciones del proyecto |
-| `/login` | Acceso (etapa 3) |
+| `/login` | Autenticación (admin / cliente) |
+
+Guía para crear usuarios y roles: [`docs/AUTH.md`](docs/AUTH.md)
 | `/admin` | Panel administrador (etapa 4) |
 | `/cliente` | Panel cliente (etapa 6) |
 

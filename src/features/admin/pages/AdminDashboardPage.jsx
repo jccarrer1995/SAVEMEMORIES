@@ -26,8 +26,8 @@ export function AdminDashboardPage() {
       </div>
 
       <p className="panel-notice">
-        Etapa 4: aquí podrás crear proyectos, asignar plantillas (boda, XV, baby shower),
-        configurar contenido y definir cuántos enlaces puede generar cada cliente.
+        Etapa 4: podrás crear proyectos, asignar plantillas (boda, XV, baby shower), configurar
+        contenido y definir cuántos enlaces puede generar cada cliente.
       </p>
     </PanelShell>
   )

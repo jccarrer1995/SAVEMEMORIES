@@ -1,9 +1,13 @@
 import { Link, useLocation } from 'react-router-dom'
 
 /**
- * @param {{ items: Array<{ label: string, href: string, disabled?: boolean }>, roleLabel: string }} props
+ * @param {{
+ *   items: Array<{ label: string, href: string, disabled?: boolean }>,
+ *   roleLabel: string,
+ *   email?: string,
+ * }} props
  */
-export function PanelSidebar({ items, roleLabel }) {
+export function PanelSidebar({ items, roleLabel, email }) {
   const location = useLocation()
 
   return (
@@ -13,6 +17,7 @@ export function PanelSidebar({ items, roleLabel }) {
           SAVEMEMORIES
         </Link>
         <p className="panel-role-badge mt-3">{roleLabel}</p>
+        {email ? <p className="marketing-muted mt-2 truncate text-xs">{email}</p> : null}
       </div>
 
       <nav className="flex flex-col gap-1 px-3 pb-6">

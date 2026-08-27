@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { LEGACY_BODA_PROJECT_ID } from '../../../app/router/routes.js'
-import { mailtoQuote, whatsappUrl, SITE } from '../data/siteContent.js'
+import { whatsappUrl, SITE } from '../data/siteContent.js'
 import { scrollToSection } from '../hooks/useMarketingFonts.js'
 
 export function MarketingHero() {

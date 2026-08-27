@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -10,23 +11,24 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-const missingKeys = [
+const requiredKeys = [
   'VITE_FIREBASE_API_KEY',
   'VITE_FIREBASE_AUTH_DOMAIN',
   'VITE_FIREBASE_PROJECT_ID',
   'VITE_FIREBASE_APP_ID',
-].filter((key) => !import.meta.env[key])
+]
 
-/** @type {import('firebase/firestore').Firestore | null} */
-let db = null
+const missingKeys = requiredKeys.filter((key) => !import.meta.env[key])
+export const isFirebaseConfigured = missingKeys.length === 0
 
-if (missingKeys.length === 0) {
-  const app = initializeApp(firebaseConfig)
-  db = getFirestore(app)
-} else if (import.meta.env.DEV) {
+const app = isFirebaseConfigured ? initializeApp(firebaseConfig) : null
+const auth = app ? getAuth(app) : null
+const db = app ? getFirestore(app) : null
+
+if (!isFirebaseConfigured && import.meta.env.DEV) {
   console.info(
-    '[invitación] Firebase opcional. Sin .env las confirmaciones se guardan en este dispositivo y se pueden descargar a Excel.'
+    '[SAVEMEMORIES] Firebase no configurado. RSVP local y paneles de acceso deshabilitados hasta configurar .env.'
   )
 }
 
-export { db }
+export { app, auth, db }

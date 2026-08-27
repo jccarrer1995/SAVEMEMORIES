@@ -57,12 +57,14 @@ export function LoginPage() {
             </div>
           )}
 
-          <Link
-            to="/"
-            className="marketing-link mt-6 inline-block text-sm font-medium underline-offset-2 hover:underline"
-          >
-            Volver al inicio
-          </Link>
+          <div className="mt-6 text-center">
+            <Link
+              to="/"
+              className="marketing-link text-sm font-medium underline-offset-2 hover:underline"
+            >
+              Volver al inicio
+            </Link>
+          </div>
         </div>
       </section>
     </MarketingLayout>

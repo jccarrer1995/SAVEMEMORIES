@@ -39,8 +39,19 @@ service cloud.firestore {
     }
 
     match /users/{uid} {
-      allow read: if isSelf(uid);
-      allow create, update, delete: if false;
+      allow read: if isSelf(uid) || isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.role == 'client'
+        && request.resource.data.email is string
+        && request.resource.data.email.size() > 3
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.active is bool;
+      allow update: if isAdmin()
+        && resource.data.role == 'client'
+        && request.resource.data.role == 'client';
+      allow delete: if isAdmin() && resource.data.role == 'client';
     }
 
     match /projects/{projectId} {

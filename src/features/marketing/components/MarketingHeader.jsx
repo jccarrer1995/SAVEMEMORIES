@@ -26,22 +26,33 @@ function NavAnchor({ id, label }) {
 }
 
 export function MarketingHeader() {
+  const location = useLocation()
+  const isLoginPage = location.pathname === '/login'
+
   return (
     <header className="marketing-header sticky top-0 z-20">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
-        <Link to="/" className="marketing-serif text-xl tracking-[0.18em] text-[#7a4a32]">
+        <Link
+          to="/"
+          className="marketing-serif min-w-0 truncate text-xl tracking-[0.18em] text-[#7a4a32]"
+        >
           {SITE.name}
         </Link>
 
-        <nav className="hidden items-center gap-5 md:flex">
+        <nav className={`hidden items-center gap-5 md:flex ${isLoginPage ? 'ml-auto' : ''}`}>
           {NAV_LINKS.map((link) => (
             <NavAnchor key={link.id} id={link.id} label={link.label} />
           ))}
         </nav>
 
-        <Link to="/login" className="marketing-btn-secondary rounded-full px-4 py-2 text-xs font-medium md:text-sm">
-          Acceso
-        </Link>
+        {!isLoginPage ? (
+          <Link
+            to="/login"
+            className="marketing-btn-secondary shrink-0 rounded-full px-4 py-2 text-xs font-medium md:text-sm"
+          >
+            Acceso
+          </Link>
+        ) : null}
       </div>
     </header>
   )

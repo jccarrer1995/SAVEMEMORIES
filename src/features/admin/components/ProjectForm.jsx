@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { EventDateTimeFields } from './EventDateTimeFields.jsx'
+import { ClientOwnerField } from './ClientOwnerField.jsx'
 import { TEMPLATE_OPTIONS } from '../data/templateOptions.js'
 import { panelFieldClass } from '../utils/panelFieldClass.js'
 import { slugify } from '../utils/slugify.js'
@@ -10,6 +11,7 @@ import {
   summarizeFieldErrors,
   validateProjectForm,
 } from '../utils/validateProjectForm.js'
+import { scrollToFirstInvalidField } from '../utils/formUiHelpers.js'
 
 /**
  * @param {{
@@ -26,12 +28,6 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
   const [fieldErrors, setFieldErrors] = useState(/** @type {Record<string, string>} */ ({}))
 
   const previewUrl = useMemo(() => `/invitacion/${values.slug || 'slug'}`, [values.slug])
-
-  function scrollToFirstInvalid() {
-    requestAnimationFrame(() => {
-      document.querySelector('.panel-field.is-invalid')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    })
-  }
 
   function updateField(field, value) {
     setValues((prev) => ({ ...prev, [field]: value }))
@@ -69,7 +65,7 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
       const summary = summarizeFieldErrors(validation.fieldErrors)
       setError(summary)
       toast.error(summary)
-      scrollToFirstInvalid()
+      scrollToFirstInvalidField()
       return
     }
 
@@ -83,7 +79,7 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
       if (Object.keys(mapped).length > 0) setFieldErrors(mapped)
       setError(message)
       toast.error(message)
-      scrollToFirstInvalid()
+      scrollToFirstInvalidField()
     } finally {
       setSaving(false)
     }
@@ -140,15 +136,7 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
               <option value="archived">Archivado</option>
             </select>
           </label>
-          <label className="panel-field">
-            <span>UID cliente (opcional)</span>
-            <input
-              type="text"
-              value={values.ownerId}
-              onChange={(event) => updateField('ownerId', event.target.value)}
-              placeholder="Firebase UID del cliente"
-            />
-          </label>
+          <ClientOwnerField value={values.ownerId} onChange={(uid) => updateField('ownerId', uid)} />
           <label className="panel-field">
             <span>Límite de enlaces</span>
             <input

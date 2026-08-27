@@ -18,6 +18,7 @@ import {
 } from '../../features/invitations/pages/InvitationPage.jsx'
 import { HomeOrLegacyInvitationPage } from '../../features/marketing/pages/HomeOrLegacyInvitationPage.jsx'
 import { ROLES } from '../../shared/constants/roles.js'
+import { adminClientRoutes } from './adminClientRoutes.jsx'
 
 function InvitationRoute() {
   const { projectId, linkCode } = useParams()
@@ -76,6 +77,7 @@ export function AppRouter() {
           </ProtectedRoute>
         }
       />
+      {adminClientRoutes()}
       <Route
         path="/cliente"
         element={

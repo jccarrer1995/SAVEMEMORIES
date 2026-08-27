@@ -38,7 +38,7 @@ export function AdminDashboardPage() {
         </article>
         <article className="panel-stat-card">
           <p className="panel-stat-value">{stats.total}</p>
-          <p className="panel-stat-label">Total en Firestore</p>
+          <p className="panel-stat-label">Total</p>
         </article>
       </div>
 

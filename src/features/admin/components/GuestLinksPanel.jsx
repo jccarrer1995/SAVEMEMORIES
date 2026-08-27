@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { GuestLinkForm } from './GuestLinkForm.jsx'
+import { GuestLinkStatusToggle } from './GuestLinkStatusToggle.jsx'
 import {
   createProjectGuestLink,
   listGuestLinks,
@@ -9,6 +10,30 @@ import {
 } from '../services/guestLinkService.js'
 import { getProjectById } from '../services/projectService.js'
 import { buildInvitationLinkUrl } from '../../invitations/core/utils/invitationUrl.js'
+import { copyTextToClipboard } from '../../../shared/utils/copyTextToClipboard.js'
+
+/**
+ * @param {number} linksCount
+ * @param {number} linkLimit
+ * @param {boolean} loading
+ */
+function formatGuestLinksSummary(linksCount, linkLimit, loading) {
+  if (loading) return 'Cargando enlaces…'
+
+  const limitPart = linkLimit > 0 ? ` / ${String(linkLimit)}` : ''
+  return `${String(linksCount)}${limitPart} enlace(s) generado(s)`
+}
+
+/** @param {string} url */
+async function copyGuestLinkUrl(url) {
+  const copied = await copyTextToClipboard(url)
+  if (copied) {
+    toast.success('Enlace copiado')
+    return
+  }
+
+  toast.error('No se pudo copiar el enlace')
+}
 
 /**
  * @param {{ projectId: string }} props
@@ -18,6 +43,7 @@ export function GuestLinksPanel({ projectId }) {
   const [linkLimit, setLinkLimit] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [togglingLinkId, setTogglingLinkId] = useState('')
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -56,29 +82,22 @@ export function GuestLinksPanel({ projectId }) {
   }
 
   async function handleToggle(linkCode, active) {
-    await toggleProjectGuestLink(projectId, linkCode, active)
-    toast.success(active ? 'Enlace activado' : 'Enlace desactivado')
-    await loadData()
-  }
-
-  async function handleCopy(url) {
+    setTogglingLinkId(linkCode)
     try {
-      await navigator.clipboard.writeText(url)
-      toast.success('Enlace copiado')
-    } catch {
-      toast.error('No se pudo copiar el enlace')
+      await toggleProjectGuestLink(projectId, linkCode, active)
+      toast.success(active ? 'Enlace activado' : 'Enlace desactivado')
+      await loadData()
+    } finally {
+      setTogglingLinkId('')
     }
   }
 
   const limitReached = linkLimit > 0 && links.length >= linkLimit
+  const linksSummary = formatGuestLinksSummary(links.length, linkLimit, loading)
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="marketing-muted text-sm">
-        {loading
-          ? 'Cargando enlaces…'
-          : `${links.length}${linkLimit > 0 ? ` / ${linkLimit}` : ''} enlace(s) generado(s)`}
-      </p>
+      <p className="marketing-muted text-sm">{linksSummary}</p>
 
       {error ? <p className="panel-form-error">{error}</p> : null}
 
@@ -93,16 +112,15 @@ export function GuestLinksPanel({ projectId }) {
           <thead>
             <tr>
               <th>Invitado</th>
-              <th>Cupos</th>
-              <th>Código</th>
+              <th className="panel-table-col-desktop">Código</th>
               <th>Estado</th>
-              <th aria-label="Acciones" />
+              <th aria-label="Acciones" className="panel-table-actions-heading" />
             </tr>
           </thead>
           <tbody>
             {links.length === 0 && !loading ? (
               <tr>
-                <td colSpan={5} className="panel-table-empty">
+                <td colSpan={4} className="panel-table-empty">
                   Aún no hay enlaces. Genera el primero arriba.
                 </td>
               </tr>
@@ -111,28 +129,31 @@ export function GuestLinksPanel({ projectId }) {
               const url = buildInvitationLinkUrl(projectId, link.id)
               return (
                 <tr key={link.id}>
-                  <td>{link.guestLabel}</td>
-                  <td>{link.cupos}</td>
                   <td>
-                    <code className="text-xs">{link.id}</code>
+                    <p className="font-medium">{link.guestLabel}</p>
+                    <p className="marketing-muted text-xs">
+                      {link.cupos} cupo{link.cupos === 1 ? '' : 's'}
+                    </p>
                   </td>
-                  <td>{link.active ? 'Activo' : 'Inactivo'}</td>
-                  <td className="panel-table-actions">
-                    <button type="button" className="marketing-link text-sm" onClick={() => void handleCopy(url)}>
+                  <td className="panel-table-col-desktop">
+                    <code className="panel-table-code">{link.id}</code>
+                  </td>
+                  <td>
+                    <GuestLinkStatusToggle
+                      active={link.active}
+                      disabled={togglingLinkId === link.id || loading}
+                      onChange={(active) => void handleToggle(link.id, active)}
+                    />
+                  </td>
+                  <td className="panel-table-actions panel-table-actions--end">
+                    <button type="button" className="panel-action-link" onClick={() => void copyGuestLinkUrl(url)}>
                       Copiar
                     </button>
                     {link.active ? (
-                      <Link to={url} className="marketing-link text-sm" target="_blank" rel="noreferrer">
+                      <Link to={url} className="panel-action-link" target="_blank" rel="noreferrer">
                         Ver
                       </Link>
                     ) : null}
-                    <button
-                      type="button"
-                      className="marketing-link text-sm"
-                      onClick={() => void handleToggle(link.id, !link.active)}
-                    >
-                      {link.active ? 'Desactivar' : 'Activar'}
-                    </button>
                   </td>
                 </tr>
               )

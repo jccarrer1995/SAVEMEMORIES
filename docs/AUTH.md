@@ -14,6 +14,14 @@
 
 ## 2. Crear un usuario
 
+### Desde el panel admin (recomendado)
+
+1. Inicia sesión como **admin** → **Clientes** → **+ Nuevo cliente**
+2. Completa nombre, correo y contraseña temporal
+3. El sistema crea la cuenta en Firebase Auth y el perfil `users/{uid}` con `role: "client"`
+
+### Manualmente en Firebase Console
+
 1. **Authentication** → **Users** → **Add user**
 2. Ingresa correo y contraseña temporal
 
@@ -85,6 +93,7 @@ Si el usuario existe en Auth pero **no** tiene documento en `users`, el login fa
 |------|----------------|
 | `/admin` | `admin` |
 | `/admin/proyectos` | `admin` |
+| `/admin/clientes` | `admin` |
 | `/cliente` | `client` |
 | `/cliente/proyectos` | `client` |
 | `/cliente/proyectos/:projectId/enlaces` | `client` (solo si `ownerId` coincide) |
@@ -92,7 +101,7 @@ Si el usuario existe en Auth pero **no** tiene documento en `users`, el login fa
 
 ## Panel cliente
 
-1. El administrador asigna el **UID del cliente** en el campo `ownerId` del proyecto (formulario de edición).
+1. El administrador crea al cliente en **Admin → Clientes** o asigna el **UID** en el campo `ownerId` del proyecto.
 2. El cliente inicia sesión y ve en `/cliente/proyectos` solo los eventos donde `ownerId` es su UID.
 3. Desde cada proyecto puede:
    - Ver confirmaciones RSVP y **exportar Excel**
@@ -106,7 +115,7 @@ Si un cliente no ve proyectos, verifica que el documento en Firestore tenga `own
 - Colección `projects`: lectura pública solo si `status == 'active'`; admin lee/escribe todo; cliente dueño lee los suyos (`ownerId`).
 - Subcolección `projects/{id}/links/{linkCode}`: lectura pública solo si el enlace está `active` y el proyecto activo; admin y dueño gestionan enlaces.
 - Colección `bodaRsvps`: creación pública (formulario invitación); lectura abierta para listar confirmaciones en paneles.
-- Escritura de roles: solo desde consola Firebase (etapa posterior podrá hacerlo el admin desde la app).
+- Colección `users`: cada usuario lee su propio doc; el admin puede listar, crear, editar y eliminar perfiles con `role: "client"`.
 
 ## Desarrollo local
 

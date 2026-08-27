@@ -15,6 +15,7 @@ export async function fetchUserProfile(uid) {
     if (!snap.exists()) return null
 
     const data = snap.data()
+    if (data.active === false) return null
     if (!isValidUserRole(data.role)) return null
 
     return {

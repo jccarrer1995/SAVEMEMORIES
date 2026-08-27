@@ -41,7 +41,7 @@ export function AuthProvider({ children }) {
             setUser(null)
             setProfile(null)
             setAuthError(
-              'Tu cuenta no tiene rol asignado. Crea el documento users/{uid} en Firestore con role admin o client.'
+              'Tu cuenta no está habilitada para acceder. Contacta al administrador.',
             )
             return
           }

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useAuth } from '../../auth/hooks/useAuth.js'
-import { ProjectStatusBadge } from '../../admin/components/ProjectStatusBadge.jsx'
-import { getTemplateLabel } from '../../admin/data/templateOptions.js'
 import { listMyProjects } from '../services/clientProjectService.js'
 import { CLIENT_NAV } from '../data/clientNav.js'
+import {
+  ClientProjectsDesktopTable,
+  ClientProjectsMobileList,
+} from '../components/ClientProjectsListViews.jsx'
 import { PanelShell } from '../../../shared/layouts/PanelShell.jsx'
 import { ROLES } from '../../../shared/constants/roles.js'
 
@@ -44,56 +45,8 @@ export function ClientProjectsListPage() {
 
       {error ? <p className="panel-form-error">{error}</p> : null}
 
-      <div className="panel-table-wrap">
-        <table className="panel-table">
-          <thead>
-            <tr>
-              <th>Evento</th>
-              <th>Plantilla</th>
-              <th>Estado</th>
-              <th>Enlaces</th>
-              <th aria-label="Acciones" />
-            </tr>
-          </thead>
-          <tbody>
-            {projects.length === 0 && !loading ? (
-              <tr>
-                <td colSpan={5} className="panel-table-empty">
-                  No tienes eventos asignados. Pide al administrador que ponga tu UID en el campo{' '}
-                  <strong>ownerId</strong> del proyecto.
-                </td>
-              </tr>
-            ) : null}
-            {projects.map((project) => (
-              <tr key={project.id}>
-                <td>
-                  <p className="font-medium">{project.title || project.slug}</p>
-                  <p className="marketing-muted text-xs">/{project.slug}</p>
-                </td>
-                <td>{getTemplateLabel(project.templateId)}</td>
-                <td>
-                  <ProjectStatusBadge status={project.status} />
-                </td>
-                <td>{project.linkLimit}</td>
-                <td className="panel-table-actions">
-                  <Link
-                    to={`/cliente/proyectos/${project.slug}/respuestas`}
-                    className="marketing-link text-sm"
-                  >
-                    Respuestas
-                  </Link>
-                  <Link
-                    to={`/cliente/proyectos/${project.slug}/enlaces`}
-                    className="marketing-link text-sm"
-                  >
-                    Enlaces
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ClientProjectsMobileList projects={projects} loading={loading} />
+      <ClientProjectsDesktopTable projects={projects} loading={loading} />
     </PanelShell>
   )
 }

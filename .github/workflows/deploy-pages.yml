@@ -25,18 +25,18 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Skip deploy without Firebase secrets
+      - name: Warn when Firebase secrets are missing
         if: env.VITE_FIREBASE_API_KEY == ''
-        run: echo "Firebase secrets are not set. Skipping GitHub Pages deploy."
-      - run: npm run build
-        if: env.VITE_FIREBASE_API_KEY != ''
+        run: |
+          echo "::warning::Firebase secrets are not set. The site will deploy, but login and Firestore features may not work in production."
+      - name: Build for GitHub Pages
+        run: npm run build
         env:
           VITE_BASE: /SAVEMEMORIES/
       - name: SPA fallback for GitHub Pages
-        if: env.VITE_FIREBASE_API_KEY != ''
         run: cp dist/index.html dist/404.html && touch dist/.nojekyll
-      - uses: peaceiris/actions-gh-pages@v4
-        if: env.VITE_FIREBASE_API_KEY != ''
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist

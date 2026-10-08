@@ -65,6 +65,7 @@ export function BodaInvitationView({ project, guestInvite, allowQueryParams = fa
                 transition={{ duration: 0.7 }}
               >
                 <EnvelopeScene
+                  cupos={invite.cupos}
                   onOpenStart={playMusic}
                   onOpened={() => {
                     setOpened(true)

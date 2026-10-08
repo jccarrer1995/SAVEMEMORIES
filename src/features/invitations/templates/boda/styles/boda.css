@@ -129,6 +129,45 @@
   color: #6b5d4c;
 }
 
+.boda-reserved {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  color: #6a655c;
+}
+
+.boda-reserved-icon {
+  width: 2.6rem;
+  height: 1.7rem;
+  color: #b7b48a;
+}
+
+.boda-reserved-label {
+  margin: 0;
+  font-family: Cinzel, 'Cormorant Garamond', serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.boda-reserved-count {
+  display: grid;
+  place-items: center;
+  width: 3.15rem;
+  height: 3.15rem;
+  margin: 0.15rem 0;
+  border: 1.5px solid #3d3a34;
+  border-radius: 0.7rem;
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1;
+  color: #2c2c2c;
+}
+
 .boda-liner {
   position: absolute;
   inset: 0;

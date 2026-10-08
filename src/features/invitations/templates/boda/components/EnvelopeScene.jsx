@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { useInvitationProject } from '../../../core/hooks/useInvitationProject.js'
+import { ReservedPlaces } from './ReservedPlaces.jsx'
 
 /**
- * @param {{ onOpened: () => void, onOpenStart?: () => void }} props
+ * @param {{ cupos: number, onOpened: () => void, onOpenStart?: () => void }} props
  */
-export function EnvelopeScene({ onOpened, onOpenStart }) {
+export function EnvelopeScene({ cupos, onOpened, onOpenStart }) {
   const project = useInvitationProject()
   const [started, setStarted] = useState(false)
   const [opened, setOpened] = useState(false)
@@ -67,6 +68,8 @@ export function EnvelopeScene({ onOpened, onOpenStart }) {
 
         <p className="boda-envelope-initials">{project.iniciales}</p>
       </div>
+
+      <ReservedPlaces cupos={cupos} />
 
       {!started ? (
         <motion.p

@@ -122,7 +122,7 @@ La colección legacy `bodaRsvps` se mantiene hasta migrar datos en una etapa pos
 - Hooks: `useNombre.js`
 - Servicios: `camelCase.js` (verbo + sustantivo: `saveRsvp.js`)
 - Constantes: `UPPER_SNAKE_CASE`
-- Slugs de proyecto: `kebab-case` (ej. `juan-carlos-jessica`)
+- Slugs de proyecto: `kebab-case` (ej. `boda-demo-1`)
 
 ## Etapas de implementación
 

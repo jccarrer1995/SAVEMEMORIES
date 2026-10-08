@@ -5,6 +5,7 @@ import { GuestLinkForm } from './GuestLinkForm.jsx'
 import { GuestLinkStatusToggle } from './GuestLinkStatusToggle.jsx'
 import {
   createProjectGuestLink,
+  deleteProjectGuestLink,
   listGuestLinks,
   toggleProjectGuestLink,
 } from '../services/guestLinkService.js'
@@ -44,6 +45,7 @@ export function GuestLinksPanel({ projectId }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [togglingLinkId, setTogglingLinkId] = useState('')
+  const [deletingLinkId, setDeletingLinkId] = useState('')
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -89,6 +91,32 @@ export function GuestLinksPanel({ projectId }) {
       await loadData()
     } finally {
       setTogglingLinkId('')
+    }
+  }
+
+  async function handleDelete(linkCode, guestLabel) {
+    const confirmed = window.confirm(
+      `¿Eliminar a "${guestLabel}"?\n\nSu enlace dejará de funcionar y podrás generar otro en su lugar.`,
+    )
+    if (!confirmed) return
+
+    setDeletingLinkId(linkCode)
+    try {
+      await deleteProjectGuestLink(projectId, linkCode)
+      toast.success('Invitado eliminado')
+      await loadData()
+    } catch (err) {
+      const isPermission =
+        err && typeof err === 'object' && 'code' in err && err.code === 'permission-denied'
+      toast.error(
+        isPermission
+          ? 'Sin permiso para eliminar invitados. Publica las reglas de Firestore actualizadas.'
+          : err instanceof Error
+            ? err.message
+            : 'No se pudo eliminar el invitado.',
+      )
+    } finally {
+      setDeletingLinkId('')
     }
   }
 
@@ -154,6 +182,14 @@ export function GuestLinksPanel({ projectId }) {
                         Ver
                       </Link>
                     ) : null}
+                    <button
+                      type="button"
+                      className="panel-action-link"
+                      disabled={deletingLinkId === link.id || loading}
+                      onClick={() => void handleDelete(link.id, link.guestLabel)}
+                    >
+                      {deletingLinkId === link.id ? 'Eliminando…' : 'Eliminar'}
+                    </button>
                   </td>
                 </tr>
               )

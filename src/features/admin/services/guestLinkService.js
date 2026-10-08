@@ -2,6 +2,7 @@ import { generateLinkCode } from '../utils/generateLinkCode.js'
 import {
   countGuestLinks,
   createGuestLink,
+  deleteGuestLink,
   fetchGuestLink,
   listGuestLinks,
   setGuestLinkActive,
@@ -41,4 +42,13 @@ export async function createProjectGuestLink(projectId, values) {
  */
 export async function toggleProjectGuestLink(projectId, linkCode, active) {
   await setGuestLinkActive(projectId, linkCode, active)
+}
+
+/**
+ * @param {string} projectId
+ * @param {string} linkCode
+ */
+export async function deleteProjectGuestLink(projectId, linkCode) {
+  if (!linkCode) throw new Error('Enlace no especificado.')
+  await deleteGuestLink(projectId, linkCode)
 }

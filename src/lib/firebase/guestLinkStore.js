@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -106,4 +107,14 @@ export async function setGuestLinkActive(projectId, linkCode, active) {
     { active, updatedAt: serverTimestamp() },
     { merge: true },
   )
+}
+
+/**
+ * @param {string} projectId
+ * @param {string} linkCode
+ */
+export async function deleteGuestLink(projectId, linkCode) {
+  if (!db) throw new Error('Firebase no está configurado.')
+
+  await deleteDoc(doc(db, 'projects', projectId, 'links', linkCode))
 }

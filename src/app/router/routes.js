@@ -10,4 +10,4 @@ export const ROUTES = {
   projectResponses: '/respuestas/:projectId',
 }
 
-export const LEGACY_BODA_PROJECT_ID = 'juan-carlos-jessica'
+export const LEGACY_BODA_PROJECT_ID = 'boda-demo-1'

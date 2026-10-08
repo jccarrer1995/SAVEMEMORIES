@@ -48,7 +48,7 @@ export function AdminDashboardPage() {
         </Link>{' '}
         con plantilla boda, contenido editable y límite de enlaces. La demo estática{' '}
         <Link to="/demo/boda" className="marketing-link">
-          juan-carlos-jessica
+          boda-demo-1
         </Link>{' '}
         sigue disponible sin Firestore.
       </p>

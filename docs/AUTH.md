@@ -64,7 +64,7 @@ match /links/{linkCode} {
     && request.resource.data.cupos >= 1
     && request.resource.data.active == true;
   allow update: if canManageProject(projectId);
-  allow delete: if false;
+  allow delete: if canManageProject(projectId);
 }
 ```
 

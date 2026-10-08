@@ -16,9 +16,9 @@ npm run dev
 | Ruta | Descripción |
 |------|-------------|
 | `/` | Home comercial con secciones, FAQ y contacto |
-| `/invitacion/juan-carlos-jessica` | Demo boda Juan Carlos & Jessica |
+| `/invitacion/boda-demo-1` | Demo boda Juan Carlos & Jessica |
 | `/demo/boda` | Alias legacy de la demo |
-| `/respuestas/juan-carlos-jessica` | Confirmaciones del proyecto |
+| `/respuestas/boda-demo-1` | Confirmaciones del proyecto |
 | `/login` | Autenticación (admin / cliente) |
 
 Guía para crear usuarios y roles: [`docs/AUTH.md`](docs/AUTH.md)
@@ -31,7 +31,7 @@ Link por familia (mismo formato de siempre):
 
 También funciona en:
 
-`/invitacion/juan-carlos-jessica?invitados=...&cupos=...` o `/demo/boda?invitados=...&cupos=...`
+`/invitacion/boda-demo-1?invitados=...&cupos=...` o `/demo/boda?invitados=...&cupos=...`
 
 ## Estructura
 

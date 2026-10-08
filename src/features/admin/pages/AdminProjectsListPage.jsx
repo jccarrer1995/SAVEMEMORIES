@@ -62,7 +62,7 @@ export function AdminProjectsListPage() {
                 <td colSpan={5} className="panel-table-empty">
                   Aún no hay proyectos. Crea el primero o sigue usando la demo estática{' '}
                   <Link to="/demo/boda" className="marketing-link">
-                    juan-carlos-jessica
+                    boda-demo-1
                   </Link>
                   .
                 </td>

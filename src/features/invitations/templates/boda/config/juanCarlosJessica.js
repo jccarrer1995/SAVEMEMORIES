@@ -2,7 +2,7 @@ import { publicUrl } from '../../../core/utils/publicUrl.js'
 
 /** @type {import('../../../core/types/invitationProject.js').InvitationProjectConfig} */
 export const juanCarlosJessicaProject = {
-  id: 'juan-carlos-jessica',
+  id: 'boda-demo-1',
   templateId: 'boda',
   title: 'Juan Carlos & Jessica',
   novio: 'Juan Carlos',

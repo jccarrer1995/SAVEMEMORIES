@@ -1,11 +1,11 @@
-import { juanCarlosJessicaProject } from '../../templates/boda/config/juanCarlosJessica.js'
 import { demoBabyShowerProject } from '../../templates/baby-shower/config/demoBabyShower.js'
+import { demoBodaProject } from '../../templates/boda/config/demoBoda.js'
 
 /** @type {Record<string, import('../types/invitationProject.js').RegisteredProject>} */
 const PROJECTS = {
-  [juanCarlosJessicaProject.id]: {
-    templateId: juanCarlosJessicaProject.templateId,
-    config: juanCarlosJessicaProject,
+  [demoBodaProject.id]: {
+    templateId: demoBodaProject.templateId,
+    config: demoBodaProject,
   },
   [demoBabyShowerProject.id]: {
     templateId: demoBabyShowerProject.templateId,

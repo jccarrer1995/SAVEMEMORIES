@@ -4,8 +4,9 @@ export const SITE = {
   name: 'SAVEMEMORIES',
   tagline: 'Invitaciones digitales con alma',
   email: 'contacto@savememories.com',
-  whatsapp: '593999999999',
-  whatsappMessage: 'Hola, me gustaría cotizar una invitación digital para mi evento.',
+  whatsapp: '593988099638',
+  whatsappMessage:
+    'Estoy interesado en tener unas invitaciones digitales, me ayuda con más información.',
 }
 
 export const NAV_LINKS = [

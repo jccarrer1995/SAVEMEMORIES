@@ -1,3 +1,4 @@
+import { LEGACY_BODA_PROJECT_ID } from '../../../../app/router/routes.js'
 import { isSupportedTemplateId } from '../constants/supportedTemplates.js'
 import { fetchProjectRecord } from '../../../../lib/firebase/projectStore.js'
 import { getProjectById as getRegistryProject } from '../registry/projectRegistry.js'
@@ -133,6 +134,11 @@ function mapRecordToRegistered(record) {
  * @returns {Promise<import('../types/invitationProject.js').RegisteredProject | null>}
  */
 export async function loadPublicProject(projectId) {
+  if (projectId === LEGACY_BODA_PROJECT_ID) {
+    const registered = getRegistryProject(projectId)
+    return registered ? normalizeRegisteredProject(registered) : null
+  }
+
   try {
     const record = await fetchProjectRecord(projectId)
     if (record) {

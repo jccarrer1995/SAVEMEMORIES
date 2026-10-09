@@ -13,9 +13,6 @@ export function MarketingFooter() {
           <Link to="/login" className="marketing-link">
             Acceso clientes
           </Link>
-          <Link to="/admin" className="marketing-link">
-            Admin
-          </Link>
         </nav>
       </div>
       <p className="marketing-muted mx-auto mt-8 max-w-5xl text-center text-xs">

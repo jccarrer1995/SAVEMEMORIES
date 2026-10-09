@@ -16,7 +16,8 @@ npm run dev
 | Ruta | Descripción |
 |------|-------------|
 | `/` | Home comercial con secciones, FAQ y contacto |
-| `/invitacion/boda-demo-1` | Demo boda Juan Carlos & Jessica |
+| `/invitacion/boda-demo-1` | Demo boda (Valentina & Mateo, datos de ejemplo) |
+| `/invitacion/boda-juan-y-jessica/:linkCode` | Invitación real con enlace por familia |
 | `/demo/boda` | Alias legacy de la demo |
 | `/respuestas/boda-demo-1` | Confirmaciones del proyecto |
 | `/login` | Autenticación (admin / cliente) |
@@ -37,7 +38,7 @@ También funciona en:
 
 Ver reglas y etapas en [`docs/DESARROLLO.md`](docs/DESARROLLO.md).
 
-Config del proyecto demo: `src/features/invitations/templates/boda/config/juanCarlosJessica.js`  
+Config del proyecto demo: `src/features/invitations/templates/boda/config/demoBoda.js`  
 Textos del sitio comercial (WhatsApp, email): `src/features/marketing/data/siteContent.js`  
 Assets: `public/boda/`
 

@@ -1,20 +1,13 @@
 import { Link } from 'react-router-dom'
 import '../../marketing/styles/marketing.css'
 import { LEGACY_BODA_PROJECT_ID } from '../../../app/router/routes.js'
+import { InvitationLoadingScreen } from '../components/InvitationLoadingScreen.jsx'
 import { useGuestLinkValidation } from '../core/hooks/useGuestLinkValidation.js'
 import { useProjectLoader } from '../core/hooks/useProjectLoader.js'
 import { getDefaultGuestInvite } from '../core/utils/guestInvite.js'
 import { BabyShowerInvitationView } from '../templates/baby-shower/pages/BabyShowerInvitationView.jsx'
 import { BodaInvitationView } from '../templates/boda/pages/BodaInvitationView.jsx'
 import { BodaResponsesView } from '../templates/boda/pages/BodaResponsesView.jsx'
-
-function ProjectLoadingScreen() {
-  return (
-    <div className="marketing-page flex min-h-screen items-center justify-center px-6">
-      <p className="marketing-muted text-sm">Cargando invitación…</p>
-    </div>
-  )
-}
 
 /**
  * @param {{
@@ -54,7 +47,7 @@ export function InvitationPage({ projectId, linkCode, allowQueryParams = false }
     error: linkError,
   } = useGuestLinkValidation(projectId, linkCode)
 
-  if (loading || (linkCode && linkLoading)) return <ProjectLoadingScreen />
+  if (loading || (linkCode && linkLoading)) return <InvitationLoadingScreen />
 
   if (!project) {
     return <InvalidInvitationPage reason="El proyecto no existe o fue desactivado." />
@@ -84,7 +77,7 @@ export function InvitationPage({ projectId, linkCode, allowQueryParams = false }
 export function ProjectResponsesPage({ projectId }) {
   const { loading, project } = useProjectLoader(projectId, 'responses')
 
-  if (loading) return <ProjectLoadingScreen />
+  if (loading) return <InvitationLoadingScreen />
 
   if (!project) {
     return <InvalidInvitationPage reason="El proyecto no existe." />

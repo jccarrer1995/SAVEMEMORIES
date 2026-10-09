@@ -27,7 +27,10 @@ export function BabyShowerInvitationView({ project, guestInvite, allowQueryParam
       ? getGuestInviteFromSearch(project, `?${searchParams.toString()}`)
       : getDefaultGuestInvite(project))
   const [opened, setOpened] = useState(false)
-  const { musicPlaying, playMusic, toggleMusic } = useInvitationMusic(project.musicaSrc)
+  const { musicPlaying, playMusic, toggleMusic, audioRef, resolvedSrc } = useInvitationMusic(
+    project.musicaSrc,
+    { fallbackPath: '/baby-shower/baby-shower.mp3' },
+  )
 
   useEffect(() => {
     document.title = project.title
@@ -54,7 +57,16 @@ export function BabyShowerInvitationView({ project, guestInvite, allowQueryParam
 
   return (
     <InvitationProjectProvider project={project}>
-      <div className="bs-site min-h-[100dvh] bg-[#ede8f0] md:flex md:justify-center">
+      <div className="bs-site relative min-h-[100dvh] bg-[#ede8f0] md:flex md:justify-center">
+        <audio
+          ref={audioRef}
+          src={resolvedSrc}
+          loop
+          playsInline
+          preload="auto"
+          className="hidden"
+          aria-hidden
+        />
         <div className="relative mx-auto min-h-[100dvh] w-full max-w-[430px] overflow-x-hidden bg-[#faf7fb] shadow-[0_0_40px_rgba(120,90,140,0.18)]">
           <AnimatePresence mode="wait">
             {!opened ? (
@@ -83,8 +95,8 @@ export function BabyShowerInvitationView({ project, guestInvite, allowQueryParam
               </motion.div>
             )}
           </AnimatePresence>
-          <MusicToggle playing={musicPlaying} onToggle={toggleMusic} />
         </div>
+        <MusicToggle playing={musicPlaying} onToggle={toggleMusic} />
       </div>
     </InvitationProjectProvider>
   )

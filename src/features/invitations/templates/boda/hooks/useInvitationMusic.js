@@ -1,24 +1,35 @@
-import { useEffect, useRef, useState } from 'react'
-import { resolvePublicAssetUrl } from '../../../core/utils/publicUrl.js'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { resolveMusicSrc } from '../../../core/utils/publicUrl.js'
 
 /**
- * @param {string} musicaSrc
+ * @param {string | undefined} musicaSrc
+ * @param {{ fallbackPath?: string }} [options]
  */
-export function useInvitationMusic(musicaSrc) {
+export function useInvitationMusic(musicaSrc, options = {}) {
+  const fallbackPath = options.fallbackPath ?? '/boda/musica.mp3'
+  const resolvedSrc = useMemo(
+    () => resolveMusicSrc(musicaSrc, fallbackPath),
+    [musicaSrc, fallbackPath],
+  )
   const audioRef = useRef(/** @type {HTMLAudioElement | null} */ (null))
   const [musicPlaying, setMusicPlaying] = useState(false)
 
   useEffect(() => {
-    const audio = new Audio(resolvePublicAssetUrl(musicaSrc))
+    const audio = audioRef.current
+    if (!audio || !resolvedSrc) return
+
+    audio.src = resolvedSrc
     audio.loop = true
     audio.preload = 'auto'
+
     const syncPlaying = () => setMusicPlaying(!audio.paused)
     const onError = () => setMusicPlaying(false)
+
     audio.addEventListener('playing', syncPlaying)
     audio.addEventListener('pause', syncPlaying)
     audio.addEventListener('ended', syncPlaying)
     audio.addEventListener('error', onError)
-    audioRef.current = audio
+    audio.load()
 
     return () => {
       audio.pause()
@@ -26,25 +37,29 @@ export function useInvitationMusic(musicaSrc) {
       audio.removeEventListener('pause', syncPlaying)
       audio.removeEventListener('ended', syncPlaying)
       audio.removeEventListener('error', onError)
-      audioRef.current = null
     }
-  }, [musicaSrc])
+  }, [resolvedSrc])
 
-  function playMusic() {
+  const playMusic = useCallback(async () => {
     const audio = audioRef.current
-    if (!audio) return
-    audio.play().catch(() => setMusicPlaying(false))
-  }
+    if (!audio || !resolvedSrc) return
 
-  function toggleMusic() {
+    try {
+      await audio.play()
+    } catch {
+      setMusicPlaying(false)
+    }
+  }, [resolvedSrc])
+
+  const toggleMusic = useCallback(() => {
     const audio = audioRef.current
     if (!audio) return
     if (!audio.paused) {
       audio.pause()
       return
     }
-    playMusic()
-  }
+    void playMusic()
+  }, [playMusic])
 
-  return { musicPlaying, playMusic, toggleMusic }
+  return { musicPlaying, playMusic, toggleMusic, audioRef, resolvedSrc }
 }

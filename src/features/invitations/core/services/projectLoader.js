@@ -1,7 +1,7 @@
 import { isSupportedTemplateId } from '../constants/supportedTemplates.js'
 import { fetchProjectRecord } from '../../../../lib/firebase/projectStore.js'
 import { getProjectById as getRegistryProject } from '../registry/projectRegistry.js'
-import { publicUrl, resolvePublicAssetUrl } from '../utils/publicUrl.js'
+import { publicUrl, resolveMusicSrc, resolvePublicAssetUrl } from '../utils/publicUrl.js'
 
 /**
  * @param {import('../types/invitationProject.js').InvitationProjectConfig} content
@@ -20,8 +20,30 @@ function normalizeProjectAssets(content) {
 
   return {
     ...content,
-    musicaSrc: resolvePublicAssetUrl(content.musicaSrc),
+    musicaSrc: resolveMusicSrc(content.musicaSrc, '/boda/musica.mp3'),
     fotos: normalizedFotos,
+  }
+}
+
+/**
+ * @param {import('../types/invitationProject.js').RegisteredProject} project
+ */
+function normalizeRegisteredProject(project) {
+  const withAssets = normalizeProjectAssets(project.config)
+  const normalizedContent =
+    project.templateId === 'boda'
+      ? applyLegacyBodaContent(withAssets)
+      : {
+          ...withAssets,
+          musicaSrc: resolveMusicSrc(withAssets.musicaSrc, '/baby-shower/baby-shower.mp3'),
+        }
+
+  return {
+    ...project,
+    config: {
+      ...project.config,
+      ...normalizedContent,
+    },
   }
 }
 
@@ -88,7 +110,12 @@ function mapRecordToRegistered(record) {
   )
   const withAssets = normalizeProjectAssets(content)
   const normalizedContent =
-    record.templateId === 'boda' ? applyLegacyBodaContent(withAssets) : withAssets
+    record.templateId === 'boda'
+      ? applyLegacyBodaContent(withAssets)
+      : {
+          ...withAssets,
+          musicaSrc: resolveMusicSrc(withAssets.musicaSrc, '/baby-shower/baby-shower.mp3'),
+        }
 
   return {
     templateId: record.templateId,
@@ -116,7 +143,8 @@ export async function loadPublicProject(projectId) {
     // Continúa con el registry estático.
   }
 
-  return getRegistryProject(projectId)
+  const registered = getRegistryProject(projectId)
+  return registered ? normalizeRegisteredProject(registered) : null
 }
 
 /**
@@ -131,5 +159,6 @@ export async function loadProjectForResponses(projectId) {
     // Continúa con el registry estático.
   }
 
-  return getRegistryProject(projectId)
+  const registered = getRegistryProject(projectId)
+  return registered ? normalizeRegisteredProject(registered) : null
 }

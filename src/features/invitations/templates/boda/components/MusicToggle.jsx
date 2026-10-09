@@ -6,7 +6,7 @@ import { Music } from 'lucide-react'
 export function MusicToggle({ playing, onToggle }) {
   return (
     <div
-      className="pointer-events-none fixed bottom-6 z-50"
+      className="pointer-events-none fixed bottom-6 z-[100]"
       style={{ left: 'max(1rem, calc(50% - 215px + 1rem))' }}
     >
       {playing ? (

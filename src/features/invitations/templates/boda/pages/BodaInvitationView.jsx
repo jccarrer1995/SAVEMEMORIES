@@ -27,7 +27,8 @@ export function BodaInvitationView({ project, guestInvite, allowQueryParams = fa
       ? getGuestInviteFromSearch(project, `?${searchParams.toString()}`)
       : getDefaultGuestInvite(project))
   const [opened, setOpened] = useState(false)
-  const { musicPlaying, playMusic, toggleMusic } = useInvitationMusic(project.musicaSrc)
+  const { musicPlaying, playMusic, toggleMusic, audioRef, resolvedSrc } =
+    useInvitationMusic(project.musicaSrc)
 
   useEffect(() => {
     document.title = project.title
@@ -54,7 +55,16 @@ export function BodaInvitationView({ project, guestInvite, allowQueryParams = fa
 
   return (
     <InvitationProjectProvider project={project}>
-      <div className="boda-site min-h-[100dvh] bg-[#121212] md:flex md:justify-center">
+      <div className="boda-site relative min-h-[100dvh] bg-[#121212] md:flex md:justify-center">
+        <audio
+          ref={audioRef}
+          src={resolvedSrc}
+          loop
+          playsInline
+          preload="auto"
+          className="hidden"
+          aria-hidden
+        />
         <div className="boda-cream relative mx-auto min-h-[100dvh] w-full max-w-[430px] overflow-x-hidden shadow-[0_0_40px_rgba(0,0,0,0.35)]">
           <AnimatePresence mode="wait">
             {!opened ? (
@@ -84,8 +94,8 @@ export function BodaInvitationView({ project, guestInvite, allowQueryParams = fa
               </motion.div>
             )}
           </AnimatePresence>
-          <MusicToggle playing={musicPlaying} onToggle={toggleMusic} />
         </div>
+        <MusicToggle playing={musicPlaying} onToggle={toggleMusic} />
       </div>
     </InvitationProjectProvider>
   )

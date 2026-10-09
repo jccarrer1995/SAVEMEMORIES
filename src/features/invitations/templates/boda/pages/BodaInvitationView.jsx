@@ -55,7 +55,7 @@ export function BodaInvitationView({ project, guestInvite, allowQueryParams = fa
   return (
     <InvitationProjectProvider project={project}>
       <div className="boda-site min-h-[100dvh] bg-[#121212] md:flex md:justify-center">
-        <div className="relative mx-auto min-h-[100dvh] w-full max-w-[430px] overflow-x-hidden bg-[#f4efe6] shadow-[0_0_40px_rgba(0,0,0,0.35)]">
+        <div className="boda-cream relative mx-auto min-h-[100dvh] w-full max-w-[430px] overflow-x-hidden shadow-[0_0_40px_rgba(0,0,0,0.35)]">
           <AnimatePresence mode="wait">
             {!opened ? (
               <motion.div

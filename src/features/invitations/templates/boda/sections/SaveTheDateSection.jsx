@@ -2,13 +2,15 @@ import { useInvitationProject } from '../../../core/hooks/useInvitationProject.j
 import { Countdown } from '../components/Countdown.jsx'
 import { FadeInOnScroll } from '../components/FadeInOnScroll.jsx'
 import { FrameLine } from '../components/FloralMotif.jsx'
+import { OliveSectionDecor } from '../components/OliveSectionDecor.jsx'
 
 export function SaveTheDateSection() {
   const project = useInvitationProject()
 
   return (
-    <section className="boda-cream px-6 py-12 text-center">
-      <FadeInOnScroll>
+    <section className="boda-cream relative overflow-hidden px-6 py-12 text-center">
+      <OliveSectionDecor flowers={['tl']} branches={['tr']} />
+      <FadeInOnScroll className="boda-section-content">
         <FrameLine className="mx-auto mb-6 w-64" />
         <p className="boda-serif text-[32px] text-[#2c2c2c]">Nuestra Boda</p>
         <Countdown className="mt-3 text-[20px]" targetIso={project.fechaIso} />

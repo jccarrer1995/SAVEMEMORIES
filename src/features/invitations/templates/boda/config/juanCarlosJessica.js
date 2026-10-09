@@ -38,7 +38,7 @@ export const juanCarlosJessicaProject = {
     detalle: 'Mujeres vestido midi | Hombres saco y camisa',
   },
   noNinos:
-    'Amamos a sus pequeños, pero queremos que en este día sólo tengan que preocuparse por pasarla increíble.',
+    'Amamos a los niños, pero por razones de seguridad, nuestra boda será solo para adultos. Queremos que en este día sólo tengan que preocuparse por pasarla increíble.',
   invitadosPorDefecto: {
     nombre: 'Gustavo, Betsy e Hija',
     cupos: 3,

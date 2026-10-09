@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
 import { useEffect, useId, useRef, useState } from 'react'
 import { useInvitationProject } from '../../../core/hooks/useInvitationProject.js'
-import { publicUrl } from '../../../core/utils/publicUrl.js'
 import { formatEnvelopeDate } from '../utils/formatEnvelopeDate.js'
+import { OliveSectionDecor } from './OliveSectionDecor.jsx'
 import { ReservedPlaces } from './ReservedPlaces.jsx'
 
 /**
@@ -37,18 +37,7 @@ export function EnvelopeScene({ cupos, onOpened, onOpenStart }) {
       onClick={start}
       aria-label="Abrir invitación"
     >
-      <img
-        src={publicUrl('/boda/floral-verde-olivo-superior-izquierda.png')}
-        alt=""
-        className="boda-envelope-floral boda-envelope-floral--tl"
-        decoding="async"
-      />
-      <img
-        src={publicUrl('/boda/floral-verde-olivo-inferior-derecha.png')}
-        alt=""
-        className="boda-envelope-floral boda-envelope-floral--br"
-        decoding="async"
-      />
+      <OliveSectionDecor flowers={['tl', 'br']} branches={['tr']} />
 
       <header className="boda-envelope-header">
         <p className="boda-envelope-kicker">Nuestra boda</p>

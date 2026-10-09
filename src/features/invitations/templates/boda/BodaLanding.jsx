@@ -1,6 +1,5 @@
 import { useInvitationProject } from '../../core/hooks/useInvitationProject.js'
 import { DressCodeSection } from './sections/DressCodeSection.jsx'
-import { GallerySection } from './sections/GallerySection.jsx'
 import { GiftsSection } from './sections/GiftsSection.jsx'
 import { HeroSection } from './sections/HeroSection.jsx'
 import { QuoteAndParentsSection } from './sections/QuoteAndParentsSection.jsx'
@@ -20,7 +19,6 @@ export function BodaLanding({ grupoInvitados, cupos }) {
       <HeroSection />
       <SaveTheDateSection />
       <QuoteAndParentsSection />
-      <GallerySection />
       <VenueSection venue={project.recepcion} floral="right" />
       <TimelineSection />
       <GiftsSection />

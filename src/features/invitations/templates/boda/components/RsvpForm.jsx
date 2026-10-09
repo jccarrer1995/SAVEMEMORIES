@@ -130,7 +130,7 @@ export function RsvpForm({ grupoInvitados, cupos }) {
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-lg bg-[#d8d4ce] px-5 py-2 text-sm text-[#3a3228] disabled:opacity-60"
+          className="boda-cta-btn boda-map-btn-light"
         >
           {submitting ? 'Enviando…' : 'Enviar'}
         </button>

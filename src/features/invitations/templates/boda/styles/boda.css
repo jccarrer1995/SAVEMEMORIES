@@ -1,7 +1,16 @@
 .boda-site {
+  --boda-olive: #8d9a7c;
+  --boda-olive-dark: #6d7d62;
+  --boda-olive-deep: #556248;
+  --boda-olive-cream: #f3ede4;
+  --boda-olive-warm: #ebe4d4;
+  --boda-olive-sage: #54582f;
+  --boda-olive-mist: #e8ebe3;
+  --boda-olive-gold: #c9a962;
+
   font-family: 'Outfit', system-ui, sans-serif;
   color: #2c2c2c;
-  background: #f4efe6;
+  background: var(--boda-olive-cream);
   color-scheme: light;
   -webkit-tap-highlight-color: transparent;
 }
@@ -33,24 +42,9 @@
   cursor: pointer;
 }
 
-.boda-envelope-floral {
-  position: absolute;
+.boda-envelope-stage .boda-olive-floral {
   width: min(44vw, 10.75rem);
   max-width: 172px;
-  height: auto;
-  pointer-events: none;
-  object-fit: contain;
-  user-select: none;
-}
-
-.boda-envelope-floral--tl {
-  left: clamp(-2.25rem, -7vw, -1rem);
-  top: clamp(-1.25rem, -4vw, -0.35rem);
-}
-
-.boda-envelope-floral--br {
-  right: clamp(-2.25rem, -7vw, -1rem);
-  bottom: clamp(-1.25rem, -4vw, -0.35rem);
 }
 
 .boda-envelope-header {
@@ -144,7 +138,7 @@
 }
 
 .boda-paper {
-  background-color: #24344d;
+  background-color: var(--boda-olive-dark);
   background-image:
     radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.07), transparent 50%),
     radial-gradient(ellipse at 80% 90%, rgba(0, 0, 0, 0.22), transparent 46%),
@@ -268,7 +262,145 @@
 }
 
 .boda-hero-veil {
-  background: rgba(12, 14, 12, 0.48);
+  background: linear-gradient(
+    180deg,
+    rgba(45, 52, 38, 0.55) 0%,
+    rgba(35, 42, 30, 0.62) 45%,
+    rgba(28, 34, 24, 0.68) 100%
+  );
+}
+
+.boda-olive-floral {
+  position: absolute;
+  width: min(42vw, 10rem);
+  max-width: 168px;
+  height: auto;
+  pointer-events: none;
+  object-fit: contain;
+  user-select: none;
+  z-index: 0;
+}
+
+.boda-olive-floral--tl {
+  left: clamp(-2rem, -6.5vw, -0.65rem);
+  top: clamp(-1.1rem, -3.5vw, -0.2rem);
+}
+
+.boda-olive-floral--tr {
+  right: clamp(-2rem, -6.5vw, -0.65rem);
+  top: clamp(-1.1rem, -3.5vw, -0.2rem);
+  transform: scaleX(-1);
+}
+
+.boda-olive-floral--br {
+  right: clamp(-2rem, -6.5vw, -0.65rem);
+  bottom: clamp(-1.1rem, -3.5vw, -0.2rem);
+}
+
+.boda-olive-floral--bl {
+  left: clamp(-2rem, -6.5vw, -0.65rem);
+  bottom: clamp(-1.1rem, -3.5vw, -0.2rem);
+  transform: scaleX(-1);
+}
+
+.boda-olive-floral--hero {
+  z-index: 10;
+  opacity: 0.72;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+}
+
+.boda-olive-floral--soft {
+  opacity: 0.88;
+}
+
+.boda-olive-branch {
+  position: absolute;
+  width: min(36vw, 7.5rem);
+  max-width: 132px;
+  height: auto;
+  pointer-events: none;
+  object-fit: contain;
+  user-select: none;
+  z-index: 0;
+  opacity: 0.92;
+}
+
+.boda-olive-branch--tl {
+  left: clamp(-1.5rem, -5vw, -0.25rem);
+  top: clamp(-0.5rem, -2vw, 0.35rem);
+}
+
+.boda-olive-branch--tr {
+  right: clamp(-1.5rem, -5vw, -0.25rem);
+  top: clamp(-0.5rem, -2vw, 0.35rem);
+}
+
+.boda-olive-branch--br {
+  right: clamp(-1.5rem, -5vw, -0.25rem);
+  bottom: clamp(-0.5rem, -2vw, 0.35rem);
+  transform: scaleY(-1);
+}
+
+.boda-olive-branch--bl {
+  left: clamp(-1.5rem, -5vw, -0.25rem);
+  bottom: clamp(-0.5rem, -2vw, 0.35rem);
+  transform: scaleY(-1);
+}
+
+.boda-olive-branch--hero {
+  z-index: 10;
+  opacity: 0.65;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.22));
+}
+
+.boda-olive-long-branch {
+  position: absolute;
+  pointer-events: none;
+  object-fit: contain;
+  user-select: none;
+  z-index: 0;
+  opacity: 0.95;
+}
+
+.boda-olive-long-branch--left {
+  left: 0;
+  top: 50%;
+  height: min(105%, 36rem);
+  max-height: none;
+  width: auto;
+  max-width: min(32vw, 9.5rem);
+  transform: translateY(-50%) translateX(clamp(-1.75rem, -7vw, -0.85rem));
+  object-position: left center;
+}
+
+.boda-olive-long-branch--right {
+  right: clamp(-0.35rem, -1.5vw, 0);
+  top: 50%;
+  height: min(105%, 36rem);
+  max-height: none;
+  width: auto;
+  max-width: min(32vw, 9.5rem);
+  transform: translateY(-50%);
+  object-position: right center;
+}
+
+.boda-olive-long-branch--right.boda-olive-long-branch--rsvp {
+  top: auto;
+  bottom: 0;
+  right: 0;
+  height: min(88vh, 40rem);
+  max-height: none;
+  max-width: min(36vw, 10rem);
+  transform: translateX(clamp(0.85rem, 7vw, 1.75rem))
+    translateY(clamp(0.75rem, 4vw, 1.5rem));
+  object-fit: contain;
+  object-position: right bottom;
+  z-index: 0;
+}
+
+.boda-section-content {
+  position: relative;
+  z-index: 1;
 }
 
 .boda-hero-kicker {
@@ -301,29 +433,66 @@
   text-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
+.boda-hero-emblem {
+  margin-top: 8.35rem;
+  height: clamp(2rem, 7vw, 2.85rem);
+  width: auto;
+  color: #f8f2e8;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.38));
+}
+
 .boda-cream {
-  background-color: #f4efe6;
+  background-color: var(--boda-olive-cream);
 }
 
 .boda-cream-warm {
-  background-color: #efe6d6;
+  background-color: var(--boda-olive-warm);
 }
 
-.boda-bluegray {
-  background-color: #d8dee6;
+.boda-bluegray,
+.boda-quote-bg,
+.boda-olive-panel {
+  background-color: var(--boda-olive-sage);
+  color: #fff;
 }
 
-.boda-quote-bg {
-  background-color: #d5dbe3;
+.boda-quote-bg::after,
+.boda-bluegray::after,
+.boda-olive-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0.75rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.boda-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.625rem 2rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.boda-cta-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .boda-map-btn {
-  background: #5c5c5c;
+  background: var(--boda-olive-deep);
   color: #fff;
 }
 
 .boda-map-btn-light {
-  background: #cbbba3;
+  background: #c5b896;
   color: #3a3228;
 }
 
@@ -370,7 +539,7 @@
 }
 
 .boda-input:focus {
-  border-color: #b9a48a;
+  border-color: var(--boda-olive);
   background: #fff;
 }
 

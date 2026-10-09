@@ -14,7 +14,7 @@ export function RsvpSection({ grupoInvitados, cupos }) {
       <FloralMotif className="pointer-events-none absolute -right-8 top-0 w-36" />
       <FadeInOnScroll>
         <FloralMotif className="mx-auto w-48" variant="divider" />
-        <h2 className="boda-serif mt-4 text-[32px] text-[#b7b0a6]">No niños</h2>
+        <h2 className="boda-serif mt-4 text-[32px] text-[#333232]">No niños</h2>
         <p className="mx-auto mt-4 max-w-sm text-[13px] leading-relaxed text-[#6b645c]">
           {project.noNinos}
         </p>

@@ -1,7 +1,22 @@
 /**
- * @param {{ className?: string, variant?: 'corner' | 'spray' | 'divider' }} props
+ * @param {{ className?: string, variant?: 'corner' | 'spray' | 'divider' | 'watercolor' }} props
  */
 export function FloralMotif({ className = '', variant = 'corner' }) {
+  if (variant === 'watercolor') {
+    return (
+      <svg viewBox="0 0 180 220" className={className} aria-hidden>
+        <ellipse cx="72" cy="68" rx="36" ry="26" fill="#efb09a" opacity="0.92" transform="rotate(-28 72 68)" />
+        <ellipse cx="108" cy="56" rx="30" ry="22" fill="#f5c4b0" opacity="0.88" transform="rotate(18 108 56)" />
+        <ellipse cx="90" cy="88" rx="28" ry="20" fill="#e8a08a" opacity="0.9" />
+        <ellipse cx="52" cy="102" rx="20" ry="15" fill="#f0b8a4" opacity="0.85" transform="rotate(-16 52 102)" />
+        <path d="M88 108c6 26 4 52-8 78" stroke="#6f8f62" strokeWidth="2.2" fill="none" opacity="0.85" />
+        <ellipse cx="76" cy="142" rx="15" ry="7" fill="#7a9a6a" transform="rotate(-32 76 142)" />
+        <ellipse cx="98" cy="164" rx="17" ry="8" fill="#688c5a" transform="rotate(24 98 164)" />
+        <ellipse cx="68" cy="182" rx="13" ry="6" fill="#7a9a6a" transform="rotate(-18 68 182)" />
+      </svg>
+    )
+  }
+
   if (variant === 'divider') {
     return (
       <svg viewBox="0 0 220 70" className={className} aria-hidden>

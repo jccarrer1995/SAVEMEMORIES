@@ -17,9 +17,9 @@ export function HeroSection() {
 
       <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-6 pb-28 pt-[14vh]">
         <p className="boda-hero-kicker">Nuestra Boda</p>
-        <h1 className="boda-hero-name mt-6">{project.novio}</h1>
+        <h1 className="boda-hero-name mt-6">{project.novia}</h1>
         <p className="boda-hero-amp">&</p>
-        <h1 className="boda-hero-name">{project.novia}</h1>
+        <h1 className="boda-hero-name">{project.novio}</h1>
       </div>
     </section>
   )

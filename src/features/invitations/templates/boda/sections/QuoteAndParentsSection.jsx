@@ -19,16 +19,16 @@ export function QuoteAndParentsSection() {
           <h2 className="boda-serif text-[34px] text-[#2c2c2c]">Nuestros Padres</h2>
           <div className="relative z-10 mt-8 space-y-6 text-sm text-[#3a3a3a]">
             <div>
-              <p className="mb-2 text-[11px] tracking-[0.2em] text-[#7a7368]">PADRES DEL NOVIO</p>
-              {project.padres.novio.map((name) => (
+              <p className="mb-2 text-[11px] tracking-[0.2em] text-[#7a7368]">PADRES DE LA NOVIA</p>
+              {project.padres.novia.map((name) => (
                 <p key={name} className="leading-7">
                   {name}
                 </p>
               ))}
             </div>
             <div>
-              <p className="mb-2 text-[11px] tracking-[0.2em] text-[#7a7368]">PADRES DE LA NOVIA</p>
-              {project.padres.novia.map((name) => (
+              <p className="mb-2 text-[11px] tracking-[0.2em] text-[#7a7368]">PADRES DEL NOVIO</p>
+              {project.padres.novio.map((name) => (
                 <p key={name} className="leading-7">
                   {name}
                 </p>

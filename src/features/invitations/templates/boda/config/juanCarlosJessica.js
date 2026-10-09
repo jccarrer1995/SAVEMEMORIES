@@ -27,7 +27,7 @@ export const juanCarlosJessicaProject = {
     { id: 'recepcion', hora: '19:00 hrs', label: 'RECEPCIÓN', icon: 'people' },
     { id: 'civil', hora: '20:00 hrs', label: 'CIVIL', icon: 'rings' },
     { id: 'cena', hora: '22:00 hrs', label: 'CENA', icon: 'glasses' },
-    { id: 'fiesta', hora: '22:30 hrs', label: 'FIESTA', icon: 'music' },
+    { id: 'fiesta', hora: '00:00 hrs', label: 'FIESTA', icon: 'music' },
   ],
   regalos: {
     texto:
@@ -44,12 +44,8 @@ export const juanCarlosJessicaProject = {
     cupos: 3,
   },
   fotos: {
-    hero: publicUrl('/boda/Pareja1.jpeg'),
-    galeria: [
-      publicUrl('/boda/Pareja2.jpeg'),
-      publicUrl('/boda/Pareja3.jpeg'),
-      publicUrl('/boda/Pareja4.jpeg'),
-    ],
+    hero: publicUrl('/boda/couple-2.jpg'),
+    galeria: [publicUrl('/boda/Pareja4.jpeg')],
   },
   musicaSrc: publicUrl('/boda/musica.mp3'),
 }

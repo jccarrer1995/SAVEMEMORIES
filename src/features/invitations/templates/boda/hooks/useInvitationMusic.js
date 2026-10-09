@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { resolvePublicAssetUrl } from '../../../core/utils/publicUrl.js'
 
 /**
  * @param {string} musicaSrc
@@ -8,7 +9,7 @@ export function useInvitationMusic(musicaSrc) {
   const [musicPlaying, setMusicPlaying] = useState(false)
 
   useEffect(() => {
-    const audio = new Audio(musicaSrc)
+    const audio = new Audio(resolvePublicAssetUrl(musicaSrc))
     audio.loop = true
     audio.preload = 'auto'
     const syncPlaying = () => setMusicPlaying(!audio.paused)

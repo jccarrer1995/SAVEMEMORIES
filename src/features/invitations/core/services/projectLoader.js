@@ -1,7 +1,29 @@
 import { isSupportedTemplateId } from '../constants/supportedTemplates.js'
 import { fetchProjectRecord } from '../../../../lib/firebase/projectStore.js'
 import { getProjectById as getRegistryProject } from '../registry/projectRegistry.js'
-import { publicUrl } from '../utils/publicUrl.js'
+import { publicUrl, resolvePublicAssetUrl } from '../utils/publicUrl.js'
+
+/**
+ * @param {import('../types/invitationProject.js').InvitationProjectConfig} content
+ */
+function normalizeProjectAssets(content) {
+  const fotos = content.fotos
+  const normalizedFotos = fotos
+    ? {
+        ...fotos,
+        hero: fotos.hero ? resolvePublicAssetUrl(fotos.hero) : fotos.hero,
+        galeria: Array.isArray(fotos.galeria)
+          ? fotos.galeria.map((item) => resolvePublicAssetUrl(item))
+          : fotos.galeria,
+      }
+    : fotos
+
+  return {
+    ...content,
+    musicaSrc: resolvePublicAssetUrl(content.musicaSrc),
+    fotos: normalizedFotos,
+  }
+}
 
 /** @type {readonly string[]} */
 const REMOVED_BODA_GALLERY_FILES = ['Pareja2.jpeg', 'Pareja3.jpeg']
@@ -64,8 +86,9 @@ function mapRecordToRegistered(record) {
   const content = /** @type {import('../types/invitationProject.js').InvitationProjectConfig} */ (
     record.content
   )
+  const withAssets = normalizeProjectAssets(content)
   const normalizedContent =
-    record.templateId === 'boda' ? applyLegacyBodaContent(content) : content
+    record.templateId === 'boda' ? applyLegacyBodaContent(withAssets) : withAssets
 
   return {
     templateId: record.templateId,

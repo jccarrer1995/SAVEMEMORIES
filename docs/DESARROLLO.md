@@ -134,6 +134,13 @@ La colección legacy `bodaRsvps` se mantiene hasta migrar datos en una etapa pos
 6. **Panel cliente** — respuestas, cuota de enlaces, Excel.
 7. **Seguridad y deploy** — Firestore rules, pruebas, publicación.
 
+## Publicación (producción)
+
+- **Canal principal:** Firebase Hosting, proyecto **`savememories-prd`** → https://savememories-prd.web.app
+- **Comando:** `npm run publish` (build con `vite build --base /` + deploy hosting y `firestore.rules`).
+- Requiere `.env` con `VITE_FIREBASE_*` y sesión `firebase login` (proyecto por defecto en `.firebaserc`).
+- GitHub Pages (`/SAVEMEMORIES/`) es despliegue legacy vía CI; no usarlo como “publish” salvo petición explícita.
+
 ## Checklist antes de cerrar una etapa
 
 - [ ] `npm run build` sin errores

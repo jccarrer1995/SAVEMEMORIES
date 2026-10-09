@@ -13,7 +13,7 @@ export function ClientProjectResponsesPage() {
               ← Mis proyectos
             </Link>
           </div>
-          <ClientResponsesPanel projectId={project.slug} projectTitle={project.title || project.slug} />
+          <ClientResponsesPanel projectId={project.id} projectTitle={project.title || project.slug} />
         </>
       )}
     </ClientProjectShell>

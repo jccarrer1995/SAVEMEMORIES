@@ -40,6 +40,7 @@ export function useGuestLinkValidation(projectId, linkCode) {
           nombre: record.guestLabel,
           cupos: record.cupos,
           linkCode: record.id,
+          mesa: record.mesa,
         })
       })
       .catch(() => {

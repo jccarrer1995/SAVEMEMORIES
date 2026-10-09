@@ -1,5 +1,23 @@
-import { addDoc, collection, getDocs, orderBy, query, serverTimestamp, where } from 'firebase/firestore'
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  serverTimestamp,
+  updateDoc,
+  where,
+} from 'firebase/firestore'
 import { db } from '../../../../../lib/firebase/index.js'
+import { normalizeMesa } from '../../../../../shared/utils/normalizeMesa.js'
+import {
+  pickLatestRsvpRow,
+  rowToGuestConfirmation,
+  rsvpCreatedAtIso,
+} from '../utils/rsvpConfirmation.js'
 
 export const BODA_RSVP_COLLECTION = 'bodaRsvps'
 
@@ -11,6 +29,8 @@ export const BODA_RSVP_COLLECTION = 'bodaRsvps'
  * @property {string} mensaje
  * @property {string} grupoInvitados
  * @property {number} cupos
+ * @property {string} [linkCode]
+ * @property {string} [mesaAsignada]
  */
 
 /**
@@ -33,6 +53,8 @@ function toRow(payload, projectId) {
     mensaje: payload.mensaje,
     grupoInvitados: payload.grupoInvitados,
     cupos: payload.cupos,
+    ...(payload.linkCode ? { linkCode: payload.linkCode } : {}),
+    ...(normalizeMesa(payload.mesaAsignada) ? { mesaAsignada: normalizeMesa(payload.mesaAsignada) } : {}),
     createdAt: new Date().toISOString(),
   }
 }
@@ -59,6 +81,53 @@ export function readLocalRsvps(projectId) {
 function persistLocal(projectId, row) {
   const next = [...readLocalRsvps(projectId), row]
   window.localStorage.setItem(localStorageKey(projectId), JSON.stringify(next))
+}
+
+/**
+ * @param {Record<string, unknown>} a
+ * @param {Record<string, unknown>} b
+ */
+function isSameLocalRsvpRow(a, b) {
+  return (
+    a.createdAt === b.createdAt &&
+    a.grupoInvitados === b.grupoInvitados &&
+    a.nombres === b.nombres &&
+    a.telefono === b.telefono
+  )
+}
+
+/**
+ * @param {string} projectId
+ * @param {Record<string, unknown>} row
+ */
+function removeLocalRsvp(projectId, row) {
+  const next = readLocalRsvps(projectId).filter((item) => !isSameLocalRsvpRow(item, row))
+  window.localStorage.setItem(localStorageKey(projectId), JSON.stringify(next))
+}
+
+/**
+ * @param {string} projectId
+ * @param {Record<string, unknown>} row
+ */
+export async function deleteRsvp(projectId, row) {
+  const docId = typeof row.id === 'string' ? row.id : ''
+
+  if (docId && db) {
+    const docRef = doc(db, BODA_RSVP_COLLECTION, docId)
+    const snap = await getDoc(docRef)
+    if (snap.exists()) {
+      const data = snap.data()
+      const storedProjectId = typeof data.projectId === 'string' ? data.projectId : ''
+      if (!storedProjectId) {
+        await updateDoc(docRef, { projectId })
+      } else if (storedProjectId !== projectId) {
+        throw new Error('Este registro pertenece a otro proyecto.')
+      }
+    }
+    await deleteDoc(docRef)
+  }
+
+  removeLocalRsvp(projectId, row)
 }
 
 /**
@@ -99,7 +168,50 @@ export async function saveRsvp(projectId, payload) {
     }
   }
 
+  if (db && !firestore) {
+    throw new Error('No se pudo guardar tu confirmación. Revisa tu conexión e intenta de nuevo.')
+  }
+
   return { firestore, sheets }
+}
+
+/**
+ * @param {string} projectId
+ * @param {{ grupoInvitados: string, linkCode?: string }} invite
+ * @returns {Promise<import('../utils/rsvpConfirmation.js').GuestRsvpConfirmation | null>}
+ */
+export async function fetchGuestRsvpConfirmation(projectId, invite) {
+  if (!db) return null
+
+  const { grupoInvitados, linkCode } = invite
+
+  try {
+    if (linkCode) {
+      const byLink = await getDocs(
+        query(
+          collection(db, BODA_RSVP_COLLECTION),
+          where('projectId', '==', projectId),
+          where('linkCode', '==', linkCode),
+        ),
+      )
+      const latestLink = pickLatestRsvpRow(byLink.docs.map((docSnap) => docSnap.data()))
+      const fromLink = latestLink ? rowToGuestConfirmation(latestLink) : null
+      if (fromLink) return fromLink
+    }
+
+    const byGroup = await getDocs(
+      query(
+        collection(db, BODA_RSVP_COLLECTION),
+        where('projectId', '==', projectId),
+        where('grupoInvitados', '==', grupoInvitados),
+      ),
+    )
+    const latestGroup = pickLatestRsvpRow(byGroup.docs.map((docSnap) => docSnap.data()))
+    return latestGroup ? rowToGuestConfirmation(latestGroup) : null
+  } catch (error) {
+    console.warn('[invitation] No se pudo leer confirmación del invitado:', error)
+    return null
+  }
 }
 
 /**
@@ -120,9 +232,7 @@ export async function listRsvps(projectId) {
     )
     const remote = snap.docs.map((docSnap) => {
       const data = docSnap.data()
-      const createdAt = data.createdAt?.toDate?.() instanceof Date
-        ? data.createdAt.toDate().toISOString()
-        : data.createdAt ?? ''
+      const createdAt = rsvpCreatedAtIso(data) || (data.createdAt ?? '')
       return { id: docSnap.id, ...data, createdAt }
     })
 
@@ -134,12 +244,10 @@ export async function listRsvps(projectId) {
       const remote = snap.docs
         .map((docSnap) => {
           const data = docSnap.data()
-          const createdAt = data.createdAt?.toDate?.() instanceof Date
-            ? data.createdAt.toDate().toISOString()
-            : data.createdAt ?? ''
+          const createdAt = rsvpCreatedAtIso(data) || (data.createdAt ?? '')
           return { id: docSnap.id, ...data, createdAt }
         })
-        .filter((row) => !row.projectId || row.projectId === projectId)
+        .filter((row) => row.projectId === projectId || !row.projectId)
 
       if (remote.length > 0) return remote
     } catch {
@@ -161,6 +269,7 @@ export async function downloadRsvpsExcel(projectId, fileLabel, rows) {
     Fecha: formatExcelDate(row.createdAt),
     Grupo: row.grupoInvitados ?? '',
     Cupos: row.cupos ?? '',
+    Mesa: row.mesaAsignada ?? '',
     Confirmación: row.confirmacion ?? '',
     'Nombre de asistentes': row.nombres ?? '',
     Teléfono: row.telefono ?? '',
@@ -175,6 +284,7 @@ export async function downloadRsvpsExcel(projectId, fileLabel, rows) {
             Fecha: '',
             Grupo: '',
             Cupos: '',
+            Mesa: '',
             Confirmación: '',
             'Nombre de asistentes': '',
             Teléfono: '',

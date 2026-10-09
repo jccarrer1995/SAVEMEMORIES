@@ -90,7 +90,12 @@ export function BodaInvitationView({ project, guestInvite, allowQueryParams = fa
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.85 }}
               >
-                <BodaLanding grupoInvitados={invite.nombre} cupos={invite.cupos} />
+                <BodaLanding
+                  grupoInvitados={invite.nombre}
+                  cupos={invite.cupos}
+                  linkCode={invite.linkCode}
+                  mesa={invite.mesa}
+                />
               </motion.div>
             )}
           </AnimatePresence>

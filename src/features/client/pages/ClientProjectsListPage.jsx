@@ -1,24 +1,23 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../auth/hooks/useAuth.js'
-import { listMyProjects } from '../services/clientProjectService.js'
+import { listMyProjectsWithLinkUsage } from '../services/clientProjectService.js'
 import { CLIENT_NAV } from '../data/clientNav.js'
-import {
-  ClientProjectsDesktopTable,
-  ClientProjectsMobileList,
-} from '../components/ClientProjectsListViews.jsx'
+import { ClientProjectsList } from '../components/ClientProjectsListViews.jsx'
 import { PanelShell } from '../../../shared/layouts/PanelShell.jsx'
 import { ROLES } from '../../../shared/constants/roles.js'
 
 export function ClientProjectsListPage() {
   const { profile } = useAuth()
-  const [projects, setProjects] = useState(/** @type {import('../../admin/types/projectRecord.js').ProjectRecord[]} */ ([]))
+  const [projects, setProjects] = useState(
+    /** @type {Array<import('../../admin/types/projectRecord.js').ProjectRecord & { linksUsed: number }>} */ ([]),
+  )
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
     if (!profile?.uid) return
 
-    listMyProjects(profile.uid)
+    listMyProjectsWithLinkUsage(profile.uid)
       .then(setProjects)
       .catch((err) => {
         const isPermission =
@@ -45,8 +44,7 @@ export function ClientProjectsListPage() {
 
       {error ? <p className="panel-form-error">{error}</p> : null}
 
-      <ClientProjectsMobileList projects={projects} loading={loading} />
-      <ClientProjectsDesktopTable projects={projects} loading={loading} />
+      <ClientProjectsList projects={projects} loading={loading} />
     </PanelShell>
   )
 }

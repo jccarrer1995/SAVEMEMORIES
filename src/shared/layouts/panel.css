@@ -350,6 +350,58 @@
   background: rgba(255, 252, 248, 0.85);
 }
 
+.panel-table-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-top: 0.75rem;
+}
+
+.panel-table-pagination-summary {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #8b5e4b;
+}
+
+.panel-table-pagination-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.65rem;
+}
+
+.panel-table-pagination-status {
+  font-size: 0.8125rem;
+  color: #5c3a2e;
+  padding: 0 0.15rem;
+}
+
+.panel-table-pagination-btn {
+  appearance: none;
+  border: 1px solid rgba(122, 74, 50, 0.25);
+  border-radius: 9999px;
+  background: rgba(255, 252, 248, 0.95);
+  padding: 0.4rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #7a4a32;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.panel-table-pagination-btn:hover:not(:disabled) {
+  background: #f3e4da;
+  border-color: rgba(201, 123, 92, 0.38);
+}
+
+.panel-table-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .panel-table {
   width: 100%;
   border-collapse: collapse;
@@ -406,8 +458,135 @@
   text-align: right;
 }
 
+.panel-table-actions--center {
+  justify-content: center;
+  text-align: center;
+}
+
 .panel-table-actions-heading {
   text-align: right;
+}
+
+.panel-table th.panel-table-actions-heading--center {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.panel-table td.panel-table-actions--center {
+  text-align: center;
+}
+
+.panel-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(122, 74, 50, 0.22);
+  background: rgba(255, 252, 248, 0.9);
+  color: #7a4a32;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.panel-icon-btn:hover:not(:disabled),
+.panel-icon-btn:focus-visible:not(:disabled) {
+  background: #f3e4da;
+  border-color: rgba(201, 123, 92, 0.38);
+  color: #3a0d08;
+}
+
+.panel-icon-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.panel-icon-btn--danger {
+  border-color: rgba(198, 40, 40, 0.28);
+  color: #b71c1c;
+}
+
+.panel-icon-btn--danger:hover:not(:disabled),
+.panel-icon-btn--danger:focus-visible:not(:disabled) {
+  background: #fdeaea;
+  border-color: rgba(198, 40, 40, 0.45);
+  color: #7f0000;
+}
+
+.panel-actions-menu {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.panel-actions-menu--center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.panel-actions-menu-popover {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  z-index: 40;
+  min-width: 10.5rem;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(201, 123, 92, 0.22);
+  background: #fffaf6;
+  padding: 0.35rem;
+  box-shadow: 0 12px 28px rgba(45, 24, 12, 0.16);
+}
+
+.panel-actions-menu--start .panel-actions-menu-popover {
+  right: auto;
+  left: 0;
+}
+
+.panel-actions-menu--center .panel-actions-menu-popover {
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.panel-actions-menu-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  padding: 0.55rem 0.65rem;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #5c3a2e;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.panel-actions-menu-item:hover:not(:disabled),
+.panel-actions-menu-item:focus-visible:not(:disabled) {
+  background: rgba(243, 228, 218, 0.85);
+  color: #3a0d08;
+}
+
+.panel-actions-menu-item:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.panel-actions-menu-item--danger {
+  color: #b71c1c;
+}
+
+.panel-actions-menu-item--danger:hover:not(:disabled),
+.panel-actions-menu-item--danger:focus-visible:not(:disabled) {
+  background: #fdeaea;
+  color: #7f0000;
 }
 
 .panel-status-toggle {
@@ -535,6 +714,14 @@
   gap: 0.75rem;
 }
 
+@media (min-width: 700px) {
+  .panel-card-list--projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+    gap: 1rem;
+  }
+}
+
 .panel-project-card {
   border: 1px solid rgba(201, 123, 92, 0.2);
   border-radius: 1rem;
@@ -623,6 +810,62 @@
 .panel-badge--archived {
   background: #e0e0e0;
   color: #2a2a2a;
+}
+
+.panel-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.panel-pill--confirmed {
+  background: #d4e8d4;
+  color: #0f3d14;
+}
+
+.panel-pill--pending {
+  background: #fdeaea;
+  color: #7f0000;
+}
+
+.panel-table-sort {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.panel-table-sort-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #7a4a32;
+}
+
+.panel-table-sort-select {
+  appearance: none;
+  border: 1px solid rgba(122, 74, 50, 0.25);
+  border-radius: 9999px;
+  background: rgba(255, 252, 248, 0.95)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a4a32' stroke-width='1.4'/%3E%3C/svg%3E")
+    no-repeat right 0.75rem center;
+  padding: 0.4rem 2rem 0.4rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  color: #5c3a2e;
+  cursor: pointer;
+}
+
+.panel-table-sort-select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .panel-form {
@@ -753,4 +996,120 @@ button.panel-btn-primary:hover:not(:disabled) {
 button.panel-btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.panel-action-link--danger {
+  border-color: rgba(198, 40, 40, 0.28) !important;
+  color: #b71c1c !important;
+}
+
+.panel-table-actions .panel-action-link--danger:hover:not(:disabled),
+.panel-table-actions .panel-action-link--danger:focus-visible:not(:disabled),
+.panel-project-card-actions .panel-action-link--danger:hover:not(:disabled),
+.panel-project-card-actions .panel-action-link--danger:focus-visible:not(:disabled) {
+  background: #fdeaea;
+  border-color: rgba(198, 40, 40, 0.45) !important;
+  color: #7f0000 !important;
+}
+
+.panel-confirm-root {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.panel-confirm-backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: rgba(45, 24, 12, 0.45);
+  cursor: pointer;
+}
+
+.panel-confirm-backdrop:disabled {
+  cursor: not-allowed;
+}
+
+.panel-confirm-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 26rem);
+  border-radius: 1rem;
+  border: 1px solid rgba(201, 123, 92, 0.22);
+  background: #fffaf6;
+  padding: 1.35rem 1.25rem 1.15rem;
+  box-shadow: 0 18px 48px rgba(45, 24, 12, 0.22);
+}
+
+.panel-confirm-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: #5c3a2e;
+  margin: 0;
+}
+
+.panel-confirm-description {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #7a4a32;
+}
+
+.panel-confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-top: 1.35rem;
+}
+
+.panel-confirm-btn {
+  appearance: none;
+  border-radius: 9999px;
+  padding: 0.45rem 1rem;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.panel-confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.panel-confirm-btn--ghost {
+  border: 1px solid rgba(122, 74, 50, 0.25);
+  background: transparent;
+  color: #7a4a32;
+}
+
+.panel-confirm-btn--ghost:hover:not(:disabled) {
+  background: rgba(243, 228, 218, 0.65);
+}
+
+.panel-confirm-btn--primary {
+  border: none;
+  background: #6b3a1f;
+  color: #fff;
+}
+
+.panel-confirm-btn--primary:hover:not(:disabled) {
+  background: #5c3018;
+}
+
+.panel-confirm-btn--danger {
+  border: none;
+  background: #c62828;
+  color: #fff;
+}
+
+.panel-confirm-btn--danger:hover:not(:disabled) {
+  background: #b71c1c;
 }

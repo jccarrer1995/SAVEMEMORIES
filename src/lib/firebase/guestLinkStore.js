@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore'
 import { db } from './index.js'
 import { asText } from '../../shared/utils/asText.js'
+import { normalizeMesa } from '../../shared/utils/normalizeMesa.js'
 
 /**
  * @param {unknown} value
@@ -36,6 +37,7 @@ export function mapGuestLinkDoc(linkCode, data) {
     active: data.active !== false,
     createdAt: toIsoDate(data.createdAt),
     updatedAt: toIsoDate(data.updatedAt),
+    mesa: normalizeMesa(data.mesa),
   }
 }
 
@@ -83,10 +85,12 @@ export async function createGuestLink(projectId, linkCode, values) {
   const existing = await getDoc(ref)
   if (existing.exists()) throw new Error('El código generado ya existe. Intenta de nuevo.')
 
+  const mesa = normalizeMesa(values.mesa)
   await setDoc(ref, {
     guestLabel: values.guestLabel.trim(),
     cupos: Number(values.cupos) || 1,
     active: true,
+    ...(mesa ? { mesa } : {}),
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   })
@@ -117,4 +121,25 @@ export async function deleteGuestLink(projectId, linkCode) {
   if (!db) throw new Error('Firebase no está configurado.')
 
   await deleteDoc(doc(db, 'projects', projectId, 'links', linkCode))
+}
+
+/**
+ * @param {string} projectId
+ * @param {string} linkCode
+ * @param {string} mesa
+ */
+export async function updateGuestLinkMesa(projectId, linkCode, mesa) {
+  if (!db) throw new Error('Firebase no está configurado.')
+
+  const normalized = normalizeMesa(mesa)
+  const ref = doc(db, 'projects', projectId, 'links', linkCode)
+  const snap = await getDoc(ref)
+  if (!snap.exists()) throw new Error('Enlace no encontrado.')
+
+  if (normalized) {
+    await setDoc(ref, { mesa: normalized, updatedAt: serverTimestamp() }, { merge: true })
+    return
+  }
+
+  await setDoc(ref, { mesa: '', updatedAt: serverTimestamp() }, { merge: true })
 }

@@ -41,6 +41,7 @@
  * @property {{ nombre: string, cupos: number }} invitadosPorDefecto
  * @property {InvitationPhotos} fotos
  * @property {string} musicaSrc
+ * @property {string} [mesaAsignada]
  */
 
 /**
@@ -48,6 +49,7 @@
  * @property {string} nombre
  * @property {number} cupos
  * @property {string} [linkCode]
+ * @property {string} [mesa]
  */
 
 /**

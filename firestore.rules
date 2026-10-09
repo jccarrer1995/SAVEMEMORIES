@@ -1,92 +1,229 @@
 rules_version = '2';
 
+
+
 service cloud.firestore {
+
   match /databases/{database}/documents {
+
     function isSignedIn() {
+
       return request.auth != null;
+
     }
+
+
 
     function isSelf(uid) {
+
       return isSignedIn() && request.auth.uid == uid;
+
     }
+
+
 
     function userRole() {
+
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+
     }
+
+
 
     function isAdmin() {
+
       return isSignedIn() && userRole() == 'admin';
+
     }
+
+
 
     function isClient() {
+
       return isSignedIn() && userRole() == 'client';
+
     }
+
+
 
     function projectData(projectId) {
+
       return get(/databases/$(database)/documents/projects/$(projectId)).data;
+
     }
+
+
 
     function isProjectOwner(projectId) {
+
       return isSignedIn() && projectData(projectId).ownerId == request.auth.uid;
+
     }
+
+
 
     function canManageProject(projectId) {
+
       return isAdmin() || isProjectOwner(projectId);
+
     }
+
+
 
     function activeProject(projectId) {
+
       return projectData(projectId).status == 'active';
+
     }
+
+
 
     match /users/{uid} {
+
       allow read: if isSelf(uid) || isAdmin();
+
       allow list: if isAdmin();
+
       allow create: if isAdmin()
+
         && request.resource.data.role == 'client'
+
         && request.resource.data.email is string
+
         && request.resource.data.email.size() > 3
+
         && request.resource.data.displayName is string
+
         && request.resource.data.displayName.size() > 0
+
         && request.resource.data.active is bool;
+
       allow update: if isAdmin()
+
         && resource.data.role == 'client'
+
         && request.resource.data.role == 'client';
+
       allow delete: if isAdmin() && resource.data.role == 'client';
+
     }
+
+
 
     match /projects/{projectId} {
-      allow get: if resource.data.status == 'active' || isAdmin() || isProjectOwner(projectId);
+
+      allow get: if isAdmin()
+
+        || (isSignedIn() && resource.data.ownerId == request.auth.uid)
+
+        || resource.data.status == 'active';
+
       allow list: if isAdmin() || (isClient() && resource.data.ownerId == request.auth.uid);
+
       allow create, update: if isAdmin();
+
       allow delete: if false;
 
+
+
       match /links/{linkCode} {
+
         allow get: if isAdmin()
+
           || isProjectOwner(projectId)
+
           || (resource != null
+
               && resource.data.active == true
+
               && activeProject(projectId));
+
         allow list: if canManageProject(projectId);
+
         allow create: if canManageProject(projectId)
+
           && request.resource.data.guestLabel is string
+
           && request.resource.data.guestLabel.size() > 0
+
           && request.resource.data.cupos is number
+
           && request.resource.data.cupos >= 1
-          && request.resource.data.active == true;
+
+          && request.resource.data.active == true
+          && (!('mesa' in request.resource.data)
+              || (request.resource.data.mesa is string
+                  && request.resource.data.mesa.size() <= 120));
+
         allow update: if canManageProject(projectId);
+
         allow delete: if canManageProject(projectId);
+
       }
+
     }
 
+
+
     match /bodaRsvps/{docId} {
+
       allow create: if request.resource.data.nombres is string
+
         && request.resource.data.nombres.size() > 0
+
         && request.resource.data.nombres.size() < 500
+
         && request.resource.data.confirmacion is string
+
         && request.resource.data.telefono is string
-        && request.resource.data.grupoInvitados is string;
+
+        && request.resource.data.grupoInvitados is string
+
+        && request.resource.data.projectId is string
+
+        && (!('linkCode' in request.resource.data)
+
+            || (request.resource.data.linkCode is string
+
+                && request.resource.data.linkCode.size() > 0))
+        && (!('mesaAsignada' in request.resource.data)
+            || (request.resource.data.mesaAsignada is string
+                && request.resource.data.mesaAsignada.size() <= 120));
+
       allow read: if true;
-      allow update, delete: if false;
+
+      allow update: if isAdmin()
+
+        || (
+
+          !('projectId' in resource.data)
+
+          && request.resource.data.projectId is string
+
+          && canManageProject(request.resource.data.projectId)
+
+          && request.resource.data.nombres == resource.data.nombres
+
+          && request.resource.data.confirmacion == resource.data.confirmacion
+
+          && request.resource.data.telefono == resource.data.telefono
+
+          && request.resource.data.grupoInvitados == resource.data.grupoInvitados
+
+          && request.resource.data.cupos == resource.data.cupos
+
+        );
+
+      allow delete: if isAdmin()
+
+        || (resource.data.projectId is string
+
+            && canManageProject(resource.data.projectId));
+
     }
+
   }
+
 }
+
+

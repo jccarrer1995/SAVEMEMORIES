@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { useInvitationProject } from '../../../core/hooks/useInvitationProject.js'
 import { saveRsvp } from '../services/saveRsvp.js'
-
 /**
  * @param {number} cupos
  */
@@ -19,16 +18,21 @@ function confirmationOptions(cupos) {
 }
 
 /**
- * @param {{ grupoInvitados: string, cupos: number }} props
+ * @param {{
+ *   grupoInvitados: string,
+ *   cupos: number,
+ *   linkCode?: string,
+ *   mesaAsignada?: string,
+ *   onConfirmed: (data: { confirmacion: string, nombres: string }) => void,
+ * }} props
  */
-export function RsvpForm({ grupoInvitados, cupos }) {
+export function RsvpForm({ grupoInvitados, cupos, linkCode, mesaAsignada, onConfirmed }) {
   const project = useInvitationProject()
   const [confirmacion, setConfirmacion] = useState('')
   const [nombres, setNombres] = useState('')
   const [telefono, setTelefono] = useState('')
   const [mensaje, setMensaje] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
 
   async function handleSubmit(event) {
@@ -49,26 +53,20 @@ export function RsvpForm({ grupoInvitados, cupos }) {
         mensaje: mensaje.trim(),
         grupoInvitados,
         cupos,
+        linkCode,
+        mesaAsignada,
       })
-      setSent(true)
       toast.success('Confirmación enviada. ¡Gracias!')
+      onConfirmed({
+        confirmacion,
+        nombres: nombres.trim(),
+      })
     } catch (err) {
       const message = err instanceof Error ? err.message : 'No se pudo enviar. Intenta de nuevo.'
       setError(message)
     } finally {
       setSubmitting(false)
     }
-  }
-
-  if (sent) {
-    return (
-      <div className="px-4 py-10 text-center">
-        <p className="boda-serif text-2xl text-[#3a3228]">¡Gracias!</p>
-        <p className="mt-2 text-sm text-[#6b645c]">
-          Recibimos la confirmación de {grupoInvitados}.
-        </p>
-      </div>
-    )
   }
 
   return (

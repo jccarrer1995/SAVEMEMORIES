@@ -2,7 +2,10 @@
 
 Plataforma de invitaciones digitales (boda, XV, baby shower y más).
 
-Sitio publicado: https://jccarrer1995.github.io/SAVEMEMORIES/
+Sitio publicado (producción): **https://savememories-prd.web.app**
+
+Publicar: `npm run publish` (Firebase Hosting `savememories-prd` + reglas Firestore).  
+Copia legacy en GitHub Pages: https://jccarrer1995.github.io/SAVEMEMORIES/
 
 ## Cómo correrlo
 

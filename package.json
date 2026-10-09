@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:firebase": "vite build --base /",
+    "deploy:firebase": "npm run build:firebase && firebase deploy --only hosting,firestore:rules",
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "publish": "npm run deploy:firebase",
     "preview": "vite preview",
     "lint": "eslint ."
   },

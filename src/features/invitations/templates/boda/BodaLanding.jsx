@@ -9,9 +9,9 @@ import { TimelineSection } from './sections/TimelineSection.jsx'
 import { VenueSection } from './sections/VenueSection.jsx'
 
 /**
- * @param {{ grupoInvitados: string, cupos: number }} props
+ * @param {{ grupoInvitados: string, cupos: number, linkCode?: string, mesa?: string }} props
  */
-export function BodaLanding({ grupoInvitados, cupos }) {
+export function BodaLanding({ grupoInvitados, cupos, linkCode, mesa }) {
   const project = useInvitationProject()
 
   return (
@@ -23,7 +23,12 @@ export function BodaLanding({ grupoInvitados, cupos }) {
       <TimelineSection />
       <GiftsSection />
       <DressCodeSection />
-      <RsvpSection grupoInvitados={grupoInvitados} cupos={cupos} />
+      <RsvpSection
+        grupoInvitados={grupoInvitados}
+        cupos={cupos}
+        linkCode={linkCode}
+        mesa={mesa}
+      />
     </div>
   )
 }

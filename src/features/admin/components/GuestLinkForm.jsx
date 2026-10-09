@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 export function GuestLinkForm({ onSubmit, disabled = false }) {
   const [guestLabel, setGuestLabel] = useState('')
   const [cupos, setCupos] = useState(2)
+  const [mesa, setMesa] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -18,9 +19,10 @@ export function GuestLinkForm({ onSubmit, disabled = false }) {
     setError('')
     setSaving(true)
     try {
-      await onSubmit({ guestLabel, cupos })
+      await onSubmit({ guestLabel, cupos, mesa })
       setGuestLabel('')
       setCupos(2)
+      setMesa('')
       toast.success('Enlace creado')
     } catch (err) {
       const message = err instanceof Error ? err.message : 'No se pudo crear el enlace.'
@@ -53,6 +55,16 @@ export function GuestLinkForm({ onSubmit, disabled = false }) {
             min={1}
             value={cupos}
             onChange={(event) => setCupos(Number(event.target.value))}
+            disabled={disabled || saving}
+          />
+        </label>
+        <label className="panel-field panel-field--wide">
+          <span>Mesa asignada (opcional)</span>
+          <input
+            type="text"
+            value={mesa}
+            onChange={(event) => setMesa(event.target.value)}
+            placeholder="Ej. Mesa N.° 12"
             disabled={disabled || saving}
           />
         </label>

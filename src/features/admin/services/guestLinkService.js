@@ -6,6 +6,7 @@ import {
   fetchGuestLink,
   listGuestLinks,
   setGuestLinkActive,
+  updateGuestLinkMesa,
 } from '../../../lib/firebase/guestLinkStore.js'
 import { getProjectById } from './projectService.js'
 
@@ -31,8 +32,21 @@ export async function createProjectGuestLink(projectId, values) {
   if (!Number.isFinite(cupos) || cupos < 1) throw new Error('Los cupos deben ser al menos 1.')
 
   const linkCode = generateLinkCode()
-  await createGuestLink(projectId, linkCode, { guestLabel, cupos })
+  await createGuestLink(projectId, linkCode, {
+    guestLabel,
+    cupos,
+    mesa: values.mesa,
+  })
   return linkCode
+}
+
+/**
+ * @param {string} projectId
+ * @param {string} linkCode
+ * @param {string} mesa
+ */
+export async function updateProjectGuestLinkMesa(projectId, linkCode, mesa) {
+  await updateGuestLinkMesa(projectId, linkCode, mesa)
 }
 
 /**

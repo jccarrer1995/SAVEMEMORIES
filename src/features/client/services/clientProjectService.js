@@ -3,6 +3,7 @@ import {
   fetchProjectRecordForOwner,
   listProjectRecordsByOwner,
 } from '../../../lib/firebase/clientProjectStore.js'
+import { patchProjectSmsTemplate } from '../../../lib/firebase/projectStore.js'
 
 export { listGuestLinks } from '../../../lib/firebase/guestLinkStore.js'
 export {
@@ -46,6 +47,23 @@ export async function listMyProjectsWithLinkUsage(ownerId) {
  */
 export async function getMyProject(projectId, ownerId) {
   return fetchProjectRecordForOwner(projectId, ownerId)
+}
+
+/**
+ * @param {string} projectId
+ * @param {string} ownerId
+ * @param {string} smsTemplate
+ */
+export async function saveMyProjectSmsTemplate(projectId, ownerId, smsTemplate) {
+  const project = await fetchProjectRecordForOwner(projectId, ownerId)
+  if (!project) throw new Error('Proyecto no encontrado o sin permiso.')
+
+  const trimmed = smsTemplate.trim()
+  if (trimmed.length > 5000) {
+    throw new Error('La plantilla es demasiado larga (máximo 5000 caracteres).')
+  }
+
+  await patchProjectSmsTemplate(projectId, trimmed)
 }
 
 /**

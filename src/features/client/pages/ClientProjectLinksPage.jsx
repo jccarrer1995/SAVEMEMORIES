@@ -13,7 +13,10 @@ export function ClientProjectLinksPage() {
               ← Mis proyectos
             </Link>
           </div>
-          <GuestLinksPanel projectId={project.slug} />
+          <GuestLinksPanel
+            projectId={project.slug}
+            mesaSimulationHref={`/cliente/proyectos/${project.slug}/enlaces/simular-mesas`}
+          />
         </>
       )}
     </ClientProjectShell>

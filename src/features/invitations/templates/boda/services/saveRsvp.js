@@ -16,6 +16,7 @@ import { normalizeMesa } from '../../../../../shared/utils/normalizeMesa.js'
 import {
   pickLatestRsvpRow,
   rowToGuestConfirmation,
+  rowToGuestDecline,
   rsvpCreatedAtIso,
 } from '../utils/rsvpConfirmation.js'
 
@@ -178,40 +179,70 @@ export async function saveRsvp(projectId, payload) {
 /**
  * @param {string} projectId
  * @param {{ grupoInvitados: string, linkCode?: string }} invite
- * @returns {Promise<import('../utils/rsvpConfirmation.js').GuestRsvpConfirmation | null>}
+ * @returns {Promise<Record<string, unknown> | null>}
  */
-export async function fetchGuestRsvpConfirmation(projectId, invite) {
+async function fetchLatestGuestRsvpRow(projectId, invite) {
   if (!db) return null
 
   const { grupoInvitados, linkCode } = invite
 
-  try {
-    if (linkCode) {
-      const byLink = await getDocs(
-        query(
-          collection(db, BODA_RSVP_COLLECTION),
-          where('projectId', '==', projectId),
-          where('linkCode', '==', linkCode),
-        ),
-      )
-      const latestLink = pickLatestRsvpRow(byLink.docs.map((docSnap) => docSnap.data()))
-      const fromLink = latestLink ? rowToGuestConfirmation(latestLink) : null
-      if (fromLink) return fromLink
-    }
-
-    const byGroup = await getDocs(
+  if (linkCode) {
+    const byLink = await getDocs(
       query(
         collection(db, BODA_RSVP_COLLECTION),
         where('projectId', '==', projectId),
-        where('grupoInvitados', '==', grupoInvitados),
+        where('linkCode', '==', linkCode),
       ),
     )
-    const latestGroup = pickLatestRsvpRow(byGroup.docs.map((docSnap) => docSnap.data()))
-    return latestGroup ? rowToGuestConfirmation(latestGroup) : null
+    const latestLink = pickLatestRsvpRow(byLink.docs.map((docSnap) => docSnap.data()))
+    if (latestLink) return latestLink
+  }
+
+  const byGroup = await getDocs(
+    query(
+      collection(db, BODA_RSVP_COLLECTION),
+      where('projectId', '==', projectId),
+      where('grupoInvitados', '==', grupoInvitados),
+    ),
+  )
+  return pickLatestRsvpRow(byGroup.docs.map((docSnap) => docSnap.data()))
+}
+
+/**
+ * @param {string} projectId
+ * @param {{ grupoInvitados: string, linkCode?: string }} invite
+ * @returns {Promise<
+ *   | { kind: 'confirmed', data: import('../utils/rsvpConfirmation.js').GuestRsvpConfirmation }
+ *   | { kind: 'declined', data: import('../utils/rsvpConfirmation.js').GuestRsvpDecline }
+ *   | { kind: 'none' }
+ * >}
+ */
+export async function fetchGuestRsvpState(projectId, invite) {
+  try {
+    const latest = await fetchLatestGuestRsvpRow(projectId, invite)
+    if (!latest) return { kind: 'none' }
+
+    const confirmed = rowToGuestConfirmation(latest)
+    if (confirmed) return { kind: 'confirmed', data: confirmed }
+
+    const declined = rowToGuestDecline(latest)
+    if (declined) return { kind: 'declined', data: declined }
+
+    return { kind: 'none' }
   } catch (error) {
     console.warn('[invitation] No se pudo leer confirmación del invitado:', error)
-    return null
+    return { kind: 'none' }
   }
+}
+
+/**
+ * @param {string} projectId
+ * @param {{ grupoInvitados: string, linkCode?: string }} invite
+ * @returns {Promise<import('../utils/rsvpConfirmation.js').GuestRsvpConfirmation | null>}
+ */
+export async function fetchGuestRsvpConfirmation(projectId, invite) {
+  const state = await fetchGuestRsvpState(projectId, invite)
+  return state.kind === 'confirmed' ? state.data : null
 }
 
 /**

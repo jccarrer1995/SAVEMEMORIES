@@ -120,7 +120,13 @@ service cloud.firestore {
 
       allow list: if isAdmin() || (isClient() && resource.data.ownerId == request.auth.uid);
 
-      allow create, update: if isAdmin();
+      allow create: if isAdmin();
+
+      allow update: if isAdmin()
+        || (isProjectOwner(projectId)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['smsTemplate', 'updatedAt'])
+            && request.resource.data.smsTemplate is string
+            && request.resource.data.smsTemplate.size() <= 5000);
 
       allow delete: if false;
 

@@ -6,6 +6,12 @@ export function isAttendanceConfirmed(confirmacion) {
   return !/no podr/i.test(confirmacion)
 }
 
+/** @param {string} confirmacion */
+export function isAttendanceDeclined(confirmacion) {
+  if (!confirmacion) return false
+  return /no podr/i.test(confirmacion)
+}
+
 /**
  * @typedef {object} GuestRsvpConfirmation
  * @property {string} confirmacion
@@ -14,6 +20,10 @@ export function isAttendanceConfirmed(confirmacion) {
  * @property {number} cupos
  * @property {string} createdAt
  * @property {string} [mesaAsignada]
+ */
+
+/**
+ * @typedef {GuestRsvpConfirmation} GuestRsvpDecline
  */
 
 /**
@@ -52,6 +62,24 @@ export function pickLatestRsvpRow(rows) {
 export function rowToGuestConfirmation(row) {
   const confirmacion = typeof row.confirmacion === 'string' ? row.confirmacion : ''
   if (!isAttendanceConfirmed(confirmacion)) return null
+
+  return {
+    confirmacion,
+    nombres: typeof row.nombres === 'string' ? row.nombres : '',
+    grupoInvitados: typeof row.grupoInvitados === 'string' ? row.grupoInvitados : '',
+    cupos: typeof row.cupos === 'number' ? row.cupos : 0,
+    createdAt: rsvpCreatedAtIso(row) || new Date().toISOString(),
+    mesaAsignada: normalizeMesa(row.mesaAsignada),
+  }
+}
+
+/**
+ * @param {Record<string, unknown>} row
+ * @returns {GuestRsvpDecline | null}
+ */
+export function rowToGuestDecline(row) {
+  const confirmacion = typeof row.confirmacion === 'string' ? row.confirmacion : ''
+  if (!isAttendanceDeclined(confirmacion)) return null
 
   return {
     confirmacion,

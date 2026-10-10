@@ -7,6 +7,7 @@ import { ProtectedRoute } from '../../features/auth/components/ProtectedRoute.js
 import { LoginPage } from '../../features/auth/pages/LoginPage.jsx'
 import { ClientDashboardPage } from '../../features/client/pages/ClientDashboardPage.jsx'
 import { ClientProjectLinksPage } from '../../features/client/pages/ClientProjectLinksPage.jsx'
+import { ClientProjectLinksSimulationPage } from '../../features/client/pages/ClientProjectLinksSimulationPage.jsx'
 import { ClientProjectResponsesPage } from '../../features/client/pages/ClientProjectResponsesPage.jsx'
 import { ClientProjectsListPage } from '../../features/client/pages/ClientProjectsListPage.jsx'
 import {
@@ -92,6 +93,14 @@ export function AppRouter() {
         element={
           <ProtectedRoute allowedRoles={[ROLES.CLIENT]}>
             <ClientProjectsListPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/cliente/proyectos/:projectId/enlaces/simular-mesas"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.CLIENT]}>
+            <ClientProjectLinksSimulationPage />
           </ProtectedRoute>
         }
       />

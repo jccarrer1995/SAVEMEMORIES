@@ -3,9 +3,10 @@ import { FadeInOnScroll } from '../components/FadeInOnScroll.jsx'
 import { OrnamentLine } from '../components/FloralMotif.jsx'
 import { OliveLongBranchSide } from '../components/OliveLongBranchSide.jsx'
 import { RsvpConfirmationTicket } from '../components/RsvpConfirmationTicket.jsx'
+import { RsvpDeclineCard } from '../components/RsvpDeclineCard.jsx'
 import { RsvpForm } from '../components/RsvpForm.jsx'
 import { useInvitationProject } from '../../../core/hooks/useInvitationProject.js'
-import { fetchGuestRsvpConfirmation } from '../services/saveRsvp.js'
+import { fetchGuestRsvpState } from '../services/saveRsvp.js'
 import { isAttendanceConfirmed } from '../utils/rsvpConfirmation.js'
 import { normalizeMesa } from '../../../../../shared/utils/normalizeMesa.js'
 import { NoNinosSection } from './NoNinosSection.jsx'
@@ -23,15 +24,28 @@ export function RsvpSection({ grupoInvitados, cupos, linkCode, mesa }) {
   const [guestConfirmation, setGuestConfirmation] = useState(
     /** @type {import('../utils/rsvpConfirmation.js').GuestRsvpConfirmation | null} */ (null),
   )
+  const [guestDecline, setGuestDecline] = useState(
+    /** @type {import('../utils/rsvpConfirmation.js').GuestRsvpDecline | null} */ (null),
+  )
   const [rsvpLoading, setRsvpLoading] = useState(true)
 
   useEffect(() => {
     let cancelled = false
     setRsvpLoading(true)
 
-    fetchGuestRsvpConfirmation(project.id, { grupoInvitados, linkCode })
-      .then((confirmation) => {
-        if (!cancelled) setGuestConfirmation(confirmation)
+    fetchGuestRsvpState(project.id, { grupoInvitados, linkCode })
+      .then((state) => {
+        if (cancelled) return
+        if (state.kind === 'confirmed') {
+          setGuestConfirmation(state.data)
+          setGuestDecline(null)
+        } else if (state.kind === 'declined') {
+          setGuestDecline(state.data)
+          setGuestConfirmation(null)
+        } else {
+          setGuestConfirmation(null)
+          setGuestDecline(null)
+        }
       })
       .finally(() => {
         if (!cancelled) setRsvpLoading(false)
@@ -43,16 +57,27 @@ export function RsvpSection({ grupoInvitados, cupos, linkCode, mesa }) {
   }, [project.id, grupoInvitados, linkCode])
 
   const showTicket = Boolean(guestConfirmation)
+  const showDecline = Boolean(guestDecline)
 
   const ticketMesa =
     normalizeMesa(guestConfirmation?.mesaAsignada) ?? mesaAsignada
 
   function handleConfirmed({ confirmacion, nombres }) {
-    if (!isAttendanceConfirmed(confirmacion)) {
-      setGuestConfirmation(null)
+    if (isAttendanceConfirmed(confirmacion)) {
+      setGuestDecline(null)
+      setGuestConfirmation({
+        confirmacion,
+        nombres,
+        grupoInvitados,
+        cupos,
+        createdAt: new Date().toISOString(),
+        mesaAsignada,
+      })
       return
     }
-    setGuestConfirmation({
+
+    setGuestConfirmation(null)
+    setGuestDecline({
       confirmacion,
       nombres,
       grupoInvitados,
@@ -63,6 +88,7 @@ export function RsvpSection({ grupoInvitados, cupos, linkCode, mesa }) {
   }
 
   const invitadosTicketLabel = guestConfirmation?.nombres || grupoInvitados
+  const invitadosDeclineLabel = guestDecline?.nombres || grupoInvitados
 
   return (
     <>
@@ -79,6 +105,13 @@ export function RsvpSection({ grupoInvitados, cupos, linkCode, mesa }) {
                 invitadosLabel={invitadosTicketLabel}
                 mesaAsignada={ticketMesa}
                 pases={cupos}
+              />
+            ) : showDecline ? (
+              <RsvpDeclineCard
+                invitadosLabel={invitadosDeclineLabel}
+                cupos={cupos}
+                novio={project.novio}
+                novia={project.novia}
               />
             ) : (
               <>

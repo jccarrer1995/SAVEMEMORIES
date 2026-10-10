@@ -39,6 +39,7 @@ export function mapProjectDoc(id, data) {
     ownerId: asText(data.ownerId),
     linkLimit: Number(data.linkLimit ?? 0),
     content: /** @type {Record<string, unknown>} */ (data.content ?? {}),
+    smsTemplate: asText(data.smsTemplate),
     createdAt: toIsoDate(data.createdAt),
     updatedAt: toIsoDate(data.updatedAt),
   }
@@ -93,4 +94,21 @@ export async function persistProjectRecord(slug, payload, isNew) {
 
   await setDoc(ref, payload, { merge: true })
   return slug
+}
+
+/**
+ * @param {string} projectId
+ * @param {string} smsTemplate
+ */
+export async function patchProjectSmsTemplate(projectId, smsTemplate) {
+  if (!db) throw new Error('Firebase no está configurado.')
+
+  await setDoc(
+    doc(db, PROJECTS_COLLECTION, projectId),
+    {
+      smsTemplate: smsTemplate.trim(),
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true },
+  )
 }

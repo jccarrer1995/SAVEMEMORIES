@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { useInvitationProject } from '../../../core/hooks/useInvitationProject.js'
 import { saveRsvp } from '../services/saveRsvp.js'
+import { isAttendanceConfirmed } from '../utils/rsvpConfirmation.js'
 /**
  * @param {number} cupos
  */
@@ -56,7 +57,11 @@ export function RsvpForm({ grupoInvitados, cupos, linkCode, mesaAsignada, onConf
         linkCode,
         mesaAsignada,
       })
-      toast.success('Confirmación enviada. ¡Gracias!')
+      toast.success(
+        isAttendanceConfirmed(confirmacion)
+          ? 'Confirmación enviada. ¡Gracias!'
+          : 'Recibimos tu respuesta. Gracias por avisarnos.',
+      )
       onConfirmed({
         confirmacion,
         nombres: nombres.trim(),

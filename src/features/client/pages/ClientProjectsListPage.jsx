@@ -44,7 +44,18 @@ export function ClientProjectsListPage() {
 
       {error ? <p className="panel-form-error">{error}</p> : null}
 
-      <ClientProjectsList projects={projects} loading={loading} />
+      <ClientProjectsList
+        projects={projects}
+        loading={loading}
+        ownerId={profile?.uid ?? ''}
+        onSmsTemplateSaved={(projectId, smsTemplate) => {
+          setProjects((prev) =>
+            prev.map((project) =>
+              project.id === projectId ? { ...project, smsTemplate } : project,
+            ),
+          )
+        }}
+      />
     </PanelShell>
   )
 }

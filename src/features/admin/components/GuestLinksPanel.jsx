@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { GuestLinkForm } from './GuestLinkForm.jsx'
 import { GuestLinkStatusToggle } from './GuestLinkStatusToggle.jsx'
@@ -11,6 +12,7 @@ import {
 } from '../services/guestLinkService.js'
 import { getProjectById } from '../services/projectService.js'
 import { buildInvitationLinkUrl } from '../../invitations/core/utils/invitationUrl.js'
+import { getProjectSmsTemplate, renderSmsTemplate } from '../../invitations/core/utils/smsTemplate.js'
 import { PanelActionsMenu } from '../../../shared/components/PanelActionsMenu.jsx'
 import { PanelTextDialog } from '../../../shared/components/PanelTextDialog.jsx'
 import { PanelTablePagination } from '../../../shared/components/PanelTablePagination.jsx'
@@ -20,7 +22,7 @@ import { listRsvps } from '../../invitations/templates/boda/services/saveRsvp.js
 import { GuestLinkConfirmPill } from './GuestLinkConfirmPill.jsx'
 import {
   buildGuestLinkConfirmationIndex,
-  isGuestLinkConfirmed,
+  getGuestLinkRsvpStatus,
   sortGuestLinks,
 } from '../utils/guestLinkTableHelpers.js'
 
@@ -47,10 +49,21 @@ async function copyGuestLinkUrl(url) {
   toast.error('No se pudo copiar el enlace')
 }
 
+/** @param {string} message */
+async function copyGuestSmsMessage(message) {
+  const copied = await copyTextToClipboard(message)
+  if (copied) {
+    toast.success('Mensaje SMS copiado')
+    return
+  }
+
+  toast.error('No se pudo copiar el mensaje')
+}
+
 /**
- * @param {{ projectId: string }} props
+ * @param {{ projectId: string, mesaSimulationHref?: string }} props
  */
-export function GuestLinksPanel({ projectId }) {
+export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
   const [links, setLinks] = useState(/** @type {import('../../invitations/core/types/guestLink.js').GuestLinkRecord[]} */ ([]))
   const [linkLimit, setLinkLimit] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -65,6 +78,7 @@ export function GuestLinksPanel({ projectId }) {
   const [sortMode, setSortMode] = useState(
     /** @type {import('../utils/guestLinkTableHelpers.js').GuestLinkSortMode} */ ('confirmado'),
   )
+  const [smsTemplate, setSmsTemplate] = useState('')
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -80,6 +94,7 @@ export function GuestLinksPanel({ projectId }) {
         return
       }
       setLinkLimit(project.linkLimit)
+      setSmsTemplate(getProjectSmsTemplate(project))
       setLinks(projectLinks)
       setRsvpRows(rsvps)
     } catch (err) {
@@ -184,7 +199,13 @@ export function GuestLinksPanel({ projectId }) {
         <p className="panel-form-hint">Alcanzaste el límite de enlaces configurado para este proyecto.</p>
       ) : null}
 
-      <div className="panel-table-sort">
+      <div className="panel-table-toolbar">
+        {mesaSimulationHref ? (
+          <Link to={mesaSimulationHref} className="panel-btn-primary rounded-full px-4 py-2 text-sm font-medium">
+            Simular mesas
+          </Link>
+        ) : null}
+        <div className="panel-table-sort">
         <span className="panel-table-sort-label">Ordenar:</span>
         <select
           className="panel-table-sort-select"
@@ -203,6 +224,7 @@ export function GuestLinksPanel({ projectId }) {
           <option value="confirmado">Confirmado → por confirmar</option>
           <option value="por-confirmar">Por confirmar → confirmado</option>
         </select>
+        </div>
       </div>
 
       <div className="panel-table-wrap">
@@ -227,7 +249,7 @@ export function GuestLinksPanel({ projectId }) {
             ) : null}
             {pagination.pageItems.map((link) => {
               const url = buildInvitationLinkUrl(projectId, link.id)
-              const confirmed = isGuestLinkConfirmed(link, confirmationIndex)
+              const rsvpStatus = getGuestLinkRsvpStatus(link, confirmationIndex)
               return (
                 <tr key={link.id}>
                   <td>
@@ -248,7 +270,7 @@ export function GuestLinksPanel({ projectId }) {
                   </td>
                   <td>{link.mesa || '—'}</td>
                   <td>
-                    <GuestLinkConfirmPill confirmed={confirmed} />
+                    <GuestLinkConfirmPill status={rsvpStatus} />
                   </td>
                   <td className="panel-table-actions panel-table-actions--center">
                     <PanelActionsMenu
@@ -257,6 +279,17 @@ export function GuestLinksPanel({ projectId }) {
                           id: 'copy',
                           label: 'Copiar enlace',
                           onClick: () => void copyGuestLinkUrl(url),
+                        },
+                        {
+                          id: 'copy-sms',
+                          label: 'Copiar mensaje SMS',
+                          onClick: () =>
+                            void copyGuestSmsMessage(
+                              renderSmsTemplate(smsTemplate, {
+                                linkUrl: url,
+                                guestLabel: link.guestLabel,
+                              }),
+                            ),
                         },
                         {
                           id: 'mesa',

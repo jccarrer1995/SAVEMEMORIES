@@ -651,6 +651,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.35rem;
   border: 1px solid rgba(122, 74, 50, 0.22);
   border-radius: 9999px;
   background: rgba(255, 252, 248, 0.9);
@@ -686,6 +687,12 @@
 .panel-project-card-actions .panel-action-link:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+.panel-action-link__icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
 }
 
 .panel-table th.panel-table-col-desktop,
@@ -835,12 +842,131 @@
   color: #7f0000;
 }
 
+.panel-pill--declined {
+  background: #ece8e4;
+  color: #4a4540;
+}
+
+.panel-table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 0.65rem;
+}
+
 .panel-table-sort {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 0.75rem;
-  margin-bottom: 0.65rem;
+}
+
+.mesa-simulation-page {
+  min-height: 12rem;
+}
+
+.mesa-simulation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 1rem;
+}
+
+.mesa-simulation-scene {
+  border: 1px solid rgba(201, 123, 92, 0.22);
+  border-radius: 1rem;
+  background: rgba(255, 252, 248, 0.9);
+  padding: 1rem 0.85rem 1.1rem;
+}
+
+.mesa-simulation-scene-title {
+  margin: 0;
+  text-align: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #5c3a2e;
+}
+
+.mesa-simulation-scene-total {
+  margin: 0.25rem 0 0.85rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #8b5e4b;
+}
+
+.mesa-simulation-scene-single {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mesa-simulation-scene-duo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.mesa-simulation-scene-duo .mesa-simulation-guest:nth-child(1) {
+  justify-self: end;
+  text-align: right;
+}
+
+.mesa-simulation-scene-duo .mesa-simulation-guest:nth-child(3) {
+  justify-self: start;
+  text-align: left;
+}
+
+.mesa-simulation-scene-multi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.mesa-simulation-scene-multi-top,
+.mesa-simulation-scene-multi-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem 0.55rem;
+  width: 100%;
+}
+
+.mesa-simulation-table {
+  border-radius: 9999px;
+  border: 2px solid rgba(84, 88, 47, 0.35);
+  background: radial-gradient(circle at 35% 30%, #8f9668 0%, #54582f 58%, #3d4228 100%);
+  box-shadow:
+    inset 0 2px 6px rgba(255, 255, 255, 0.18),
+    0 8px 18px rgba(45, 24, 12, 0.14);
+}
+
+.mesa-simulation-guest {
+  max-width: 8.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(201, 123, 92, 0.24);
+  background: #fff;
+  padding: 0.45rem 0.55rem;
+  box-shadow: 0 4px 12px rgba(45, 24, 12, 0.06);
+}
+
+.mesa-simulation-guest-name {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #5c3a2e;
+}
+
+.mesa-simulation-guest-meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.68rem;
+  color: #8b5e4b;
 }
 
 .panel-table-sort-label {
@@ -1043,6 +1169,19 @@ button.panel-btn-primary:disabled {
   background: #fffaf6;
   padding: 1.35rem 1.25rem 1.15rem;
   box-shadow: 0 18px 48px rgba(45, 24, 12, 0.22);
+}
+
+.panel-confirm-dialog--wide {
+  width: min(100%, 42rem);
+  max-height: min(92vh, 44rem);
+  overflow-y: auto;
+}
+
+.panel-confirm-dialog--wide .panel-field textarea {
+  min-height: 16rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  resize: vertical;
 }
 
 .panel-confirm-title {

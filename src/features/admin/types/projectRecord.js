@@ -10,6 +10,7 @@
  * @property {string} ownerId
  * @property {number} linkLimit
  * @property {Record<string, unknown>} content
+ * @property {string} [smsTemplate]
  * @property {string} [createdAt]
  * @property {string} [updatedAt]
  */

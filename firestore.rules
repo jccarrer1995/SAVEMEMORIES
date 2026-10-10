@@ -78,6 +78,26 @@ service cloud.firestore {
 
 
 
+    function validGuestLinkEtiquetaLado(data) {
+
+      return !('etiquetaLado' in data)
+
+        || data.etiquetaLado in ['novio', 'novia', 'ambos'];
+
+    }
+
+
+
+    function validGuestLinkEtiquetaGrupo(data) {
+
+      return !('etiquetaGrupo' in data)
+
+        || data.etiquetaGrupo in ['familia', 'amigo', 'trabajo', 'universidad', 'otros'];
+
+    }
+
+
+
     match /users/{uid} {
 
       allow read: if isSelf(uid) || isAdmin();
@@ -159,9 +179,13 @@ service cloud.firestore {
           && request.resource.data.active == true
           && (!('mesa' in request.resource.data)
               || (request.resource.data.mesa is string
-                  && request.resource.data.mesa.size() <= 120));
+                  && request.resource.data.mesa.size() <= 120))
+          && validGuestLinkEtiquetaLado(request.resource.data)
+          && validGuestLinkEtiquetaGrupo(request.resource.data);
 
-        allow update: if canManageProject(projectId);
+        allow update: if canManageProject(projectId)
+          && validGuestLinkEtiquetaLado(request.resource.data)
+          && validGuestLinkEtiquetaGrupo(request.resource.data);
 
         allow delete: if canManageProject(projectId);
 

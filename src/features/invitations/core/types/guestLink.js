@@ -7,6 +7,15 @@
  * @property {string} createdAt
  * @property {string} [updatedAt]
  * @property {string} [mesa]
+ * @property {string} [etiquetaLado]
+ * @property {string} [etiquetaGrupo]
+ */
+
+/**
+ * @typedef {object} GuestLinkMetaValues
+ * @property {string} mesa
+ * @property {string} [etiquetaLado]
+ * @property {string} [etiquetaGrupo]
  */
 
 /**
@@ -14,4 +23,6 @@
  * @property {string} guestLabel
  * @property {number} cupos
  * @property {string} [mesa]
+ * @property {string} [etiquetaLado]
+ * @property {string} [etiquetaGrupo]
  */

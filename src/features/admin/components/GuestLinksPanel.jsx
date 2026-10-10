@@ -1,20 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import { GuestLinkForm } from './GuestLinkForm.jsx'
+import { GuestLinkCreateModal } from './GuestLinkCreateModal.jsx'
 import { GuestLinkStatusToggle } from './GuestLinkStatusToggle.jsx'
 import {
   createProjectGuestLink,
   deleteProjectGuestLink,
   listGuestLinks,
   toggleProjectGuestLink,
-  updateProjectGuestLinkMesa,
+  updateProjectGuestLinkMeta,
 } from '../services/guestLinkService.js'
 import { getProjectById } from '../services/projectService.js'
 import { buildInvitationLinkUrl } from '../../invitations/core/utils/invitationUrl.js'
 import { getProjectSmsTemplate, renderSmsTemplate } from '../../invitations/core/utils/smsTemplate.js'
 import { PanelActionsMenu } from '../../../shared/components/PanelActionsMenu.jsx'
-import { PanelTextDialog } from '../../../shared/components/PanelTextDialog.jsx'
+import { GuestLinkEditTagsModal } from './GuestLinkEditTagsModal.jsx'
+import { GuestLinkEtiquetasPills } from './GuestLinkEtiquetasPills.jsx'
 import { PanelTablePagination } from '../../../shared/components/PanelTablePagination.jsx'
 import { usePanelTablePagination } from '../../../shared/hooks/usePanelTablePagination.js'
 import { copyTextToClipboard } from '../../../shared/utils/copyTextToClipboard.js'
@@ -70,15 +71,17 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
   const [error, setError] = useState('')
   const [togglingLinkId, setTogglingLinkId] = useState('')
   const [deletingLinkId, setDeletingLinkId] = useState('')
-  const [mesaEditLink, setMesaEditLink] = useState(
+  const [tagsEditLink, setTagsEditLink] = useState(
     /** @type {import('../../invitations/core/types/guestLink.js').GuestLinkRecord | null} */ (null),
   )
-  const [savingMesa, setSavingMesa] = useState(false)
+  const [savingTags, setSavingTags] = useState(false)
   const [rsvpRows, setRsvpRows] = useState(/** @type {Array<Record<string, unknown>>} */ ([]))
   const [sortMode, setSortMode] = useState(
     /** @type {import('../utils/guestLinkTableHelpers.js').GuestLinkSortMode} */ ('confirmado'),
   )
   const [smsTemplate, setSmsTemplate] = useState('')
+  const [createModalOpen, setCreateModalOpen] = useState(false)
+  const [creatingLink, setCreatingLink] = useState(false)
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -115,8 +118,13 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
   }, [loadData])
 
   async function handleCreate(values) {
-    await createProjectGuestLink(projectId, values)
-    await loadData()
+    setCreatingLink(true)
+    try {
+      await createProjectGuestLink(projectId, values)
+      await loadData()
+    } finally {
+      setCreatingLink(false)
+    }
   }
 
   async function handleToggle(linkCode, active) {
@@ -156,19 +164,19 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
     }
   }
 
-  async function handleSaveMesa(value) {
-    if (!mesaEditLink) return
+  async function handleSaveTags(values) {
+    if (!tagsEditLink) return
 
-    setSavingMesa(true)
+    setSavingTags(true)
     try {
-      await updateProjectGuestLinkMesa(projectId, mesaEditLink.id, value)
-      toast.success('Mesa actualizada')
-      setMesaEditLink(null)
+      await updateProjectGuestLinkMeta(projectId, tagsEditLink.id, values)
+      toast.success('Mesa y etiquetas actualizadas')
+      setTagsEditLink(null)
       await loadData()
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'No se pudo guardar la mesa.')
+      toast.error(err instanceof Error ? err.message : 'No se pudieron guardar las etiquetas.')
     } finally {
-      setSavingMesa(false)
+      setSavingTags(false)
     }
   }
 
@@ -193,39 +201,47 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
 
       {error ? <p className="panel-form-error">{error}</p> : null}
 
-      <GuestLinkForm onSubmit={handleCreate} disabled={limitReached || loading} />
+      <div className="panel-table-toolbar">
+        <div className="panel-table-sort">
+          <span className="panel-table-sort-label">Ordenar:</span>
+          <select
+            className="panel-table-sort-select"
+            value={sortMode}
+            disabled={loading || links.length === 0}
+            onChange={(event) =>
+              setSortMode(
+                /** @type {import('../utils/guestLinkTableHelpers.js').GuestLinkSortMode} */ (
+                  event.target.value
+                ),
+              )
+            }
+          >
+            <option value="mesa-asc">De mesa menor a mayor</option>
+            <option value="mesa-desc">De mesa mayor a menor</option>
+            <option value="confirmado">Confirmado → por confirmar</option>
+            <option value="por-confirmar">Por confirmar → confirmado</option>
+          </select>
+        </div>
+        <div className="panel-table-toolbar-actions">
+          {mesaSimulationHref ? (
+            <Link to={mesaSimulationHref} className="panel-btn-secondary rounded-full px-4 py-2 text-sm font-medium">
+              Simular mesas
+            </Link>
+          ) : null}
+          <button
+            type="button"
+            className="panel-btn-primary rounded-full px-4 py-2 text-sm font-medium"
+            disabled={limitReached || loading || creatingLink}
+            onClick={() => setCreateModalOpen(true)}
+          >
+            + Nuevo enlace
+          </button>
+        </div>
+      </div>
 
       {limitReached ? (
         <p className="panel-form-hint">Alcanzaste el límite de enlaces configurado para este proyecto.</p>
       ) : null}
-
-      <div className="panel-table-toolbar">
-        {mesaSimulationHref ? (
-          <Link to={mesaSimulationHref} className="panel-btn-primary rounded-full px-4 py-2 text-sm font-medium">
-            Simular mesas
-          </Link>
-        ) : null}
-        <div className="panel-table-sort">
-        <span className="panel-table-sort-label">Ordenar:</span>
-        <select
-          className="panel-table-sort-select"
-          value={sortMode}
-          disabled={loading || links.length === 0}
-          onChange={(event) =>
-            setSortMode(
-              /** @type {import('../utils/guestLinkTableHelpers.js').GuestLinkSortMode} */ (
-                event.target.value
-              ),
-            )
-          }
-        >
-          <option value="mesa-asc">De mesa menor a mayor</option>
-          <option value="mesa-desc">De mesa mayor a menor</option>
-          <option value="confirmado">Confirmado → por confirmar</option>
-          <option value="por-confirmar">Por confirmar → confirmado</option>
-        </select>
-        </div>
-      </div>
 
       <div className="panel-table-wrap">
         <table className="panel-table">
@@ -233,8 +249,9 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
             <tr>
               <th>Invitado</th>
               <th className="panel-table-col-desktop">Código</th>
-              <th>Estado</th>
+              <th>Etiquetas</th>
               <th>Mesa</th>
+              <th>Estado</th>
               <th>Confirmado</th>
               <th className="panel-table-actions-heading panel-table-actions-heading--center">Acciones</th>
             </tr>
@@ -242,7 +259,7 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
           <tbody>
             {links.length === 0 && !loading ? (
               <tr>
-                <td colSpan={6} className="panel-table-empty">
+                <td colSpan={7} className="panel-table-empty">
                   Aún no hay enlaces. Genera el primero arriba.
                 </td>
               </tr>
@@ -262,13 +279,16 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
                     <code className="panel-table-code">{link.id}</code>
                   </td>
                   <td>
+                    <GuestLinkEtiquetasPills link={link} />
+                  </td>
+                  <td>{link.mesa || '—'}</td>
+                  <td>
                     <GuestLinkStatusToggle
                       active={link.active}
                       disabled={togglingLinkId === link.id || loading}
                       onChange={(active) => void handleToggle(link.id, active)}
                     />
                   </td>
-                  <td>{link.mesa || '—'}</td>
                   <td>
                     <GuestLinkConfirmPill status={rsvpStatus} />
                   </td>
@@ -292,9 +312,9 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
                             ),
                         },
                         {
-                          id: 'mesa',
-                          label: 'Editar mesa',
-                          onClick: () => setMesaEditLink(link),
+                          id: 'tags',
+                          label: 'Editar mesa y etiquetas',
+                          onClick: () => setTagsEditLink(link),
                         },
                         ...(link.active
                           ? [
@@ -333,22 +353,27 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
         onPageChange={pagination.setPage}
       />
 
-      <PanelTextDialog
-        open={Boolean(mesaEditLink)}
-        title="Mesa asignada"
-        description={
-          mesaEditLink
-            ? `Invitado: ${mesaEditLink.guestLabel}. Deja vacío si aún no tiene mesa.`
-            : undefined
-        }
-        label="Mesa (opcional)"
-        initialValue={mesaEditLink?.mesa ?? ''}
-        placeholder="Ej. Mesa N.° 12"
-        busy={savingMesa}
-        onCancel={() => {
-          if (!savingMesa) setMesaEditLink(null)
+      <GuestLinkCreateModal
+        open={createModalOpen}
+        disabled={limitReached || loading}
+        busy={creatingLink}
+        onClose={() => {
+          if (!creatingLink) setCreateModalOpen(false)
         }}
-        onConfirm={(value) => void handleSaveMesa(value)}
+        onSubmit={handleCreate}
+      />
+
+      <GuestLinkEditTagsModal
+        open={Boolean(tagsEditLink)}
+        guestLabel={tagsEditLink?.guestLabel}
+        initialMesa={tagsEditLink?.mesa ?? ''}
+        initialEtiquetaLado={tagsEditLink?.etiquetaLado ?? ''}
+        initialEtiquetaGrupo={tagsEditLink?.etiquetaGrupo ?? ''}
+        busy={savingTags}
+        onClose={() => {
+          if (!savingTags) setTagsEditLink(null)
+        }}
+        onConfirm={(values) => void handleSaveTags(values)}
       />
     </div>
   )

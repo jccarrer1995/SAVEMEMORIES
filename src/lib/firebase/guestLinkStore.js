@@ -1,6 +1,7 @@
 import {
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -12,6 +13,10 @@ import {
 import { db } from './index.js'
 import { asText } from '../../shared/utils/asText.js'
 import { normalizeMesa } from '../../shared/utils/normalizeMesa.js'
+import {
+  normalizeEtiquetaGrupo,
+  normalizeEtiquetaLado,
+} from '../../features/invitations/core/constants/guestLinkTags.js'
 
 /**
  * @param {unknown} value
@@ -38,6 +43,8 @@ export function mapGuestLinkDoc(linkCode, data) {
     createdAt: toIsoDate(data.createdAt),
     updatedAt: toIsoDate(data.updatedAt),
     mesa: normalizeMesa(data.mesa),
+    etiquetaLado: normalizeEtiquetaLado(data.etiquetaLado) || undefined,
+    etiquetaGrupo: normalizeEtiquetaGrupo(data.etiquetaGrupo) || undefined,
   }
 }
 
@@ -86,11 +93,15 @@ export async function createGuestLink(projectId, linkCode, values) {
   if (existing.exists()) throw new Error('El código generado ya existe. Intenta de nuevo.')
 
   const mesa = normalizeMesa(values.mesa)
+  const etiquetaLado = normalizeEtiquetaLado(values.etiquetaLado)
+  const etiquetaGrupo = normalizeEtiquetaGrupo(values.etiquetaGrupo)
   await setDoc(ref, {
     guestLabel: values.guestLabel.trim(),
     cupos: Number(values.cupos) || 1,
     active: true,
     ...(mesa ? { mesa } : {}),
+    ...(etiquetaLado ? { etiquetaLado } : {}),
+    ...(etiquetaGrupo ? { etiquetaGrupo } : {}),
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   })
@@ -129,17 +140,33 @@ export async function deleteGuestLink(projectId, linkCode) {
  * @param {string} mesa
  */
 export async function updateGuestLinkMesa(projectId, linkCode, mesa) {
+  await updateGuestLinkMeta(projectId, linkCode, { mesa })
+}
+
+/**
+ * @param {string} projectId
+ * @param {string} linkCode
+ * @param {import('../../features/invitations/core/types/guestLink.js').GuestLinkMetaValues} values
+ */
+export async function updateGuestLinkMeta(projectId, linkCode, values) {
   if (!db) throw new Error('Firebase no está configurado.')
 
-  const normalized = normalizeMesa(mesa)
   const ref = doc(db, 'projects', projectId, 'links', linkCode)
   const snap = await getDoc(ref)
   if (!snap.exists()) throw new Error('Enlace no encontrado.')
 
-  if (normalized) {
-    await setDoc(ref, { mesa: normalized, updatedAt: serverTimestamp() }, { merge: true })
-    return
-  }
+  const normalizedMesa = normalizeMesa(values.mesa)
+  const lado = normalizeEtiquetaLado(values.etiquetaLado)
+  const grupo = normalizeEtiquetaGrupo(values.etiquetaGrupo)
 
-  await setDoc(ref, { mesa: '', updatedAt: serverTimestamp() }, { merge: true })
+  await setDoc(
+    ref,
+    {
+      mesa: normalizedMesa ?? '',
+      updatedAt: serverTimestamp(),
+      etiquetaLado: lado ? lado : deleteField(),
+      etiquetaGrupo: grupo ? grupo : deleteField(),
+    },
+    { merge: true },
+  )
 }

@@ -6,6 +6,7 @@ import {
   fetchGuestLink,
   listGuestLinks,
   setGuestLinkActive,
+  updateGuestLinkMeta,
   updateGuestLinkMesa,
 } from '../../../lib/firebase/guestLinkStore.js'
 import { getProjectById } from './projectService.js'
@@ -36,6 +37,8 @@ export async function createProjectGuestLink(projectId, values) {
     guestLabel,
     cupos,
     mesa: values.mesa,
+    etiquetaLado: values.etiquetaLado,
+    etiquetaGrupo: values.etiquetaGrupo,
   })
   return linkCode
 }
@@ -47,6 +50,15 @@ export async function createProjectGuestLink(projectId, values) {
  */
 export async function updateProjectGuestLinkMesa(projectId, linkCode, mesa) {
   await updateGuestLinkMesa(projectId, linkCode, mesa)
+}
+
+/**
+ * @param {string} projectId
+ * @param {string} linkCode
+ * @param {import('../../invitations/core/types/guestLink.js').GuestLinkMetaValues} values
+ */
+export async function updateProjectGuestLinkMeta(projectId, linkCode, values) {
+  await updateGuestLinkMeta(projectId, linkCode, values)
 }
 
 /**

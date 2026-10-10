@@ -6,6 +6,7 @@ import {
   formatMesaTotalPeopleLabel,
   groupLinksByMesa,
 } from '../../admin/utils/guestLinkTableHelpers.js'
+import { GuestLinkEtiquetasPills } from '../../admin/components/GuestLinkEtiquetasPills.jsx'
 
 /**
  * @param {{ guest: import('../../invitations/core/types/guestLink.js').GuestLinkRecord }} props
@@ -14,6 +15,7 @@ function GuestMesaChip({ guest }) {
   return (
     <div className="mesa-simulation-guest">
       <p className="mesa-simulation-guest-name">{guest.guestLabel}</p>
+      <GuestLinkEtiquetasPills link={guest} hideWhenEmpty variant="simulation" />
       <p className="mesa-simulation-guest-meta">
         {guest.cupos} {guest.cupos === 1 ? 'persona' : 'personas'}
       </p>

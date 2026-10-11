@@ -39,6 +39,25 @@ function formatGuestLinksSummary(linksCount, linkLimit, loading) {
   return `${String(linksCount)}${limitPart} enlace(s) generado(s)`
 }
 
+/** @param {string} value */
+function normalizeGuestSearch(value) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLocaleLowerCase('es')
+    .trim()
+}
+
+/**
+ * @param {import('../../invitations/core/types/guestLink.js').GuestLinkRecord} link
+ * @param {string} query
+ */
+function guestLinkMatchesQuery(link, query) {
+  const needle = normalizeGuestSearch(query)
+  if (!needle) return true
+  return normalizeGuestSearch(link.guestLabel).includes(needle)
+}
+
 /** @param {string} url */
 async function copyGuestLinkUrl(url) {
   const copied = await copyTextToClipboard(url)
@@ -79,6 +98,7 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
   const [sortMode, setSortMode] = useState(
     /** @type {import('../utils/guestLinkTableHelpers.js').GuestLinkSortMode} */ ('confirmado'),
   )
+  const [guestQuery, setGuestQuery] = useState('')
   const [smsTemplate, setSmsTemplate] = useState('')
   const [createModalOpen, setCreateModalOpen] = useState(false)
   const [creatingLink, setCreatingLink] = useState(false)
@@ -193,7 +213,17 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
     [links, sortMode, confirmationIndex],
   )
 
-  const pagination = usePanelTablePagination(sortedLinks)
+  const filteredLinks = useMemo(
+    () => sortedLinks.filter((link) => guestLinkMatchesQuery(link, guestQuery)),
+    [sortedLinks, guestQuery],
+  )
+
+  const pagination = usePanelTablePagination(filteredLinks)
+  const { setPage } = pagination
+
+  useEffect(() => {
+    setPage(1)
+  }, [guestQuery, setPage])
 
   return (
     <div className="flex flex-col gap-4">
@@ -243,6 +273,17 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
         <p className="panel-form-hint">Alcanzaste el límite de enlaces configurado para este proyecto.</p>
       ) : null}
 
+      <label className="panel-guest-search">
+        <span className="panel-table-sort-label">Buscar invitado</span>
+        <input
+          type="search"
+          value={guestQuery}
+          placeholder="Nombre del invitado"
+          disabled={loading}
+          onChange={(event) => setGuestQuery(event.target.value)}
+        />
+      </label>
+
       <div className="panel-table-wrap">
         <table className="panel-table">
           <thead>
@@ -261,6 +302,13 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
               <tr>
                 <td colSpan={7} className="panel-table-empty">
                   Aún no hay enlaces. Genera el primero arriba.
+                </td>
+              </tr>
+            ) : null}
+            {links.length > 0 && filteredLinks.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="panel-table-empty">
+                  Ningún invitado coincide con “{guestQuery.trim()}”.
                 </td>
               </tr>
             ) : null}

@@ -1030,6 +1030,38 @@
   cursor: not-allowed;
 }
 
+.panel-guest-search {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 22rem;
+}
+
+.panel-guest-search input {
+  width: 100%;
+  border: 1px solid rgba(122, 74, 50, 0.25);
+  border-radius: 9999px;
+  background: rgba(255, 252, 248, 0.95);
+  padding: 0.55rem 0.95rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: #5c3a2e;
+}
+
+.panel-guest-search input::placeholder {
+  color: #a88874;
+}
+
+.panel-guest-search input:focus {
+  outline: 2px solid rgba(201, 123, 92, 0.45);
+  outline-offset: 2px;
+}
+
+.panel-guest-search input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .panel-form {
   display: flex;
   flex-direction: column;

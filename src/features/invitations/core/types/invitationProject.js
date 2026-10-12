@@ -36,7 +36,7 @@
  * @property {InvitationVenue} recepcion
  * @property {InvitationTimelineItem[]} cronograma
  * @property {{ texto: string }} regalos
- * @property {{ estilo: string, detalle: string }} dressCode
+ * @property {{ estilo: string, detalle: string, mujeres?: string, mujeresEvitar?: string, hombres?: string, hombresEvitar?: string }} dressCode
  * @property {string} noNinos
  * @property {{ nombre: string, cupos: number }} invitadosPorDefecto
  * @property {InvitationPhotos} fotos

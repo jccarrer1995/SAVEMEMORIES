@@ -40,6 +40,10 @@
  * @property {string} regalosTexto
  * @property {string} dressCodeEstilo
  * @property {string} dressCodeDetalle
+ * @property {string} dressCodeMujeres
+ * @property {string} dressCodeMujeresEvitar
+ * @property {string} dressCodeHombres
+ * @property {string} dressCodeHombresEvitar
  * @property {string} noNinos
  * @property {string} invitadoDefault
  * @property {number} cuposDefault

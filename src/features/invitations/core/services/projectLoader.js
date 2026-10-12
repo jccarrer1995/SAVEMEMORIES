@@ -86,6 +86,18 @@ function applyLegacyBodaContent(content) {
       }
       return item
     })
+    const hasEnding = cronograma.some((item) => item.id === 'finalizacion')
+    const fiestaIndex = cronograma.findIndex(
+      (item) => item.id === 'fiesta' || String(item.label ?? '').toUpperCase() === 'FIESTA',
+    )
+    if (!hasEnding && fiestaIndex !== -1) {
+      cronogramaChanged = true
+      cronograma = [
+        ...cronograma.slice(0, fiestaIndex + 1),
+        { id: 'finalizacion', hora: '03:00 hrs', label: 'FINALIZACIÓN', icon: 'clock' },
+        ...cronograma.slice(fiestaIndex + 1),
+      ]
+    }
   }
 
   const fotosChanged = hero !== fotos.hero || galeria !== fotos.galeria

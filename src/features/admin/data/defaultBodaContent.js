@@ -24,13 +24,19 @@ export function createDefaultBodaContent() {
       { id: 'recepcion', hora: '19:00 hrs', label: 'RECEPCIÓN', icon: 'people' },
       { id: 'cena', hora: '21:00 hrs', label: 'CENA', icon: 'glasses' },
       { id: 'fiesta', hora: '22:00 hrs', label: 'FIESTA', icon: 'music' },
+      { id: 'finalizacion', hora: '03:00 hrs', label: 'FINALIZACIÓN', icon: 'clock' },
     ],
     regalos: {
       texto: 'Tu presencia es nuestro mayor regalo.',
     },
     dressCode: {
-      estilo: 'Formal',
-      detalle: 'Vestido de cocktail | Traje',
+      estilo: 'Elegante',
+      detalle: '',
+      mujeres: 'Vestido largo',
+      mujeresEvitar:
+        'Les agradecemos evitar el uso de la gama de colores del blanco, rojo, y verde olivo',
+      hombres: 'Terno formal, corbata y zapatos',
+      hombresEvitar: 'Les agradecemos evitar el uso de los colores azul marino oscuro y azul noche',
     },
     noNinos: 'Celebración solo para adultos.',
     invitadosPorDefecto: {

@@ -1,4 +1,4 @@
-import { Gift, Music2, Users, Wine } from 'lucide-react'
+import { Clock, Gift, Music2, Users, Wine } from 'lucide-react'
 
 /**
  * @param {{ className?: string }} props
@@ -22,6 +22,7 @@ export function TimelineIcon({ type, className = 'h-8 w-8 text-[#2c2c2c]' }) {
   if (type === 'people') return <Users className={className} strokeWidth={1.3} />
   if (type === 'glasses') return <Wine className={className} strokeWidth={1.3} />
   if (type === 'music') return <Music2 className={className} strokeWidth={1.3} />
+  if (type === 'clock') return <Clock className={className} strokeWidth={1.3} />
   if (type === 'gift') return <Gift className={className} strokeWidth={1.3} />
   return <RingsIcon className={className} />
 }

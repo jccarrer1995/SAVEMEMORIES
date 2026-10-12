@@ -11,7 +11,7 @@ export function NoNinosSection() {
       <OliveSectionDecor flowers={['tr']} branches={['bl']} />
       <FadeInOnScroll className="boda-section-content">
         <OrnamentLine className="mx-auto w-48" />
-        <h2 className="boda-serif mt-4 text-[32px] text-[#333232]">No niños</h2>
+        <h2 className="boda-serif mt-4 text-[32px] text-[#333232]">Celebración sin niños</h2>
         <p className="mx-auto mt-4 max-w-sm text-[13px] leading-relaxed text-[#6b645c]">
           {project.noNinos}
         </p>

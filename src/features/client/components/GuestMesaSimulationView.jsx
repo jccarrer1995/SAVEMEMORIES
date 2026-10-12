@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { listGuestLinks } from '../services/clientProjectService.js'
 import {
@@ -7,6 +7,7 @@ import {
   groupLinksByMesa,
 } from '../../admin/utils/guestLinkTableHelpers.js'
 import { GuestLinkEtiquetasPills } from '../../admin/components/GuestLinkEtiquetasPills.jsx'
+import { summarizeGuestLinkTags } from '../../invitations/core/constants/guestLinkTags.js'
 
 /**
  * @param {{ guest: import('../../invitations/core/types/guestLink.js').GuestLinkRecord }} props
@@ -99,6 +100,50 @@ function MesaSimulationScene({ mesaLabel, guests, maxCupos, totalCupos }) {
 }
 
 /**
+ * @param {{
+ *   title: string,
+ *   total: number,
+ *   ambos: number,
+ *   rows: Array<{ id: string, label: string, count: number }>,
+ * }} props
+ */
+function TagSideAccordion({ title, total, ambos, rows }) {
+  const [open, setOpen] = useState(true)
+  const panelId = useId()
+
+  return (
+    <section className={`mesa-simulation-accordion${open ? ' is-open' : ''}`}>
+      <button
+        type="button"
+        className="mesa-simulation-accordion-toggle"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span>{title}</span>
+        <span className="mesa-simulation-accordion-total">{total}</span>
+        <span className="mesa-simulation-accordion-chevron" aria-hidden />
+      </button>
+      {open ? (
+        <div id={panelId} className="mesa-simulation-accordion-panel">
+          <dl className="mesa-simulation-tags-list">
+            {rows.map((item) => (
+              <div key={item.id} className="mesa-simulation-tags-item">
+                <dt>{item.label}</dt>
+                <dd>{item.count}</dd>
+              </div>
+            ))}
+          </dl>
+          {ambos > 0 ? (
+            <p className="mesa-simulation-accordion-note">Incluye {ambos} de ambos</p>
+          ) : null}
+        </div>
+      ) : null}
+    </section>
+  )
+}
+
+/**
  * @param {{ projectId: string, backHref: string }} props
  */
 export function GuestMesaSimulationView({ projectId, backHref }) {
@@ -118,7 +163,9 @@ export function GuestMesaSimulationView({ projectId, backHref }) {
   }, [projectId])
 
   const mesaGroups = useMemo(() => groupLinksByMesa(links), [links])
+  const tagSummary = useMemo(() => summarizeGuestLinkTags(links), [links])
   const linksWithoutMesa = links.filter((link) => !link.mesa?.trim()).length
+  const hasTagSummary = tagSummary.novia.total > 0 || tagSummary.novio.total > 0
 
   return (
     <div className="mesa-simulation-page flex flex-col gap-4">
@@ -132,6 +179,13 @@ export function GuestMesaSimulationView({ projectId, backHref }) {
         Vista previa según la mesa asignada en cada enlace. El tamaño de la mesa crece con más
         invitados en ese grupo.
       </p>
+
+      {!loading && hasTagSummary ? (
+        <div className="mesa-simulation-tags">
+          <TagSideAccordion {...tagSummary.novia} />
+          <TagSideAccordion {...tagSummary.novio} />
+        </div>
+      ) : null}
 
       {error ? <p className="panel-form-error">{error}</p> : null}
       {loading ? <p className="marketing-muted text-sm">Cargando simulación…</p> : null}

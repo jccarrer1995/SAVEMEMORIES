@@ -526,28 +526,16 @@
 }
 
 .panel-actions-menu-popover {
-  position: absolute;
-  top: calc(100% + 0.35rem);
-  right: 0;
-  z-index: 40;
-  min-width: 10.5rem;
+  position: fixed;
+  z-index: 80;
+  min-width: 12.75rem;
   overflow: hidden;
   border-radius: 0.75rem;
   border: 1px solid rgba(201, 123, 92, 0.22);
   background: #fffaf6;
   padding: 0.35rem;
   box-shadow: 0 12px 28px rgba(45, 24, 12, 0.16);
-}
-
-.panel-actions-menu--start .panel-actions-menu-popover {
-  right: auto;
-  left: 0;
-}
-
-.panel-actions-menu--center .panel-actions-menu-popover {
-  right: auto;
-  left: 50%;
-  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 .panel-actions-menu-item {
@@ -894,6 +882,102 @@
 
 .mesa-simulation-page {
   min-height: 12rem;
+}
+
+.mesa-simulation-tags {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.mesa-simulation-accordion {
+  border: 1px solid rgba(201, 123, 92, 0.2);
+  border-radius: 1rem;
+  background: rgba(255, 252, 248, 0.85);
+  overflow: hidden;
+}
+
+.mesa-simulation-accordion-toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  border: 0;
+  background: transparent;
+  padding: 0.85rem 1rem;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #5c3a2e;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mesa-simulation-accordion-toggle:hover,
+.mesa-simulation-accordion-toggle:focus-visible {
+  background: rgba(243, 228, 218, 0.55);
+}
+
+.mesa-simulation-accordion-total {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.mesa-simulation-accordion-chevron {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 1.5px solid #8b5e4b;
+  border-bottom: 1.5px solid #8b5e4b;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+
+.mesa-simulation-accordion.is-open .mesa-simulation-accordion-chevron {
+  transform: rotate(-135deg);
+}
+
+.mesa-simulation-accordion-panel {
+  padding: 0 1rem 0.9rem;
+}
+
+.mesa-simulation-accordion-note {
+  margin: 0.55rem 0 0;
+  font-size: 0.75rem;
+  color: #8b5e4b;
+}
+
+@media (max-width: 700px) {
+  .mesa-simulation-tags {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mesa-simulation-tags-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.mesa-simulation-tags-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mesa-simulation-tags-item dt,
+.mesa-simulation-tags-item dd {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  color: #5c3a2e;
+}
+
+.mesa-simulation-tags-item dd {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .mesa-simulation-grid {

@@ -252,15 +252,44 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
             <input
               type="text"
               value={values.dressCodeEstilo}
+              placeholder="Elegante"
               onChange={(e) => updateField('dressCodeEstilo', e.target.value)}
             />
           </label>
           <label className="panel-field">
-            <span>Detalle dress code</span>
+            <span>Mujeres</span>
             <input
               type="text"
-              value={values.dressCodeDetalle}
-              onChange={(e) => updateField('dressCodeDetalle', e.target.value)}
+              value={values.dressCodeMujeres ?? ''}
+              placeholder="Vestido largo"
+              onChange={(e) => updateField('dressCodeMujeres', e.target.value)}
+            />
+          </label>
+          <label className="panel-field panel-field--wide">
+            <span>Colores a evitar (mujeres)</span>
+            <textarea
+              value={values.dressCodeMujeresEvitar ?? ''}
+              placeholder="Les agradecemos evitar el uso de colores derivados del blanco y rojo."
+              onChange={(e) => updateField('dressCodeMujeresEvitar', e.target.value)}
+              rows={2}
+            />
+          </label>
+          <label className="panel-field">
+            <span>Hombres</span>
+            <input
+              type="text"
+              value={values.dressCodeHombres ?? ''}
+              placeholder="Terno formal, corbata y zapatos"
+              onChange={(e) => updateField('dressCodeHombres', e.target.value)}
+            />
+          </label>
+          <label className="panel-field panel-field--wide">
+            <span>Colores a evitar (hombres)</span>
+            <textarea
+              value={values.dressCodeHombresEvitar ?? ''}
+              placeholder="Les agradecemos evitar el uso de los colores gris y blanco."
+              onChange={(e) => updateField('dressCodeHombresEvitar', e.target.value)}
+              rows={2}
             />
           </label>
           <label className="panel-field panel-field--wide">

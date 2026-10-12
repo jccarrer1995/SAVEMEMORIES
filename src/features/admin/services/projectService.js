@@ -36,6 +36,10 @@ function buildContentFromForm(values) {
     dressCode: {
       estilo: values.dressCodeEstilo.trim(),
       detalle: values.dressCodeDetalle.trim(),
+      mujeres: values.dressCodeMujeres?.trim() ?? '',
+      mujeresEvitar: values.dressCodeMujeresEvitar?.trim() ?? '',
+      hombres: values.dressCodeHombres?.trim() ?? '',
+      hombresEvitar: values.dressCodeHombresEvitar?.trim() ?? '',
     },
     noNinos: values.noNinos.trim(),
     invitadosPorDefecto: {
@@ -59,7 +63,9 @@ export function projectToFormValues(project) {
   const padres = /** @type {{ novio?: string[], novia?: string[] }} */ (content.padres ?? {})
   const recepcion = /** @type {Record<string, string>} */ (content.recepcion ?? {})
   const regalos = /** @type {{ texto?: string }} */ (content.regalos ?? {})
-  const dressCode = /** @type {{ estilo?: string, detalle?: string }} */ (content.dressCode ?? {})
+  const dressCode = /** @type {{ estilo?: string, detalle?: string, mujeres?: string, mujeresEvitar?: string, hombres?: string, hombresEvitar?: string }} */ (
+    content.dressCode ?? {}
+  )
   const invitados = /** @type {{ nombre?: string, cupos?: number }} */ (content.invitadosPorDefecto ?? {})
   const fotos = /** @type {{ hero?: string, galeria?: string[] }} */ (content.fotos ?? {})
   const { fechaEvento, horaEvento } = splitFechaIso(asText(content.fechaIso))
@@ -88,6 +94,10 @@ export function projectToFormValues(project) {
     regalosTexto: regalos.texto ?? '',
     dressCodeEstilo: dressCode.estilo ?? '',
     dressCodeDetalle: dressCode.detalle ?? '',
+    dressCodeMujeres: dressCode.mujeres ?? '',
+    dressCodeMujeresEvitar: dressCode.mujeresEvitar ?? '',
+    dressCodeHombres: dressCode.hombres ?? '',
+    dressCodeHombresEvitar: dressCode.hombresEvitar ?? '',
     noNinos: asText(content.noNinos),
     invitadoDefault: invitados.nombre ?? '',
     cuposDefault: Number(invitados.cupos ?? 1),

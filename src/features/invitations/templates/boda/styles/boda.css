@@ -616,6 +616,52 @@
     0 8px 24px rgba(70, 80, 58, 0.06);
 }
 
+.boda-dress-kicker {
+  margin: 0;
+  font-family: Cinzel, 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.boda-dress-style {
+  margin: 0.2rem 0 0;
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.75rem;
+  line-height: 1;
+  color: #fff;
+}
+
+.boda-dress-art {
+  display: block;
+  width: min(64%, 9.25rem);
+  height: auto;
+  margin: 0.65rem auto 0;
+}
+
+.boda-dress-block {
+  margin: 0.95rem auto 0;
+  max-width: 17.5rem;
+}
+
+.boda-dress-block p {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.boda-dress-block p + p {
+  margin-top: 0.2rem;
+}
+
+.boda-dress-block strong {
+  font-weight: 600;
+}
+
 .boda-rsvp-decline-inner::before {
   content: '';
   position: absolute;

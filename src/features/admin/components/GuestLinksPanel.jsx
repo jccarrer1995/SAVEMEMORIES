@@ -342,6 +342,7 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
                   </td>
                   <td className="panel-table-actions panel-table-actions--center">
                     <PanelActionsMenu
+                      align="end"
                       items={[
                         {
                           id: 'copy',

@@ -46,7 +46,10 @@ export function RsvpConfirmationTicket({ invitadosLabel, mesaAsignada, pases }) 
         </ul>
 
         <p className="mt-5 text-[12px] leading-relaxed text-[#6b645c]">
-        📸 Toma una captura de pantalla o presenta esta sección de la web al momento de ingresar.
+          📸 Toma una captura de pantalla o presenta esta sección de la web al momento de ingresar.
+        </p>
+        <p className="mt-3 text-[12px] leading-relaxed text-[#6b645c]">
+          ✉️ Para tu comodidad, el cofre/buzón para sobre cerrado estará disponible a la entrada del evento.
         </p>
 
         <p className="boda-serif mt-5 text-center text-[17px] text-[#54582f]">

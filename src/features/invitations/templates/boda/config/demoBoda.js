@@ -28,6 +28,7 @@ export const demoBodaProject = {
     { id: 'civil', hora: '19:30 hrs', label: 'CEREMONIA', icon: 'rings' },
     { id: 'cena', hora: '20:30 hrs', label: 'CENA', icon: 'glasses' },
     { id: 'fiesta', hora: '22:00 hrs', label: 'BAILE', icon: 'music' },
+    { id: 'finalizacion', hora: '03:00 hrs', label: 'FINALIZACIÓN', icon: 'clock' },
   ],
   regalos: {
     texto:
@@ -35,7 +36,12 @@ export const demoBodaProject = {
   },
   dressCode: {
     estilo: 'Elegante',
-    detalle: 'Colores neutros | Evitar blanco y negro',
+    detalle: '',
+    mujeres: 'Vestido largo',
+    mujeresEvitar:
+      'Les agradecemos evitar el uso de colores derivados del blanco y rojo.',
+    hombres: 'Terno formal, corbata y zapatos',
+    hombresEvitar: 'Les agradecemos evitar colores gris y blanco.',
   },
   noNinos:
     'Esta invitación demo está pensada para adultos. En un evento real, aquí iría el mensaje sobre celebración sin niños.',

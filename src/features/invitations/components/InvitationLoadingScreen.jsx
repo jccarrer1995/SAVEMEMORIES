@@ -1,6 +1,9 @@
 import '../../marketing/styles/marketing.css'
 
-export function InvitationLoadingScreen() {
+/**
+ * @param {{ message?: string }} props
+ */
+export function InvitationLoadingScreen({ message = 'Cargando invitación' }) {
   return (
     <div
       className="marketing-page flex min-h-screen flex-col items-center justify-center px-6"
@@ -16,7 +19,7 @@ export function InvitationLoadingScreen() {
         </svg>
       </div>
       <p className="marketing-muted mt-8 text-sm tracking-wide">
-        Cargando invitación
+        {message}
         <span className="invitation-loader-dots">
           <span>.</span>
           <span>.</span>

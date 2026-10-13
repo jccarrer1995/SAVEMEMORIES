@@ -768,6 +768,72 @@
   color: #8b5e4b;
 }
 
+.panel-table-grupo-confirmacion {
+  margin: 0.2rem 0 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  font-weight: 400;
+  color: #8b5e4b;
+}
+
+.panel-rsvp-progress {
+  border: 1px solid rgba(201, 123, 92, 0.22);
+  border-radius: 1rem;
+  background: rgba(255, 252, 248, 0.9);
+  padding: 0.85rem 1rem;
+}
+
+.panel-rsvp-progress-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.panel-rsvp-progress-title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #5c3a2e;
+}
+
+.panel-rsvp-progress-stats {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #7a4a32;
+}
+
+.panel-rsvp-progress-stats strong {
+  font-weight: 600;
+  color: #3a0d08;
+}
+
+.panel-rsvp-progress-track {
+  height: 0.55rem;
+  border-radius: 9999px;
+  background: rgba(201, 123, 92, 0.15);
+  overflow: hidden;
+}
+
+.panel-rsvp-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8b5e4b 0%, #6b3a1f 100%);
+  transition: width 0.35s ease;
+}
+
+.panel-rsvp-progress-foot {
+  margin: 0.4rem 0 0;
+  font-size: 0.72rem;
+  color: #8b5e4b;
+}
+
+.panel-rsvp-progress-label {
+  margin: 0;
+}
+
 @media (max-width: 699px) {
   .panel-table th.panel-table-col-desktop,
   .panel-table td.panel-table-col-desktop {
@@ -847,6 +913,12 @@
   font-size: 0.58rem;
   padding: 0.1rem 0.38rem;
   letter-spacing: 0.01em;
+}
+
+.panel-pill.panel-pill--tag-sized {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-weight: 500;
 }
 
 .panel-table-etiquetas {
@@ -1114,6 +1186,23 @@
   cursor: not-allowed;
 }
 
+.panel-guest-search-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+}
+
+.panel-guest-search-row .panel-guest-search {
+  flex: 1 1 12rem;
+  min-width: 0;
+  max-width: 22rem;
+}
+
+.panel-guest-search-row .panel-guest-search-sort {
+  margin-left: auto;
+}
+
 .panel-guest-search {
   display: flex;
   flex-direction: column;
@@ -1368,6 +1457,19 @@ button.panel-btn-secondary:disabled {
   justify-content: flex-end;
   gap: 0.65rem;
   margin-top: 1rem;
+}
+
+.panel-message-dialog-body {
+  margin-top: 0.85rem;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(201, 123, 92, 0.18);
+  background: rgba(255, 252, 248, 0.95);
+  padding: 0.85rem 0.95rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #5c3a2e;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .panel-tag-fieldset {

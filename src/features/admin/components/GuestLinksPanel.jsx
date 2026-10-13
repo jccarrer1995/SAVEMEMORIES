@@ -23,9 +23,15 @@ import { listRsvps } from '../../invitations/templates/boda/services/saveRsvp.js
 import { GuestLinkConfirmPill } from './GuestLinkConfirmPill.jsx'
 import {
   buildGuestLinkConfirmationIndex,
+  formatGuestLinkMesaMobile,
   getGuestLinkRsvpStatus,
   sortGuestLinks,
 } from '../utils/guestLinkTableHelpers.js'
+import { rsvpCreatedAtIso } from '../../invitations/templates/boda/utils/rsvpConfirmation.js'
+import {
+  ClientRsvpProgressBar,
+  sumLatestRespondedCupos,
+} from '../../client/components/ClientRsvpProgressBar.jsx'
 
 /**
  * @param {number} linksCount
@@ -218,6 +224,16 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
     [sortedLinks, guestQuery],
   )
 
+  const totalInvitedPeople = useMemo(
+    () => links.reduce((sum, link) => sum + (Number.isFinite(link.cupos) ? link.cupos : 0), 0),
+    [links],
+  )
+
+  const respondedPeople = useMemo(
+    () => sumLatestRespondedCupos(rsvpRows, rsvpCreatedAtIso),
+    [rsvpRows],
+  )
+
   const pagination = usePanelTablePagination(filteredLinks)
   const { setPage } = pagination
 
@@ -232,26 +248,6 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
       {error ? <p className="panel-form-error">{error}</p> : null}
 
       <div className="panel-table-toolbar">
-        <div className="panel-table-sort">
-          <span className="panel-table-sort-label">Ordenar:</span>
-          <select
-            className="panel-table-sort-select"
-            value={sortMode}
-            disabled={loading || links.length === 0}
-            onChange={(event) =>
-              setSortMode(
-                /** @type {import('../utils/guestLinkTableHelpers.js').GuestLinkSortMode} */ (
-                  event.target.value
-                ),
-              )
-            }
-          >
-            <option value="mesa-asc">De mesa menor a mayor</option>
-            <option value="mesa-desc">De mesa mayor a menor</option>
-            <option value="confirmado">Confirmado → por confirmar</option>
-            <option value="por-confirmar">Por confirmar → confirmado</option>
-          </select>
-        </div>
         <div className="panel-table-toolbar-actions">
           {mesaSimulationHref ? (
             <Link to={mesaSimulationHref} className="panel-btn-secondary rounded-full px-4 py-2 text-sm font-medium">
@@ -273,16 +269,44 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
         <p className="panel-form-hint">Alcanzaste el límite de enlaces configurado para este proyecto.</p>
       ) : null}
 
-      <label className="panel-guest-search">
-        <span className="panel-table-sort-label">Buscar invitado</span>
-        <input
-          type="search"
-          value={guestQuery}
-          placeholder="Nombre del invitado"
-          disabled={loading}
-          onChange={(event) => setGuestQuery(event.target.value)}
-        />
-      </label>
+      <ClientRsvpProgressBar
+        invitedPeople={totalInvitedPeople}
+        respondedPeople={respondedPeople}
+        loading={loading}
+      />
+
+      <div className="panel-guest-search-row">
+        <label className="panel-guest-search">
+          <span className="panel-table-sort-label">Buscar invitado</span>
+          <input
+            type="search"
+            value={guestQuery}
+            placeholder="Nombre del invitado"
+            disabled={loading}
+            onChange={(event) => setGuestQuery(event.target.value)}
+          />
+        </label>
+        <div className="panel-table-sort panel-guest-search-sort">
+          <span className="panel-table-sort-label">Ordenar:</span>
+          <select
+            className="panel-table-sort-select"
+            value={sortMode}
+            disabled={loading || links.length === 0}
+            onChange={(event) =>
+              setSortMode(
+                /** @type {import('../utils/guestLinkTableHelpers.js').GuestLinkSortMode} */ (
+                  event.target.value
+                ),
+              )
+            }
+          >
+            <option value="mesa-asc">De mesa menor a mayor</option>
+            <option value="mesa-desc">De mesa mayor a menor</option>
+            <option value="confirmado">Confirmado → por confirmar</option>
+            <option value="por-confirmar">Por confirmar → confirmado</option>
+          </select>
+        </div>
+      </div>
 
       <div className="panel-table-wrap">
         <table className="panel-table">
@@ -291,9 +315,9 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
               <th>Invitado</th>
               <th className="panel-table-col-desktop">Código</th>
               <th>Etiquetas</th>
-              <th>Mesa</th>
+              <th className="panel-table-col-desktop">Mesa</th>
               <th>Estado</th>
-              <th>Confirmado</th>
+              <th className="panel-table-col-desktop">Confirmado</th>
               <th className="panel-table-actions-heading panel-table-actions-heading--center">Acciones</th>
             </tr>
           </thead>
@@ -315,6 +339,7 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
             {pagination.pageItems.map((link) => {
               const url = buildInvitationLinkUrl(projectId, link.id)
               const rsvpStatus = getGuestLinkRsvpStatus(link, confirmationIndex)
+              const mesaMobileLabel = formatGuestLinkMesaMobile(link.mesa)
               return (
                 <tr key={link.id}>
                   <td>
@@ -322,14 +347,21 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
                     <p className="marketing-muted text-xs">
                       {link.cupos} cupo{link.cupos === 1 ? '' : 's'}
                     </p>
+                    {mesaMobileLabel ? (
+                      <p className="panel-only-mobile panel-table-grupo-confirmacion">{mesaMobileLabel}</p>
+                    ) : null}
                   </td>
                   <td className="panel-table-col-desktop">
                     <code className="panel-table-code">{link.id}</code>
                   </td>
                   <td>
-                    <GuestLinkEtiquetasPills link={link} />
+                    <GuestLinkEtiquetasPills
+                      link={link}
+                      rsvpStatus={rsvpStatus}
+                      showRsvpStatusOnMobile
+                    />
                   </td>
-                  <td>{link.mesa || '—'}</td>
+                  <td className="panel-table-col-desktop">{link.mesa || '—'}</td>
                   <td>
                     <GuestLinkStatusToggle
                       active={link.active}
@@ -337,7 +369,7 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
                       onChange={(active) => void handleToggle(link.id, active)}
                     />
                   </td>
-                  <td>
+                  <td className="panel-table-col-desktop">
                     <GuestLinkConfirmPill status={rsvpStatus} />
                   </td>
                   <td className="panel-table-actions panel-table-actions--center">

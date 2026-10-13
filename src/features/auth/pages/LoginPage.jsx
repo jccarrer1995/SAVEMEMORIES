@@ -1,6 +1,7 @@
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import { LEGAL_MENU_LINKS } from '../../marketing/data/legalMeta.js'
 import { MarketingLayout } from '../../marketing/components/MarketingLayout.jsx'
 import { useMarketingFonts } from '../../marketing/hooks/useMarketingFonts.js'
 import { LoginForm } from '../components/LoginForm.jsx'
@@ -58,13 +59,20 @@ export function LoginPage() {
             </div>
           )}
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 flex flex-col items-center gap-3 text-center">
             <Link
               to="/"
               className="marketing-link text-sm font-medium underline-offset-2 hover:underline"
             >
               Volver al inicio
             </Link>
+            <p className="marketing-muted flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs">
+              {LEGAL_MENU_LINKS.map((link) => (
+                <Link key={link.to} to={link.to} className="marketing-link">
+                  {link.label}
+                </Link>
+              ))}
+            </p>
           </div>
         </div>
       </section>

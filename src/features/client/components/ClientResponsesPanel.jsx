@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Trash2 } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import {
   deleteRsvp,
@@ -8,9 +7,13 @@ import {
 } from '../../invitations/templates/boda/services/saveRsvp.js'
 import { listGuestLinks } from '../services/clientProjectService.js'
 import { PanelConfirmDialog } from '../../../shared/components/PanelConfirmDialog.jsx'
+import { PanelMessageDialog } from '../../../shared/components/PanelMessageDialog.jsx'
+import { PanelActionsMenu } from '../../../shared/components/PanelActionsMenu.jsx'
 import { PanelTablePagination } from '../../../shared/components/PanelTablePagination.jsx'
 import { usePanelTablePagination } from '../../../shared/hooks/usePanelTablePagination.js'
 import { asText } from '../../../shared/utils/asText.js'
+import { rsvpCreatedAtIso } from '../../invitations/templates/boda/utils/rsvpConfirmation.js'
+import { ClientRsvpProgressBar, sumLatestRespondedCupos } from './ClientRsvpProgressBar.jsx'
 
 /**
  * @param {{ projectId: string, projectTitle: string }} props
@@ -23,7 +26,11 @@ export function ClientResponsesPanel({ projectId, projectTitle }) {
     /** @type {Record<string, unknown> | null} */ (null),
   )
   const [deleting, setDeleting] = useState(false)
+  const [messageViewRow, setMessageViewRow] = useState(
+    /** @type {Record<string, unknown> | null} */ (null),
+  )
   const [mesaByLinkCode, setMesaByLinkCode] = useState(/** @type {Record<string, string>} */ ({}))
+  const [totalInvitedPeople, setTotalInvitedPeople] = useState(0)
 
   const loadRows = useCallback(async () => {
     setLoading(true)
@@ -35,6 +42,9 @@ export function ClientResponsesPanel({ projectId, projectTitle }) {
         if (link.mesa) mesaMap[link.id] = link.mesa
       }
       setMesaByLinkCode(mesaMap)
+      setTotalInvitedPeople(
+        links.reduce((sum, link) => sum + (Number.isFinite(link.cupos) ? link.cupos : 0), 0),
+      )
       setRows(data)
     } catch {
       setError('No se pudieron cargar las confirmaciones.')
@@ -61,6 +71,11 @@ export function ClientResponsesPanel({ projectId, projectTitle }) {
   })
 
   const pagination = usePanelTablePagination(rows)
+
+  const respondedPeople = useMemo(
+    () => sumLatestRespondedCupos(rows, rsvpCreatedAtIso),
+    [rows],
+  )
 
   async function handleConfirmDelete() {
     if (!pendingDelete) return
@@ -108,14 +123,20 @@ export function ClientResponsesPanel({ projectId, projectTitle }) {
 
       {error ? <p className="panel-form-error">{error}</p> : null}
 
+      <ClientRsvpProgressBar
+        invitedPeople={totalInvitedPeople}
+        respondedPeople={respondedPeople}
+        loading={loading}
+      />
+
       <div className="panel-table-wrap">
         <table className="panel-table">
           <thead>
             <tr>
               <th>Grupo</th>
-              <th>Confirmación</th>
-              <th>Asistentes</th>
-              <th>Teléfono</th>
+              <th className="panel-table-col-desktop">Confirmación</th>
+              <th className="panel-table-col-desktop">Asistentes</th>
+              <th className="panel-table-col-desktop">Teléfono</th>
               <th>Mesa</th>
               <th className="panel-table-actions-heading panel-table-actions-heading--center">Acciones</th>
             </tr>
@@ -132,22 +153,34 @@ export function ClientResponsesPanel({ projectId, projectTitle }) {
               const rowKey = asText(row.id, `row-${pagination.page}-${index}`)
               return (
                 <tr key={rowKey}>
-                  <td>{asText(row.grupoInvitados, '—')}</td>
-                  <td>{asText(row.confirmacion, '—')}</td>
-                  <td>{asText(row.nombres, '—')}</td>
-                  <td>{asText(row.telefono, '—')}</td>
+                  <td>
+                    <p className="font-medium">{asText(row.grupoInvitados, '—')}</p>
+                    <p className="panel-only-mobile panel-table-grupo-confirmacion">
+                      {asText(row.confirmacion, '—')}
+                    </p>
+                  </td>
+                  <td className="panel-table-col-desktop">{asText(row.confirmacion, '—')}</td>
+                  <td className="panel-table-col-desktop">{asText(row.nombres, '—')}</td>
+                  <td className="panel-table-col-desktop">{asText(row.telefono, '—')}</td>
                   <td>{resolveRowMesa(row)}</td>
                   <td className="panel-table-actions panel-table-actions--center">
-                    <button
-                      type="button"
-                      className="panel-icon-btn panel-icon-btn--danger"
-                      disabled={loading || deleting}
-                      aria-label="Eliminar confirmación"
-                      title="Eliminar"
-                      onClick={() => setPendingDelete(row)}
-                    >
-                      <Trash2 size={17} strokeWidth={1.75} aria-hidden="true" />
-                    </button>
+                    <PanelActionsMenu
+                      items={[
+                        {
+                          id: 'message',
+                          label: 'Ver mensaje',
+                          disabled: loading,
+                          onClick: () => setMessageViewRow(row),
+                        },
+                        {
+                          id: 'delete',
+                          label: deleting ? 'Eliminando…' : 'Eliminar',
+                          destructive: true,
+                          disabled: loading || deleting,
+                          onClick: () => setPendingDelete(row),
+                        },
+                      ]}
+                    />
                   </td>
                 </tr>
               )
@@ -164,6 +197,18 @@ export function ClientResponsesPanel({ projectId, projectTitle }) {
         total={pagination.total}
         disabled={loading || deleting}
         onPageChange={pagination.setPage}
+      />
+
+      <PanelMessageDialog
+        open={Boolean(messageViewRow)}
+        title="Mensaje para los novios"
+        subtitle={
+          messageViewRow
+            ? `${asText(messageViewRow.grupoInvitados, 'Invitados')} · ${asText(messageViewRow.nombres, '—')}`
+            : undefined
+        }
+        message={messageViewRow ? asText(messageViewRow.mensaje) : ''}
+        onClose={() => setMessageViewRow(null)}
       />
 
       <PanelConfirmDialog

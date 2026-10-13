@@ -188,3 +188,79 @@
     opacity: 1;
   }
 }
+
+.marketing-legal-prose {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: #5c3a2e;
+}
+
+.marketing-legal-prose p {
+  margin: 0 0 0.85rem;
+}
+
+.marketing-legal-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.marketing-legal-prose ul {
+  margin: 0.5rem 0 0.85rem;
+  padding-left: 1.25rem;
+}
+
+.marketing-legal-prose li {
+  margin-bottom: 0.4rem;
+}
+
+.marketing-legal-prose li ul {
+  margin-top: 0.35rem;
+}
+
+.marketing-legal-prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.84em;
+  background: rgba(201, 123, 92, 0.1);
+  border-radius: 0.35rem;
+  padding: 0.08rem 0.35rem;
+  color: #5c3a2e;
+}
+
+.marketing-legal-h3 {
+  margin: 1rem 0 0.35rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #7a4a32;
+}
+
+.marketing-legal-table-wrap {
+  overflow-x: auto;
+  margin: 0.75rem 0 1rem;
+  border: 1px solid rgba(201, 123, 92, 0.2);
+  border-radius: 0.75rem;
+  background: rgba(255, 252, 248, 0.9);
+}
+
+.marketing-legal-table {
+  width: 100%;
+  min-width: 36rem;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.marketing-legal-table th,
+.marketing-legal-table td {
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(201, 123, 92, 0.12);
+}
+
+.marketing-legal-table th {
+  font-weight: 600;
+  color: #7a4a32;
+  background: rgba(243, 228, 218, 0.45);
+}
+
+.marketing-legal-table tr:last-child td {
+  border-bottom: 0;
+}

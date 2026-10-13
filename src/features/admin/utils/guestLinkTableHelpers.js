@@ -203,3 +203,14 @@ export function sortGuestLinks(links, sortMode, confirmed) {
 
   return sorted
 }
+
+/**
+ * Etiqueta compacta de mesa bajo el cupo en tablas móviles.
+ * @param {string | undefined} mesa
+ */
+export function formatGuestLinkMesaMobile(mesa) {
+  const t = typeof mesa === 'string' ? mesa.trim() : ''
+  if (!t) return ''
+  if (/^mesa/i.test(t)) return t
+  return `Mesa# ${t}`
+}

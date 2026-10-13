@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { LEGAL_HEADER_LINKS } from '../data/legalMeta.js'
 import { NAV_LINKS, SITE } from '../data/siteContent.js'
 import { scrollToSection } from '../hooks/useMarketingFonts.js'
 
@@ -40,8 +41,13 @@ export function MarketingHeader() {
         </Link>
 
         <nav className={`hidden items-center gap-5 md:flex ${isLoginPage ? 'ml-auto' : ''}`}>
-          {NAV_LINKS.map((link) => (
-            <NavAnchor key={link.id} id={link.id} label={link.label} />
+          {!isLoginPage
+            ? NAV_LINKS.map((link) => <NavAnchor key={link.id} id={link.id} label={link.label} />)
+            : null}
+          {LEGAL_HEADER_LINKS.map((link) => (
+            <Link key={link.to} to={link.to} className="marketing-nav-link">
+              {link.label}
+            </Link>
           ))}
         </nav>
 

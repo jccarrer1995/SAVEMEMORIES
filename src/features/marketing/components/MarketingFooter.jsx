@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { LEGAL_MENU_LINKS } from '../data/legalMeta.js'
 import { SITE } from '../data/siteContent.js'
 
 export function MarketingFooter() {
@@ -9,7 +10,12 @@ export function MarketingFooter() {
           <p className="marketing-serif text-lg text-[#7a4a32]">{SITE.name}</p>
           <p className="marketing-muted mt-1 text-sm">{SITE.tagline}</p>
         </div>
-        <nav className="flex flex-wrap gap-4 text-sm">
+        <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+          {LEGAL_MENU_LINKS.map((link) => (
+            <Link key={link.to} to={link.to} className="marketing-link">
+              {link.label}
+            </Link>
+          ))}
           <Link to="/login" className="marketing-link">
             Acceso clientes
           </Link>

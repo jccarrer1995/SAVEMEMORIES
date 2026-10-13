@@ -19,6 +19,8 @@ import {
   ProjectResponsesPage,
 } from '../../features/invitations/pages/InvitationPage.jsx'
 import { HomeOrLegacyInvitationPage } from '../../features/marketing/pages/HomeOrLegacyInvitationPage.jsx'
+import { PrivacyPage } from '../../features/marketing/pages/PrivacyPage.jsx'
+import { TermsPage } from '../../features/marketing/pages/TermsPage.jsx'
 import { ROLES } from '../../shared/constants/roles.js'
 import { adminClientRoutes } from './adminClientRoutes.jsx'
 
@@ -39,6 +41,8 @@ export function AppRouter() {
     <Routes>
       <Route path="/" element={<HomeOrLegacyInvitationPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/terminos-y-condiciones" element={<TermsPage />} />
+      <Route path="/politica-de-privacidad" element={<PrivacyPage />} />
       <Route
         path="/admin"
         element={

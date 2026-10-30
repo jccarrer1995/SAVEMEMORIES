@@ -8,6 +8,7 @@ import {
   deleteProjectGuestLink,
   listGuestLinks,
   toggleProjectGuestLink,
+  updateProjectGuestLinkDetails,
   updateProjectGuestLinkMeta,
 } from '../services/guestLinkService.js'
 import { getProjectById } from '../services/projectService.js'
@@ -15,6 +16,7 @@ import { buildInvitationLinkUrl } from '../../invitations/core/utils/invitationU
 import { getProjectSmsTemplate, renderSmsTemplate } from '../../invitations/core/utils/smsTemplate.js'
 import { PanelActionsMenu } from '../../../shared/components/PanelActionsMenu.jsx'
 import { GuestLinkEditTagsModal } from './GuestLinkEditTagsModal.jsx'
+import { GuestLinkEditModal } from './GuestLinkEditModal.jsx'
 import { GuestLinkEtiquetasPills } from './GuestLinkEtiquetasPills.jsx'
 import { PanelTablePagination } from '../../../shared/components/PanelTablePagination.jsx'
 import { usePanelTablePagination } from '../../../shared/hooks/usePanelTablePagination.js'
@@ -100,6 +102,10 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
     /** @type {import('../../invitations/core/types/guestLink.js').GuestLinkRecord | null} */ (null),
   )
   const [savingTags, setSavingTags] = useState(false)
+  const [editingGuestLink, setEditingGuestLink] = useState(
+    /** @type {import('../../invitations/core/types/guestLink.js').GuestLinkRecord | null} */ (null),
+  )
+  const [savingGuest, setSavingGuest] = useState(false)
   const [rsvpRows, setRsvpRows] = useState(/** @type {Array<Record<string, unknown>>} */ ([]))
   const [sortMode, setSortMode] = useState(
     /** @type {import('../utils/guestLinkTableHelpers.js').GuestLinkSortMode} */ ('confirmado'),
@@ -203,6 +209,22 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
       toast.error(err instanceof Error ? err.message : 'No se pudieron guardar las etiquetas.')
     } finally {
       setSavingTags(false)
+    }
+  }
+
+  async function handleSaveGuest(values) {
+    if (!editingGuestLink) return
+
+    setSavingGuest(true)
+    try {
+      await updateProjectGuestLinkDetails(projectId, editingGuestLink.id, values)
+      toast.success('Invitado actualizado')
+      setEditingGuestLink(null)
+      await loadData()
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'No se pudo guardar el invitado.')
+    } finally {
+      setSavingGuest(false)
     }
   }
 
@@ -393,6 +415,11 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
                             ),
                         },
                         {
+                          id: 'edit-guest',
+                          label: 'Editar invitado',
+                          onClick: () => setEditingGuestLink(link),
+                        },
+                        {
                           id: 'tags',
                           label: 'Editar mesa y etiquetas',
                           onClick: () => setTagsEditLink(link),
@@ -455,6 +482,18 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
           if (!savingTags) setTagsEditLink(null)
         }}
         onConfirm={(values) => void handleSaveTags(values)}
+      />
+
+      <GuestLinkEditModal
+        key={editingGuestLink?.id ?? 'closed'}
+        open={Boolean(editingGuestLink)}
+        initialGuestLabel={editingGuestLink?.guestLabel ?? ''}
+        initialCupos={editingGuestLink?.cupos ?? 1}
+        busy={savingGuest}
+        onClose={() => {
+          if (!savingGuest) setEditingGuestLink(null)
+        }}
+        onConfirm={(values) => void handleSaveGuest(values)}
       />
     </div>
   )

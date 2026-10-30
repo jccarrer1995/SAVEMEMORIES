@@ -146,6 +146,21 @@ export async function updateGuestLinkMesa(projectId, linkCode, mesa) {
 /**
  * @param {string} projectId
  * @param {string} linkCode
+ * @param {{ guestLabel: string, cupos: number }} values
+ */
+export async function updateGuestLinkDetails(projectId, linkCode, values) {
+  if (!db) throw new Error('Firebase no está configurado.')
+
+  await setDoc(
+    doc(db, 'projects', projectId, 'links', linkCode),
+    { ...values, updatedAt: serverTimestamp() },
+    { merge: true },
+  )
+}
+
+/**
+ * @param {string} projectId
+ * @param {string} linkCode
  * @param {import('../../features/invitations/core/types/guestLink.js').GuestLinkMetaValues} values
  */
 export async function updateGuestLinkMeta(projectId, linkCode, values) {

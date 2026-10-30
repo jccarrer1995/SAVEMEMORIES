@@ -6,6 +6,7 @@ import {
   fetchGuestLink,
   listGuestLinks,
   setGuestLinkActive,
+  updateGuestLinkDetails,
   updateGuestLinkMeta,
   updateGuestLinkMesa,
 } from '../../../lib/firebase/guestLinkStore.js'
@@ -50,6 +51,25 @@ export async function createProjectGuestLink(projectId, values) {
  */
 export async function updateProjectGuestLinkMesa(projectId, linkCode, mesa) {
   await updateGuestLinkMesa(projectId, linkCode, mesa)
+}
+
+/**
+ * @param {string} projectId
+ * @param {string} linkCode
+ * @param {{ guestLabel: string, cupos: number }} values
+ */
+export async function updateProjectGuestLinkDetails(projectId, linkCode, values) {
+  if (!linkCode) throw new Error('Enlace no especificado.')
+
+  const guestLabel = values.guestLabel.trim()
+  if (!guestLabel) throw new Error('Indica el nombre del invitado o grupo.')
+
+  const parsedCupos = Number(values.cupos)
+  if (!Number.isInteger(parsedCupos) || parsedCupos < 1) {
+    throw new Error('Los cupos deben ser al menos 1.')
+  }
+
+  await updateGuestLinkDetails(projectId, linkCode, { guestLabel, cupos: parsedCupos })
 }
 
 /**

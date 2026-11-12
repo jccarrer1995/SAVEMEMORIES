@@ -1,57 +1,60 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { useAuth } from '../../auth/hooks/useAuth.js'
+import { AdminDashboardView } from '../components/AdminDashboardView.jsx'
 import { ADMIN_NAV } from '../data/adminNav.js'
+import { listClients } from '../services/clientService.js'
 import { listProjects } from '../services/projectService.js'
+import { buildAdminDashboard } from '../utils/adminDashboardModel.js'
+import { countGuestLinks } from '../../../lib/firebase/guestLinkStore.js'
 import { PanelShell } from '../../../shared/layouts/PanelShell.jsx'
 import { ROLES } from '../../../shared/constants/roles.js'
+import { firstName, greeting } from '../../../shared/utils/eventInfo.js'
 
 export function AdminDashboardPage() {
-  const [stats, setStats] = useState({ active: 0, draft: 0, total: 0 })
+  const { profile } = useAuth()
+  const [data, setData] = useState({
+    projects: /** @type {import('../types/projectRecord.js').ProjectRecord[]} */ ([]),
+    clients: /** @type {import('../types/clientRecord.js').ClientRecord[]} */ ([]),
+    linkCounts: /** @type {Record<string, number>} */ ({}),
+  })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    listProjects()
-      .then((projects) => {
-        setStats({
-          active: projects.filter((p) => p.status === 'active').length,
-          draft: projects.filter((p) => p.status === 'draft').length,
-          total: projects.length,
-        })
-      })
-      .catch(() => {})
+    let cancelled = false
+
+    async function load() {
+      try {
+        const [projects, clients] = await Promise.all([listProjects(), listClients().catch(() => [])])
+        const counts = await Promise.all(
+          projects.map(async (project) => [project.id, await countGuestLinks(project.slug).catch(() => 0)]),
+        )
+        if (!cancelled) setData({ projects, clients, linkCounts: Object.fromEntries(counts) })
+      } catch {
+        if (!cancelled) setError('No se pudieron cargar los datos del panel.')
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    void load()
+    return () => {
+      cancelled = true
+    }
   }, [])
+
+  const dashboard = useMemo(() => buildAdminDashboard(data), [data])
+  const name = firstName(profile?.displayName, profile?.email)
+  const today = new Date().toLocaleDateString('es-EC', { weekday: 'long', day: 'numeric', month: 'long' })
 
   return (
     <PanelShell
       roleLabel={`Rol ${ROLES.ADMIN}`}
-      title="Panel administrador"
-      subtitle="Gestiona proyectos, clientes y plantillas."
+      title={`${greeting()}${name ? `, ${name}` : ''}`}
+      subtitle={`Hoy es ${today}. Este es el resumen de tus proyectos, clientes y próximos eventos.`}
       navItems={ADMIN_NAV}
     >
-      <div className="panel-stat-grid">
-        <article className="panel-stat-card">
-          <p className="panel-stat-value">{stats.active}</p>
-          <p className="panel-stat-label">Proyectos activos</p>
-        </article>
-        <article className="panel-stat-card">
-          <p className="panel-stat-value">{stats.draft}</p>
-          <p className="panel-stat-label">Borradores</p>
-        </article>
-        <article className="panel-stat-card">
-          <p className="panel-stat-value">{stats.total}</p>
-          <p className="panel-stat-label">Total</p>
-        </article>
-      </div>
-
-      <p className="panel-notice">
-        <Link to="/admin/proyectos/nuevo" className="marketing-link font-medium">
-          Crear un proyecto
-        </Link>{' '}
-        con plantilla boda, contenido editable y límite de enlaces. La demo estática{' '}
-        <Link to="/demo/boda" className="marketing-link">
-          boda-demo-1
-        </Link>{' '}
-        sigue disponible sin Firestore.
-      </p>
+      <AdminDashboardView dashboard={dashboard} loading={loading} error={error} />
     </PanelShell>
   )
 }

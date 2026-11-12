@@ -46,7 +46,7 @@ export function AdminProjectsListPage() {
       {error ? <p className="panel-form-error">{error}</p> : null}
 
       <div className="panel-table-wrap">
-        <table className="panel-table">
+        <table className="panel-table panel-table--stack">
           <thead>
             <tr>
               <th>Título</th>
@@ -74,12 +74,12 @@ export function AdminProjectsListPage() {
                   <p className="font-medium">{project.title || project.slug}</p>
                   <p className="marketing-muted text-xs">/{project.slug}</p>
                 </td>
-                <td>{getTemplateLabel(project.templateId)}</td>
-                <td>
+                <td data-label="Plantilla">{getTemplateLabel(project.templateId)}</td>
+                <td data-label="Estado">
                   <ProjectStatusBadge status={project.status} />
                 </td>
-                <td>{project.linkLimit}</td>
-                <td className="panel-table-actions">
+                <td data-label="Límite de enlaces">{project.linkLimit || "Sin límite"}</td>
+                <td className="panel-table-actions panel-table-actions--wide">
                   <Link to={`/admin/proyectos/${project.slug}/enlaces`} className="panel-action-link">
                     Enlaces
                   </Link>

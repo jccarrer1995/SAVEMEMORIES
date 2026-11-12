@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Menu } from 'lucide-react'
 import { useAuth } from '../../features/auth/hooks/useAuth.js'
-import { useMarketingFonts } from '../../features/marketing/hooks/useMarketingFonts.js'
+import { useSiteFonts } from '../../features/marketing/home/useSiteFonts.js'
 import { PanelSidebar } from './PanelSidebar.jsx'
 import '../../features/marketing/styles/marketing.css'
 import './panel.css'
@@ -12,55 +12,80 @@ import './panel.css'
  *   roleLabel: string,
  *   title: string,
  *   subtitle?: string,
+ *   eyebrow?: string,
  *   navItems: Array<{ label: string, href: string, disabled?: boolean }>,
  *   children: import('react').ReactNode,
  * }} props
  */
-export function PanelShell({ roleLabel, title, subtitle, navItems, children }) {
-  useMarketingFonts(`${title} · SAVEMEMORIES`)
+export function PanelShell({ roleLabel, title, subtitle, eyebrow, navItems, children }) {
+  useSiteFonts()
   const { profile } = useAuth()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
+  const roleName = roleLabel.replace(/^Rol\s+/i, '')
+  const displayRole = roleName === 'admin' ? 'Administrador' : roleName === 'client' ? 'Cliente' : roleName
+
+  useEffect(() => {
+    document.title = `${title} · SAVEMEMORIES`
+  }, [title])
 
   useEffect(() => {
     setMenuOpen(false)
   }, [location.pathname])
 
   useEffect(() => {
-    if (!menuOpen) return
+    if (!menuOpen) return undefined
 
     function handleEscape(event) {
       if (event.key === 'Escape') setMenuOpen(false)
     }
 
     document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = ''
+    }
   }, [menuOpen])
 
   return (
-    <div className={`panel-shell font-[Outfit,sans-serif] ${menuOpen ? 'panel-shell--menu-open' : ''}`}>
-      <PanelSidebar items={navItems} isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+    <div className={`panel-shell ${menuOpen ? 'panel-shell--menu-open' : ''}`}>
+      <PanelSidebar
+        items={navItems}
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        roleLabel={displayRole}
+        email={profile?.email}
+      />
       <div className="panel-main">
+        <div className="panel-mobilebar">
+          <Link to="/" className="panel-logo panel-logo--dark">
+            <span className="panel-logo-mark" aria-hidden>
+              S
+            </span>
+            <span className="panel-logo-word">SAVEMEMORIES</span>
+          </Link>
+          <button
+            type="button"
+            className="panel-menu-toggle"
+            aria-label="Abrir menú"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(true)}
+          >
+            <span>Menú</span>
+            <span className="panel-menu-toggle-icon">
+              <Menu size={16} strokeWidth={2} aria-hidden="true" />
+            </span>
+          </button>
+        </div>
+
         <header className="panel-topbar">
-          <div className="panel-topbar-meta">
-            <button
-              type="button"
-              className="panel-menu-toggle"
-              aria-label="Abrir menú"
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen(true)}
-            >
-              <Menu size={22} strokeWidth={1.75} aria-hidden="true" />
-            </button>
-            <div className="panel-topbar-user">
-              <p className="panel-role-badge">{roleLabel}</p>
-              {profile?.email ? <p className="panel-topbar-email">{profile.email}</p> : null}
-            </div>
-          </div>
-          <div className="panel-topbar-heading">
-            <h1 className="marketing-serif text-2xl text-[#5c3a2e]">{title}</h1>
-            {subtitle ? <p className="marketing-muted mt-1 text-sm">{subtitle}</p> : null}
-          </div>
+          <p className="panel-eyebrow">
+            <span className="panel-dot" aria-hidden />
+            {eyebrow ?? `Panel ${displayRole.toLowerCase()}`}
+          </p>
+          <h1 className="panel-title">{title}</h1>
+          {subtitle ? <p className="panel-subtitle">{subtitle}</p> : null}
         </header>
         <div className="panel-content">{children}</div>
       </div>

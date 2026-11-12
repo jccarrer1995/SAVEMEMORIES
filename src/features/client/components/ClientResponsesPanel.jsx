@@ -130,7 +130,7 @@ export function ClientResponsesPanel({ projectId, projectTitle }) {
       />
 
       <div className="panel-table-wrap">
-        <table className="panel-table">
+        <table className="panel-table panel-table--stack">
           <thead>
             <tr>
               <th>Grupo</th>
@@ -159,10 +159,10 @@ export function ClientResponsesPanel({ projectId, projectTitle }) {
                       {asText(row.confirmacion, '—')}
                     </p>
                   </td>
-                  <td className="panel-table-col-desktop">{asText(row.confirmacion, '—')}</td>
-                  <td className="panel-table-col-desktop">{asText(row.nombres, '—')}</td>
-                  <td className="panel-table-col-desktop">{asText(row.telefono, '—')}</td>
-                  <td>{resolveRowMesa(row)}</td>
+                  <td className="panel-table-col-desktop" data-label="Confirmación">{asText(row.confirmacion, '—')}</td>
+                  <td className="panel-table-col-desktop" data-label="Asistentes">{asText(row.nombres, '—')}</td>
+                  <td className="panel-table-col-desktop" data-label="Teléfono">{asText(row.telefono, '—')}</td>
+                  <td data-label="Mesa">{resolveRowMesa(row) || '—'}</td>
                   <td className="panel-table-actions panel-table-actions--center">
                     <PanelActionsMenu
                       items={[

@@ -331,7 +331,7 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
       </div>
 
       <div className="panel-table-wrap">
-        <table className="panel-table">
+        <table className="panel-table panel-table--stack">
           <thead>
             <tr>
               <th>Invitado</th>
@@ -373,25 +373,25 @@ export function GuestLinksPanel({ projectId, mesaSimulationHref }) {
                       <p className="panel-only-mobile panel-table-grupo-confirmacion">{mesaMobileLabel}</p>
                     ) : null}
                   </td>
-                  <td className="panel-table-col-desktop">
+                  <td className="panel-table-col-desktop" data-label="Código">
                     <code className="panel-table-code">{link.id}</code>
                   </td>
-                  <td>
+                  <td data-label="Etiquetas">
                     <GuestLinkEtiquetasPills
                       link={link}
                       rsvpStatus={rsvpStatus}
                       showRsvpStatusOnMobile
                     />
                   </td>
-                  <td className="panel-table-col-desktop">{link.mesa || '—'}</td>
-                  <td>
+                  <td className="panel-table-col-desktop" data-label="Mesa">{link.mesa || '—'}</td>
+                  <td data-label="Enlace activo">
                     <GuestLinkStatusToggle
                       active={link.active}
                       disabled={togglingLinkId === link.id || loading}
                       onChange={(active) => void handleToggle(link.id, active)}
                     />
                   </td>
-                  <td className="panel-table-col-desktop">
+                  <td className="panel-table-col-desktop" data-label="Confirmación">
                     <GuestLinkConfirmPill status={rsvpStatus} />
                   </td>
                   <td className="panel-table-actions panel-table-actions--center">

@@ -72,7 +72,7 @@ export function AdminClientsListPage() {
       {error ? <p className="panel-form-error">{error}</p> : null}
 
       <div className="panel-table-wrap">
-        <table className="panel-table">
+        <table className="panel-table panel-table--stack">
           <thead>
             <tr>
               <th>Nombre</th>
@@ -93,16 +93,16 @@ export function AdminClientsListPage() {
             {clients.map((client) => (
               <tr key={client.uid}>
                 <td className="font-medium">{client.displayName || '—'}</td>
-                <td>{client.email || '—'}</td>
-                <td>
+                <td data-label="Correo">{client.email || '—'}</td>
+                <td data-label="UID">
                   <code className="text-xs">{client.uid.slice(0, 8)}…</code>
                 </td>
-                <td>
+                <td data-label="Estado">
                   <span className={`panel-badge panel-badge--${client.active ? 'active' : 'archived'}`}>
                     {client.active ? 'Activo' : 'Inactivo'}
                   </span>
                 </td>
-                <td className="panel-table-actions">
+                <td className="panel-table-actions panel-table-actions--wide">
                   <Link to={`/admin/clientes/${client.uid}`} className="panel-action-link">
                     Editar
                   </Link>

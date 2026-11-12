@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ProjectForm } from '../components/ProjectForm.jsx'
 import { ADMIN_NAV } from '../data/adminNav.js'
+import { TEMPLATE_OPTIONS } from '../data/templateOptions.js'
 import {
   createEmptyProjectForm,
   getProjectById,
@@ -14,6 +15,11 @@ import { ROLES } from '../../../shared/constants/roles.js'
 
 export function AdminProjectNewPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const requestedTemplate = searchParams.get('plantilla') ?? ''
+  const templateId = TEMPLATE_OPTIONS.some((item) => item.id === requestedTemplate && item.available)
+    ? requestedTemplate
+    : undefined
 
   async function handleSubmit(values) {
     await saveProject(values, true)
@@ -28,7 +34,12 @@ export function AdminProjectNewPage() {
       subtitle="Completa los datos de la invitación."
       navItems={ADMIN_NAV}
     >
-      <ProjectForm initialValues={createEmptyProjectForm()} isNew onSubmit={handleSubmit} />
+      <ProjectForm
+        key={templateId ?? 'default'}
+        initialValues={createEmptyProjectForm(templateId)}
+        isNew
+        onSubmit={handleSubmit}
+      />
     </PanelShell>
   )
 }

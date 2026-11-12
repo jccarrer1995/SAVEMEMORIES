@@ -1,6 +1,7 @@
 import { Route } from 'react-router-dom'
 import { AdminClientsListPage } from '../../features/admin/pages/AdminClientsListPage.jsx'
 import { AdminClientEditPage, AdminClientNewPage } from '../../features/admin/pages/AdminClientFormPage.jsx'
+import { AdminTemplatesPage } from '../../features/admin/pages/AdminTemplatesPage.jsx'
 import { ProtectedRoute } from '../../features/auth/components/ProtectedRoute.jsx'
 import { ROLES } from '../../shared/constants/roles.js'
 
@@ -13,6 +14,7 @@ export function adminClientRoutes() {
   return [
     <Route key="admin-clientes" path="/admin/clientes" element={guard(<AdminClientsListPage />)} />,
     <Route key="admin-clientes-nuevo" path="/admin/clientes/nuevo" element={guard(<AdminClientNewPage />)} />,
+    <Route key="admin-plantillas" path="/admin/plantillas" element={guard(<AdminTemplatesPage />)} />,
     <Route
       key="admin-clientes-edit"
       path="/admin/clientes/:clientUid"

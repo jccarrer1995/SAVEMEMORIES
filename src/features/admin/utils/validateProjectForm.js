@@ -3,7 +3,7 @@ import { getProjectFieldLabels } from '../data/templateOptions.js'
 /** @typedef {import('../types/projectRecord.js').ProjectFormValues} ProjectFormValues */
 
 /** @type {ReadonlySet<string>} */
-const EVENT_TEMPLATE_IDS = new Set(['boda', 'babyshower'])
+const EVENT_TEMPLATE_IDS = new Set(['boda', 'babyshower', 'despedida'])
 
 /**
  * @param {string} templateId
@@ -48,8 +48,12 @@ function validateEventTemplateFields(values, fieldErrors) {
     ? { novio: 'Indica el nombre del bebé.', novia: 'Indica el nombre de la mamita.' }
     : { novio: 'Indica el nombre del novio.', novia: 'Indica el nombre de la novia.' }
 
-  if (!values.novio.trim()) fieldErrors.novio = coupleMessages.novio
-  if (!values.novia.trim()) fieldErrors.novia = coupleMessages.novia
+  if (values.templateId === 'despedida') {
+    if (!values.novia.trim()) fieldErrors.novia = 'Indica el nombre de la novia.'
+  } else {
+    if (!values.novio.trim()) fieldErrors.novio = coupleMessages.novio
+    if (!values.novia.trim()) fieldErrors.novia = coupleMessages.novia
+  }
   if (!values.fechaLabel.trim()) fieldErrors.fechaLabel = 'Indica la fecha en texto.'
   if (!values.fechaEvento.trim()) fieldErrors.fechaEvento = 'Selecciona la fecha del evento.'
   if (!values.horaEvento.trim()) fieldErrors.horaEvento = 'Selecciona la hora del evento.'

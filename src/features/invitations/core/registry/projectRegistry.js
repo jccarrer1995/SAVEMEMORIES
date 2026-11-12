@@ -1,5 +1,6 @@
 import { demoBabyShowerProject } from '../../templates/baby-shower/config/demoBabyShower.js'
 import { demoBodaProject } from '../../templates/boda/config/demoBoda.js'
+import { demoDespedidaProject } from '../../templates/despedida/config/demoDespedida.js'
 
 /** @type {Record<string, import('../types/invitationProject.js').RegisteredProject>} */
 const PROJECTS = {
@@ -10,6 +11,10 @@ const PROJECTS = {
   [demoBabyShowerProject.id]: {
     templateId: demoBabyShowerProject.templateId,
     config: demoBabyShowerProject,
+  },
+  [demoDespedidaProject.id]: {
+    templateId: demoDespedidaProject.templateId,
+    config: demoDespedidaProject,
   },
 }
 

@@ -8,6 +8,8 @@ import { getDefaultGuestInvite } from '../core/utils/guestInvite.js'
 import { BabyShowerInvitationView } from '../templates/baby-shower/pages/BabyShowerInvitationView.jsx'
 import { BodaInvitationView } from '../templates/boda/pages/BodaInvitationView.jsx'
 import { BodaResponsesView } from '../templates/boda/pages/BodaResponsesView.jsx'
+import { DespedidaInvitationView } from '../templates/despedida/pages/DespedidaInvitationView.jsx'
+import { isSupportedTemplateId } from '../core/constants/supportedTemplates.js'
 
 /**
  * @param {{
@@ -27,6 +29,10 @@ function TemplateInvitationView({ project, validatedInvite, linkCode, allowQuery
 
   if (project.templateId === 'babyshower') {
     return <BabyShowerInvitationView {...viewProps} />
+  }
+
+  if (project.templateId === 'despedida') {
+    return <DespedidaInvitationView {...viewProps} />
   }
 
   return <BodaInvitationView {...viewProps} />
@@ -57,7 +63,7 @@ export function InvitationPage({ projectId, linkCode, allowQueryParams = false }
     return <InvalidInvitationPage reason={linkError} />
   }
 
-  if (project.templateId === 'boda' || project.templateId === 'babyshower') {
+  if (isSupportedTemplateId(project.templateId)) {
     return (
       <TemplateInvitationView
         project={project}
@@ -83,7 +89,7 @@ export function ProjectResponsesPage({ projectId }) {
     return <InvalidInvitationPage reason="El proyecto no existe." />
   }
 
-  if (project.templateId === 'boda' || project.templateId === 'babyshower') {
+  if (isSupportedTemplateId(project.templateId)) {
     return <BodaResponsesView project={project.config} />
   }
 
@@ -96,6 +102,10 @@ export function LegacyBodaPage() {
 
 export function LegacyBabyShowerPage() {
   return <InvitationPage projectId="demo-baby-shower" allowQueryParams />
+}
+
+export function DemoDespedidaPage() {
+  return <InvitationPage projectId="demo-despedida" allowQueryParams />
 }
 
 export function LegacyResponsesPage() {

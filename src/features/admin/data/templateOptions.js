@@ -5,7 +5,32 @@ export const TEMPLATE_OPTIONS = [
   { id: 'boda', label: 'Boda', available: true },
   { id: 'xv', label: 'Quinceañera', available: false },
   { id: 'babyshower', label: 'Baby shower', available: true },
+  { id: 'despedida', label: 'Despedida de soltera Juvenil', available: true },
 ]
+
+/**
+ * Qué bloques del formulario usa cada plantilla.
+ * @param {string} templateId
+ */
+export function getTemplateFormFeatures(templateId) {
+  if (templateId === 'despedida') {
+    return {
+      singlePerson: true,
+      showPadres: false,
+      showDressCode: false,
+      showNinos: false,
+      regalosLabel: 'Traer (una cosa por línea: snacks, bebidas…)',
+    }
+  }
+
+  return {
+    singlePerson: false,
+    showPadres: true,
+    showDressCode: true,
+    showNinos: true,
+    regalosLabel: 'Regalos',
+  }
+}
 
 /** @param {string} templateId */
 export function getTemplateLabel(templateId) {
@@ -19,6 +44,14 @@ export function getProjectFieldLabels(templateId) {
       novio: 'Bebé',
       novia: 'Mamita',
       coupleSection: 'Bebé y mamita',
+    }
+  }
+
+  if (templateId === 'despedida') {
+    return {
+      novio: '',
+      novia: 'Nombre de la novia',
+      coupleSection: 'Persona',
     }
   }
 

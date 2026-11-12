@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { EventDateTimeFields } from './EventDateTimeFields.jsx'
 import { ClientOwnerField } from './ClientOwnerField.jsx'
-import { TEMPLATE_OPTIONS, getProjectFieldLabels } from '../data/templateOptions.js'
+import { TEMPLATE_OPTIONS, getProjectFieldLabels, getTemplateFormFeatures } from '../data/templateOptions.js'
+import { createEmptyProjectForm } from '../services/projectService.js'
 import { panelFieldClass } from '../utils/panelFieldClass.js'
 import { slugify } from '../utils/slugify.js'
 import {
@@ -29,6 +30,25 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
 
   const previewUrl = useMemo(() => `/invitacion/${values.slug || 'slug'}`, [values.slug])
   const fieldLabels = useMemo(() => getProjectFieldLabels(values.templateId), [values.templateId])
+  const features = useMemo(() => getTemplateFormFeatures(values.templateId), [values.templateId])
+
+  /** En proyectos nuevos, al cambiar de plantilla se cargan sus datos de ejemplo. */
+  function handleTemplateChange(templateId) {
+    if (!isNew) {
+      updateField('templateId', templateId)
+      return
+    }
+    setValues((prev) => ({
+      ...createEmptyProjectForm(templateId),
+      title: prev.title,
+      slug: prev.slug,
+      status: prev.status,
+      ownerId: prev.ownerId,
+      linkLimit: prev.linkLimit,
+    }))
+    setFieldErrors({})
+    if (error) setError('')
+  }
 
   function updateField(field, value) {
     setValues((prev) => ({ ...prev, [field]: value }))
@@ -119,7 +139,7 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
             <span>Plantilla</span>
             <select
               value={values.templateId}
-              onChange={(event) => updateField('templateId', event.target.value)}
+              onChange={(event) => handleTemplateChange(event.target.value)}
             >
               {TEMPLATE_OPTIONS.map((option) => (
                 <option key={option.id} value={option.id} disabled={!option.available}>
@@ -161,11 +181,13 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
       <section className="panel-form-section">
         <h2 className="panel-form-heading">{fieldLabels.coupleSection}</h2>
         <div className="panel-form-grid">
-          <label className={panelFieldClass(fieldErrors, 'novio')}>
-            <span>{fieldLabels.novio}</span>
-            <input type="text" value={values.novio} onChange={(e) => updateField('novio', e.target.value)} />
-            {fieldErrors.novio ? <span className="panel-field-error">{fieldErrors.novio}</span> : null}
-          </label>
+          {!features.singlePerson ? (
+            <label className={panelFieldClass(fieldErrors, 'novio')}>
+              <span>{fieldLabels.novio}</span>
+              <input type="text" value={values.novio} onChange={(e) => updateField('novio', e.target.value)} />
+              {fieldErrors.novio ? <span className="panel-field-error">{fieldErrors.novio}</span> : null}
+            </label>
+          ) : null}
           <label className={panelFieldClass(fieldErrors, 'novia')}>
             <span>{fieldLabels.novia}</span>
             <input type="text" value={values.novia} onChange={(e) => updateField('novia', e.target.value)} />
@@ -235,18 +257,28 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
               onChange={(e) => updateField('recepcionMapsUrl', e.target.value)}
             />
           </label>
+          {features.showPadres ? (
+            <>
+              <label className="panel-field panel-field--wide">
+                <span>Padres del novio (una línea por persona)</span>
+                <textarea value={values.padresNovio} onChange={(e) => updateField('padresNovio', e.target.value)} rows={2} />
+              </label>
+              <label className="panel-field panel-field--wide">
+                <span>Padres de la novia (una línea por persona)</span>
+                <textarea value={values.padresNovia} onChange={(e) => updateField('padresNovia', e.target.value)} rows={2} />
+              </label>
+            </>
+          ) : null}
           <label className="panel-field panel-field--wide">
-            <span>Padres del novio (una línea por persona)</span>
-            <textarea value={values.padresNovio} onChange={(e) => updateField('padresNovio', e.target.value)} rows={2} />
+            <span>{features.regalosLabel}</span>
+            <textarea
+              value={values.regalosTexto}
+              onChange={(e) => updateField('regalosTexto', e.target.value)}
+              rows={features.showPadres ? 2 : 5}
+            />
           </label>
-          <label className="panel-field panel-field--wide">
-            <span>Padres de la novia (una línea por persona)</span>
-            <textarea value={values.padresNovia} onChange={(e) => updateField('padresNovia', e.target.value)} rows={2} />
-          </label>
-          <label className="panel-field panel-field--wide">
-            <span>Regalos</span>
-            <textarea value={values.regalosTexto} onChange={(e) => updateField('regalosTexto', e.target.value)} rows={2} />
-          </label>
+          {features.showDressCode ? (
+          <>
           <label className="panel-field">
             <span>Dress code</span>
             <input
@@ -292,10 +324,14 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
               rows={2}
             />
           </label>
-          <label className="panel-field panel-field--wide">
-            <span>Política niños</span>
-            <input type="text" value={values.noNinos} onChange={(e) => updateField('noNinos', e.target.value)} />
-          </label>
+          </>
+          ) : null}
+          {features.showNinos ? (
+            <label className="panel-field panel-field--wide">
+              <span>Política niños</span>
+              <input type="text" value={values.noNinos} onChange={(e) => updateField('noNinos', e.target.value)} />
+            </label>
+          ) : null}
         </div>
       </section>
 

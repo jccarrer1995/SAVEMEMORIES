@@ -27,17 +27,27 @@ function normalizeProjectAssets(content) {
 }
 
 /**
+ * @param {string} templateId
+ * @param {import('../types/invitationProject.js').InvitationProjectConfig} originalContent
+ * @param {import('../types/invitationProject.js').InvitationProjectConfig} withAssets
+ */
+function normalizeContentForTemplate(templateId, originalContent, withAssets) {
+  if (templateId === 'boda') return applyLegacyBodaContent(withAssets)
+  if (templateId === 'despedida') {
+    return { ...withAssets, musicaSrc: resolvePublicAssetUrl(originalContent.musicaSrc) }
+  }
+  return {
+    ...withAssets,
+    musicaSrc: resolveMusicSrc(withAssets.musicaSrc, '/baby-shower/baby-shower.mp3'),
+  }
+}
+
+/**
  * @param {import('../types/invitationProject.js').RegisteredProject} project
  */
 function normalizeRegisteredProject(project) {
   const withAssets = normalizeProjectAssets(project.config)
-  const normalizedContent =
-    project.templateId === 'boda'
-      ? applyLegacyBodaContent(withAssets)
-      : {
-          ...withAssets,
-          musicaSrc: resolveMusicSrc(withAssets.musicaSrc, '/baby-shower/baby-shower.mp3'),
-        }
+  const normalizedContent = normalizeContentForTemplate(project.templateId, project.config, withAssets)
 
   return {
     ...project,
@@ -122,13 +132,7 @@ function mapRecordToRegistered(record) {
     record.content
   )
   const withAssets = normalizeProjectAssets(content)
-  const normalizedContent =
-    record.templateId === 'boda'
-      ? applyLegacyBodaContent(withAssets)
-      : {
-          ...withAssets,
-          musicaSrc: resolveMusicSrc(withAssets.musicaSrc, '/baby-shower/baby-shower.mp3'),
-        }
+  const normalizedContent = normalizeContentForTemplate(record.templateId, content, withAssets)
 
   return {
     templateId: record.templateId,

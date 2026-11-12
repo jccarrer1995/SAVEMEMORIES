@@ -7,6 +7,7 @@ import {
 import { asText } from '../../../shared/utils/asText.js'
 import { createDefaultBabyShowerContent } from '../data/defaultBabyShowerContent.js'
 import { createDefaultBodaContent } from '../data/defaultBodaContent.js'
+import { createDefaultDespedidaContent } from '../data/defaultDespedidaContent.js'
 import { joinFechaIso, splitFechaIso } from '../utils/eventDateTime.js'
 
 /**
@@ -110,6 +111,7 @@ export function projectToFormValues(project) {
 /** @param {string} templateId */
 function getDefaultContentForTemplate(templateId) {
   if (templateId === 'babyshower') return createDefaultBabyShowerContent()
+  if (templateId === 'despedida') return createDefaultDespedidaContent()
   return createDefaultBodaContent()
 }
 

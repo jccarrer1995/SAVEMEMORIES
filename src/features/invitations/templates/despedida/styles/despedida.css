@@ -1,0 +1,489 @@
+/* Plantilla: Despedida de soltera Juvenil */
+
+.dsp-site {
+  --dsp-pink: #ff3d9a;
+  --dsp-pink-deep: #e01f7c;
+  --dsp-bubble: #ffc6e4;
+  --dsp-cream: #fff6ee;
+  --dsp-ink: #2a0f2e;
+  --dsp-ink-soft: #5a3a5e;
+  --dsp-lime: #cdf564;
+  --dsp-yellow: #ffe066;
+  --dsp-violet: #7b4dff;
+  --dsp-sky: #8fd8ff;
+  font-family: 'Outfit', system-ui, sans-serif;
+  color: var(--dsp-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.dsp-display {
+  font-family: 'Bagel Fat One', 'Outfit', system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.dsp-hand {
+  font-family: 'Caveat', cursive;
+  font-weight: 600;
+}
+
+.dsp-frame {
+  background: var(--dsp-cream);
+}
+
+/* ---------- Fondos ---------- */
+
+.dsp-bg-pink {
+  background-color: var(--dsp-pink);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.22) 1.4px, transparent 1.6px);
+  background-size: 18px 18px;
+}
+
+.dsp-bg-grid {
+  background-color: var(--dsp-cream);
+  background-image:
+    linear-gradient(rgba(255, 61, 154, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 61, 154, 0.09) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.dsp-bg-violet {
+  background: linear-gradient(160deg, #8a5cff 0%, #6a3cf0 55%, #5228d8 100%);
+}
+
+.dsp-bg-ink {
+  background: var(--dsp-ink);
+}
+
+.dsp-bg-lime {
+  background-color: var(--dsp-lime);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(42, 15, 46, 0.05) 0 12px,
+    transparent 12px 24px
+  );
+}
+
+/* ---------- Tipografía con borde (estilo sticker) ---------- */
+
+.dsp-outline-title {
+  color: var(--dsp-yellow);
+  -webkit-text-stroke: 2px var(--dsp-ink);
+  paint-order: stroke fill;
+  text-shadow: 4px 5px 0 var(--dsp-ink);
+  line-height: 0.92;
+}
+
+.dsp-chunky-shadow {
+  box-shadow: 4px 5px 0 var(--dsp-ink);
+  border: 2.5px solid var(--dsp-ink);
+}
+
+/* ---------- Stickers ---------- */
+
+.dsp-sticker {
+  position: absolute;
+  z-index: 5;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dsp-sticker:active {
+  cursor: grabbing;
+}
+
+.dsp-sticker-emoji {
+  display: block;
+  line-height: 1;
+  filter: drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff) drop-shadow(0 2.5px 0 #fff)
+    drop-shadow(0 -2.5px 0 #fff) drop-shadow(0 5px 6px rgba(42, 15, 46, 0.28));
+}
+
+.dsp-sticker-text {
+  display: block;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  padding: 0.35rem 0.8rem;
+  font-family: 'Bagel Fat One', 'Outfit', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  box-shadow: 0 6px 12px rgba(42, 15, 46, 0.25);
+}
+
+/* ---------- Cinta marquee ---------- */
+
+.dsp-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  border-block: 2.5px solid var(--dsp-ink);
+}
+
+.dsp-marquee-track {
+  display: inline-flex;
+  animation: dsp-marquee 16s linear infinite;
+}
+
+.dsp-marquee--reverse .dsp-marquee-track {
+  animation-direction: reverse;
+}
+
+@keyframes dsp-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- Pantalla de bloqueo ---------- */
+
+.dsp-lock {
+  position: relative;
+  display: flex;
+  height: 100dvh;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(170deg, #2a0f2e 0%, #5b1f6b 45%, #c22b83 100%);
+}
+
+.dsp-lock-blob {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(42px);
+  opacity: 0.6;
+}
+
+.dsp-lock-time {
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 84px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.dsp-notif {
+  display: flex;
+  gap: 0.7rem;
+  border-radius: 20px;
+  padding: 0.75rem 0.85rem;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.dsp-notif--highlight {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--dsp-ink);
+  box-shadow: 0 10px 30px rgba(255, 61, 154, 0.45);
+}
+
+.dsp-notif-icon {
+  display: flex;
+  height: 38px;
+  width: 38px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+.dsp-slider {
+  position: relative;
+  height: 60px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.dsp-slider-label {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.45) 0%, #fff 50%, rgba(255, 255, 255, 0.45) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: dsp-shimmer 2.4s linear infinite;
+}
+
+@keyframes dsp-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.dsp-slider-thumb {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  z-index: 2;
+  display: flex;
+  height: 50px;
+  width: 50px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--dsp-pink);
+  font-size: 22px;
+  cursor: grab;
+  touch-action: none;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Chat ---------- */
+
+.dsp-bubble {
+  position: relative;
+  border-radius: 22px 22px 22px 6px;
+  background: #fff;
+  padding: 0.9rem 1rem;
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.dsp-typing span {
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+  margin: 0 2px;
+  border-radius: 999px;
+  background: var(--dsp-ink-soft);
+  animation: dsp-typing 1s ease-in-out infinite;
+}
+
+.dsp-typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.dsp-typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes dsp-typing {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/* ---------- Polaroids ---------- */
+
+.dsp-polaroid {
+  position: relative;
+  background: #fff;
+  padding: 10px 10px 38px;
+  box-shadow: 0 14px 28px rgba(42, 15, 46, 0.22);
+}
+
+.dsp-tape {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  height: 24px;
+  width: 86px;
+  transform: translateX(-50%) rotate(-3deg);
+  background: rgba(255, 224, 102, 0.85);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.dsp-scroll-snap {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.dsp-scroll-snap::-webkit-scrollbar {
+  display: none;
+}
+
+.dsp-scroll-snap > * {
+  scroll-snap-align: center;
+}
+
+/* ---------- Ticket ---------- */
+
+.dsp-ticket {
+  position: relative;
+  border-radius: 22px;
+  background: #fff;
+  color: var(--dsp-ink);
+}
+
+.dsp-ticket::before,
+.dsp-ticket::after {
+  content: '';
+  position: absolute;
+  top: 62%;
+  height: 28px;
+  width: 28px;
+  border-radius: 999px;
+  background: var(--dsp-ticket-notch, #6a3cf0);
+  transform: translateY(-50%);
+}
+
+.dsp-ticket::before {
+  left: -14px;
+}
+
+.dsp-ticket::after {
+  right: -14px;
+}
+
+.dsp-ticket-cut {
+  border-top: 2.5px dashed rgba(42, 15, 46, 0.22);
+}
+
+/* ---------- Playlist ---------- */
+
+.dsp-eq {
+  display: inline-flex;
+  height: 16px;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.dsp-eq span {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--dsp-lime);
+  animation: dsp-eq 0.9s ease-in-out infinite;
+}
+
+.dsp-eq span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dsp-eq span:nth-child(3) {
+  animation-delay: 0.45s;
+}
+
+@keyframes dsp-eq {
+  0%,
+  100% {
+    height: 4px;
+  }
+  50% {
+    height: 16px;
+  }
+}
+
+.dsp-disco {
+  animation: dsp-spin 6s linear infinite;
+}
+
+@keyframes dsp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Formulario ---------- */
+
+.dsp-input {
+  width: 100%;
+  border-radius: 14px;
+  border: 2.5px solid var(--dsp-ink);
+  background: #fff;
+  padding: 0.7rem 0.85rem;
+  font-size: 15px;
+  color: var(--dsp-ink);
+  outline: none;
+  transition: box-shadow 0.15s ease;
+}
+
+.dsp-input:focus {
+  box-shadow: 3px 4px 0 var(--dsp-pink);
+}
+
+.dsp-choice {
+  border-radius: 999px;
+  border: 2.5px solid var(--dsp-ink);
+  background: #fff;
+  padding: 0.55rem 0.95rem;
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+
+.dsp-choice[aria-pressed='true'] {
+  background: var(--dsp-lime);
+  box-shadow: 3px 4px 0 var(--dsp-ink);
+  transform: translate(-1px, -2px);
+}
+
+.dsp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  border: 2.5px solid var(--dsp-ink);
+  background: var(--dsp-yellow);
+  padding: 0.7rem 1.5rem;
+  font-family: 'Bagel Fat One', 'Outfit', sans-serif;
+  font-size: 16px;
+  color: var(--dsp-ink);
+  box-shadow: 4px 5px 0 var(--dsp-ink);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.dsp-btn:active {
+  transform: translate(3px, 4px);
+  box-shadow: 1px 1px 0 var(--dsp-ink);
+}
+
+.dsp-btn:disabled {
+  opacity: 0.6;
+}
+
+/* ---------- Checklist ---------- */
+
+.dsp-check {
+  display: flex;
+  height: 28px;
+  width: 28px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  border: 2.5px solid var(--dsp-ink);
+  background: #fff;
+  font-size: 16px;
+}
+
+.dsp-check--on {
+  background: var(--dsp-pink);
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dsp-marquee-track,
+  .dsp-slider-label,
+  .dsp-typing span,
+  .dsp-eq span,
+  .dsp-disco {
+    animation: none;
+  }
+}

@@ -6,6 +6,7 @@ export const ROUTES = {
   invitation: '/invitacion/:projectId/:linkCode?',
   demoBoda: '/demo/boda',
   demoBabyShower: '/demo/baby-shower',
+  demoDespedida: '/demo/despedida',
   legacyResponses: '/respuestas',
   projectResponses: '/respuestas/:projectId',
 }

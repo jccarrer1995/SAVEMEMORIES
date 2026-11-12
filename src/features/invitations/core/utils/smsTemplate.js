@@ -31,13 +31,32 @@ ${signature} 💍✨`
 }
 
 /**
- * @param {import('../../../admin/types/projectRecord.js').ProjectRecord | { smsTemplate?: string, content?: Record<string, unknown> }} project
+ * @param {{ novia?: string }} names
+ */
+export function buildDespedidaSmsTemplate({ novia = '' } = {}) {
+  const nombre = novia.trim() || 'la novia'
+
+  return `¡Holaaa! 💖✨
+
+🚨 Alerta de despedida 🚨 ${nombre} se nos casa y antes nos vamos a despedir su soltería como se merece 💋💃
+
+Aquí está tu pase con todos los detalles (y qué traer 🍿🍾). Confirma porfa para contar contigo:
+${SMS_TEMPLATE_LINK_TOKEN}
+
+¡No faltes, que sin ti no es lo mismo! 👯‍♀️💅`
+}
+
+/**
+ * @param {import('../../../admin/types/projectRecord.js').ProjectRecord | { smsTemplate?: string, templateId?: string, content?: Record<string, unknown> }} project
  */
 export function getProjectSmsTemplate(project) {
   const saved = asText(project.smsTemplate).trim()
   if (saved) return saved
 
   const content = project.content ?? {}
+  if (project.templateId === 'despedida') {
+    return buildDespedidaSmsTemplate({ novia: asText(content.novia) })
+  }
   return buildDefaultSmsTemplate({
     novio: asText(content.novio),
     novia: asText(content.novia),

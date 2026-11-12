@@ -10,6 +10,7 @@ import { createDefaultBodaContent } from '../data/defaultBodaContent.js'
 import { createDefaultDespedidaContent } from '../data/defaultDespedidaContent.js'
 import { getTemplateFormFeatures } from '../data/templateOptions.js'
 import { cronogramaToText, textToCronograma } from '../utils/cronogramaText.js'
+import { applyLegacyDespedidaContent } from '../../invitations/templates/despedida/utils/legacyContent.js'
 import { joinFechaIso, splitFechaIso } from '../utils/eventDateTime.js'
 
 /**
@@ -64,7 +65,8 @@ function buildContentFromForm(values) {
  * @returns {import('../types/projectRecord.js').ProjectFormValues}
  */
 export function projectToFormValues(project) {
-  const content = project.content
+  const content =
+    project.templateId === 'despedida' ? applyLegacyDespedidaContent(project.content) : project.content
   const padres = /** @type {{ novio?: string[], novia?: string[] }} */ (content.padres ?? {})
   const recepcion = /** @type {Record<string, string>} */ (content.recepcion ?? {})
   const regalos = /** @type {{ texto?: string }} */ (content.regalos ?? {})

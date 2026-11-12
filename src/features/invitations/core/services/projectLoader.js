@@ -3,6 +3,7 @@ import { isSupportedTemplateId } from '../constants/supportedTemplates.js'
 import { fetchProjectRecord } from '../../../../lib/firebase/projectStore.js'
 import { getProjectById as getRegistryProject } from '../registry/projectRegistry.js'
 import { publicUrl, resolveMusicSrc, resolvePublicAssetUrl } from '../utils/publicUrl.js'
+import { applyLegacyDespedidaContent } from '../../templates/despedida/utils/legacyContent.js'
 
 /**
  * @param {import('../types/invitationProject.js').InvitationProjectConfig} content
@@ -34,7 +35,10 @@ function normalizeProjectAssets(content) {
 function normalizeContentForTemplate(templateId, originalContent, withAssets) {
   if (templateId === 'boda') return applyLegacyBodaContent(withAssets)
   if (templateId === 'despedida') {
-    return { ...withAssets, musicaSrc: resolvePublicAssetUrl(originalContent.musicaSrc) }
+    return applyLegacyDespedidaContent({
+      ...withAssets,
+      musicaSrc: resolvePublicAssetUrl(originalContent.musicaSrc),
+    })
   }
   return {
     ...withAssets,

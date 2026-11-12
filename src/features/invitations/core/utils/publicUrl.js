@@ -29,7 +29,7 @@ export function resolvePublicAssetUrl(url) {
         base !== '/' &&
         baseSegment &&
         !parsed.pathname.includes(`/${baseSegment}/`) &&
-        (/^\/boda\//.test(parsed.pathname) || /^\/baby-shower\//.test(parsed.pathname))
+        /^\/(boda|baby-shower|despedida)\//.test(parsed.pathname)
       ) {
         return `${parsed.origin}${base}${parsed.pathname.replace(/^\//, '')}`
       }

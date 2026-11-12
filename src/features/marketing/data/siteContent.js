@@ -42,9 +42,10 @@ export const TEMPLATES = [
   },
   {
     id: 'xv',
-    name: 'Quinceañera',
-    description: 'Estilo festivo con paleta personalizable y secciones modulares.',
-    available: false,
+    name: 'Quinceañera Elegante',
+    description: 'Puertas de salón que se abren, ornamentos dorados que se dibujan solos y pase de honor.',
+    demoPath: '/demo/quinceanera',
+    available: true,
   },
   {
     id: 'baby',

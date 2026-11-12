@@ -7,6 +7,7 @@ export const ROUTES = {
   demoBoda: '/demo/boda',
   demoBabyShower: '/demo/baby-shower',
   demoDespedida: '/demo/despedida',
+  demoQuinceanera: '/demo/quinceanera',
   legacyResponses: '/respuestas',
   projectResponses: '/respuestas/:projectId',
 }

@@ -3,7 +3,7 @@ import { getProjectFieldLabels } from '../data/templateOptions.js'
 /** @typedef {import('../types/projectRecord.js').ProjectFormValues} ProjectFormValues */
 
 /** @type {ReadonlySet<string>} */
-const EVENT_TEMPLATE_IDS = new Set(['boda', 'babyshower', 'despedida'])
+const EVENT_TEMPLATE_IDS = new Set(['boda', 'babyshower', 'despedida', 'xv'])
 
 /**
  * @param {string} templateId
@@ -48,7 +48,9 @@ function validateEventTemplateFields(values, fieldErrors) {
     ? { novio: 'Indica el nombre del bebé.', novia: 'Indica el nombre de la mamita.' }
     : { novio: 'Indica el nombre del novio.', novia: 'Indica el nombre de la novia.' }
 
-  if (values.templateId === 'despedida') {
+  if (values.templateId === 'xv') {
+    if (!values.novia.trim()) fieldErrors.novia = 'Indica el nombre de la quinceañera.'
+  } else if (values.templateId === 'despedida') {
     if (!values.novia.trim()) fieldErrors.novia = 'Indica el nombre de la novia.'
   } else {
     if (!values.novio.trim()) fieldErrors.novio = coupleMessages.novio

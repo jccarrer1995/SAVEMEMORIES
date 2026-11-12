@@ -37,6 +37,11 @@
  * @property {string} recepcionLugar
  * @property {string} recepcionDireccion
  * @property {string} recepcionMapsUrl
+ * @property {string} [ceremoniaTitulo]
+ * @property {string} [ceremoniaHora]
+ * @property {string} [ceremoniaLugar]
+ * @property {string} [ceremoniaDireccion]
+ * @property {string} [ceremoniaMapsUrl]
  * @property {string} regalosTexto
  * @property {string} cronogramaTexto
  * @property {string} dressCodeEstilo

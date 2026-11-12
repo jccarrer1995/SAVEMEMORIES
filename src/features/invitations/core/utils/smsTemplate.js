@@ -47,6 +47,25 @@ ${SMS_TEMPLATE_LINK_TOKEN}
 }
 
 /**
+ * @param {{ novia?: string }} names
+ */
+export function buildXvSmsTemplate({ novia = '' } = {}) {
+  const nombre = novia.trim() || 'Nuestra quinceañera'
+
+  return `¡Hola! 🤍
+
+Con mucha ilusión queremos invitarte a celebrar los XV años de ${nombre}, una noche que hemos soñado por mucho tiempo y que no sería igual sin ti.
+
+En tu invitación encontrarás todos los detalles y podrás confirmar tu asistencia:
+${SMS_TEMPLATE_LINK_TOKEN}
+
+Te pedimos confirmar a la brevedad para reservar tu lugar.
+
+Con cariño,
+${nombre} y familia ✨`
+}
+
+/**
  * @param {import('../../../admin/types/projectRecord.js').ProjectRecord | { smsTemplate?: string, templateId?: string, content?: Record<string, unknown> }} project
  */
 export function getProjectSmsTemplate(project) {
@@ -56,6 +75,9 @@ export function getProjectSmsTemplate(project) {
   const content = project.content ?? {}
   if (project.templateId === 'despedida') {
     return buildDespedidaSmsTemplate({ novia: asText(content.novia) })
+  }
+  if (project.templateId === 'xv') {
+    return buildXvSmsTemplate({ novia: asText(content.novia) })
   }
   return buildDefaultSmsTemplate({
     novio: asText(content.novio),

@@ -34,6 +34,9 @@ function normalizeProjectAssets(content) {
  */
 function normalizeContentForTemplate(templateId, originalContent, withAssets) {
   if (templateId === 'boda') return applyLegacyBodaContent(withAssets)
+  if (templateId === 'xv') {
+    return { ...withAssets, musicaSrc: resolvePublicAssetUrl(originalContent.musicaSrc) }
+  }
   if (templateId === 'despedida') {
     return applyLegacyDespedidaContent({
       ...withAssets,

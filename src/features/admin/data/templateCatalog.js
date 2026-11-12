@@ -1,4 +1,3 @@
-import { IMAGES } from '../../marketing/home/homeMedia.js'
 import { publicUrl } from '../../invitations/core/utils/publicUrl.js'
 import { TEMPLATE_OPTIONS } from './templateOptions.js'
 
@@ -43,12 +42,35 @@ const CATALOG_DETAILS = {
     highlights: ['Sobre animado', 'Cuenta regresiva', 'Música', 'Mapa', 'RSVP por cupos'],
   },
   xv: {
-    tagline: 'Festiva · paleta a medida',
-    description: 'Estilo de gala con paleta personalizable y secciones modulares para la quinceañera.',
-    cover: { ...IMAGES.quince },
-    palette: ['#1f2a5c', '#6b7fd7', '#c9b8dc', '#e8d9a8', '#faf7fb'],
-    sections: ['Portada', 'Mensaje de la quinceañera', 'Padres y padrinos', 'Cronograma', 'Lugar', 'RSVP'],
-    highlights: ['Paleta personalizable', 'Secciones modulares'],
+    tagline: 'Formal · azul empolvado y oro',
+    description:
+      'Puertas de salón que se abren en 3D, retrato en arco, ornamentos que se dibujan solos, silla de reina y pase de honor dorado.',
+    cover: {
+      src: 'https://images.unsplash.com/photo-1763959952707-7f4b2c3c2219?auto=format&fit=crop&w=800&q=72',
+      srcSet: [480, 800, 1200]
+        .map(
+          (w) =>
+            `https://images.unsplash.com/photo-1763959952707-7f4b2c3c2219?auto=format&fit=crop&w=${w}&q=72 ${w}w`,
+        )
+        .join(', '),
+      alt: 'Quinceañera con vestido azul y tiara',
+    },
+    palette: ['#131a29', '#7f98b8', '#c6d4e5', '#c8a76c', '#fbf8f3'],
+    demoPath: '/demo/quinceanera',
+    music: { src: publicUrl('/boda/musica.mp3'), title: 'Música de la quinceañera' },
+    sections: [
+      'Puertas de salón con sello',
+      'Retrato en arco',
+      'Mensaje de la quinceañera',
+      'Cuenta regresiva',
+      'Padres y padrinos',
+      'Misa y recepción',
+      'Programa',
+      'Galería',
+      'Código de vestimenta y regalos',
+      'Silla de reina + confirmación',
+    ],
+    highlights: ['Puertas 3D', 'Ornamentos animados', 'Ceremonia', 'Música', 'Pase de honor'],
   },
   babyshower: {
     tagline: 'Tierna · tonos pastel',

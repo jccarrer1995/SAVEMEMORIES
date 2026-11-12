@@ -9,6 +9,7 @@ import { BabyShowerInvitationView } from '../templates/baby-shower/pages/BabySho
 import { BodaInvitationView } from '../templates/boda/pages/BodaInvitationView.jsx'
 import { BodaResponsesView } from '../templates/boda/pages/BodaResponsesView.jsx'
 import { DespedidaInvitationView } from '../templates/despedida/pages/DespedidaInvitationView.jsx'
+import { XvInvitationView } from '../templates/xv/pages/XvInvitationView.jsx'
 import { isSupportedTemplateId } from '../core/constants/supportedTemplates.js'
 
 /**
@@ -33,6 +34,10 @@ function TemplateInvitationView({ project, validatedInvite, linkCode, allowQuery
 
   if (project.templateId === 'despedida') {
     return <DespedidaInvitationView {...viewProps} />
+  }
+
+  if (project.templateId === 'xv') {
+    return <XvInvitationView {...viewProps} />
   }
 
   return <BodaInvitationView {...viewProps} />
@@ -106,6 +111,10 @@ export function LegacyBabyShowerPage() {
 
 export function DemoDespedidaPage() {
   return <InvitationPage projectId="demo-despedida" allowQueryParams />
+}
+
+export function DemoXvPage() {
+  return <InvitationPage projectId="demo-quinceanera" allowQueryParams />
 }
 
 export function LegacyResponsesPage() {

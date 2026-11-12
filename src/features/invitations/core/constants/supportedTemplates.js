@@ -1,5 +1,5 @@
 /** @type {readonly string[]} */
-export const SUPPORTED_TEMPLATE_IDS = ['boda', 'babyshower', 'despedida']
+export const SUPPORTED_TEMPLATE_IDS = ['boda', 'babyshower', 'despedida', 'xv']
 
 /** @param {string} templateId */
 export function isSupportedTemplateId(templateId) {

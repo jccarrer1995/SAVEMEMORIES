@@ -16,6 +16,7 @@ import {
   LegacyBodaPage,
   LegacyBabyShowerPage,
   DemoDespedidaPage,
+  DemoXvPage,
   LegacyResponsesPage,
   ProjectResponsesPage,
 } from '../../features/invitations/pages/InvitationPage.jsx'
@@ -130,6 +131,7 @@ export function AppRouter() {
       <Route path="/demo/boda" element={<LegacyBodaPage />} />
       <Route path="/demo/baby-shower" element={<LegacyBabyShowerPage />} />
       <Route path="/demo/despedida" element={<DemoDespedidaPage />} />
+      <Route path="/demo/quinceanera" element={<DemoXvPage />} />
       <Route path="/respuestas" element={<LegacyResponsesPage />} />
       <Route path="*" element={<InvalidInvitationPage reason="Página no encontrada." />} />
     </Routes>

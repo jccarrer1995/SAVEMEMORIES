@@ -34,6 +34,7 @@
  * @property {string} cita
  * @property {{ novio: string[], novia: string[] }} padres
  * @property {InvitationVenue} recepcion
+ * @property {InvitationVenue} [ceremonia]
  * @property {InvitationTimelineItem[]} cronograma
  * @property {{ texto: string }} regalos
  * @property {{ estilo: string, detalle: string, mujeres?: string, mujeresEvitar?: string, hombres?: string, hombresEvitar?: string }} dressCode

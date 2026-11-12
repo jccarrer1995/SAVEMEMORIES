@@ -8,6 +8,7 @@ import { asText } from '../../../shared/utils/asText.js'
 import { createDefaultBabyShowerContent } from '../data/defaultBabyShowerContent.js'
 import { createDefaultBodaContent } from '../data/defaultBodaContent.js'
 import { createDefaultDespedidaContent } from '../data/defaultDespedidaContent.js'
+import { createDefaultXvContent } from '../data/defaultXvContent.js'
 import { getTemplateFormFeatures } from '../data/templateOptions.js'
 import { cronogramaToText, textToCronograma } from '../utils/cronogramaText.js'
 import { applyLegacyDespedidaContent } from '../../invitations/templates/despedida/utils/legacyContent.js'
@@ -35,6 +36,17 @@ function buildContentFromForm(values) {
       direccion: values.recepcionDireccion.trim(),
       mapsUrl: values.recepcionMapsUrl.trim(),
     },
+    ...(getTemplateFormFeatures(values.templateId).showCeremonia
+      ? {
+          ceremonia: {
+            titulo: (values.ceremoniaTitulo ?? '').trim(),
+            hora: (values.ceremoniaHora ?? '').trim(),
+            lugar: (values.ceremoniaLugar ?? '').trim(),
+            direccion: (values.ceremoniaDireccion ?? '').trim(),
+            mapsUrl: (values.ceremoniaMapsUrl ?? '').trim(),
+          },
+        }
+      : {}),
     cronograma: getTemplateFormFeatures(values.templateId).editableCronograma
       ? textToCronograma(values.cronogramaTexto ?? '')
       : getDefaultContentForTemplate(values.templateId).cronograma,
@@ -69,6 +81,7 @@ export function projectToFormValues(project) {
     project.templateId === 'despedida' ? applyLegacyDespedidaContent(project.content) : project.content
   const padres = /** @type {{ novio?: string[], novia?: string[] }} */ (content.padres ?? {})
   const recepcion = /** @type {Record<string, string>} */ (content.recepcion ?? {})
+  const ceremonia = /** @type {Record<string, string>} */ (content.ceremonia ?? {})
   const regalos = /** @type {{ texto?: string }} */ (content.regalos ?? {})
   const dressCode = /** @type {{ estilo?: string, detalle?: string, mujeres?: string, mujeresEvitar?: string, hombres?: string, hombresEvitar?: string }} */ (
     content.dressCode ?? {}
@@ -98,6 +111,11 @@ export function projectToFormValues(project) {
     recepcionLugar: recepcion.lugar ?? '',
     recepcionDireccion: recepcion.direccion ?? '',
     recepcionMapsUrl: recepcion.mapsUrl ?? '',
+    ceremoniaTitulo: ceremonia.titulo ?? '',
+    ceremoniaHora: ceremonia.hora ?? '',
+    ceremoniaLugar: ceremonia.lugar ?? '',
+    ceremoniaDireccion: ceremonia.direccion ?? '',
+    ceremoniaMapsUrl: ceremonia.mapsUrl ?? '',
     regalosTexto: regalos.texto ?? '',
     cronogramaTexto: cronogramaToText(content.cronograma),
     dressCodeEstilo: dressCode.estilo ?? '',
@@ -119,6 +137,7 @@ export function projectToFormValues(project) {
 function getDefaultContentForTemplate(templateId) {
   if (templateId === 'babyshower') return createDefaultBabyShowerContent()
   if (templateId === 'despedida') return createDefaultDespedidaContent()
+  if (templateId === 'xv') return createDefaultXvContent()
   return createDefaultBodaContent()
 }
 

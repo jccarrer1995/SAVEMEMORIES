@@ -2,6 +2,9 @@
 
 /** Ícono según palabras clave de la actividad. */
 const ICON_RULES = [
+  { icon: 'church', pattern: /misa|iglesia|ceremonia|bendici/i },
+  { icon: 'waltz', pattern: /vals|entrada|coronaci|zapatill/i },
+  { icon: 'cake', pattern: /pastel|torta|brindis de honor/i },
   { icon: 'glasses', pattern: /brind|llegad|bienven|cocktail|coctel|trago/i },
   { icon: 'people', pattern: /juego|reto|dinámica|dinamica|karaoke/i },
   { icon: 'dinner', pattern: /cena|comida|almuerzo|pizza|snack|picad/i },

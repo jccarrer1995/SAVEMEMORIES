@@ -214,6 +214,30 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
         </div>
       </section>
 
+      {features.showCeremonia ? (
+        <section className="panel-form-section">
+          <h2 className="panel-form-heading">Ceremonia</h2>
+          <div className="panel-form-grid">
+            {[
+              { field: 'ceremoniaTitulo', label: 'Título ceremonia', type: 'text' },
+              { field: 'ceremoniaHora', label: 'Hora', type: 'text' },
+              { field: 'ceremoniaLugar', label: 'Lugar (iglesia)', type: 'text' },
+              { field: 'ceremoniaDireccion', label: 'Dirección', type: 'text' },
+              { field: 'ceremoniaMapsUrl', label: 'URL Google Maps', type: 'url' },
+            ].map((item) => (
+              <label key={item.field} className="panel-field">
+                <span>{item.label}</span>
+                <input
+                  type={item.type}
+                  value={values[item.field] ?? ''}
+                  onChange={(e) => updateField(item.field, e.target.value)}
+                />
+              </label>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <section className="panel-form-section">
         <h2 className="panel-form-heading">Recepción y detalles</h2>
         <div className="panel-form-grid">
@@ -260,11 +284,11 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
           {features.showPadres ? (
             <>
               <label className="panel-field panel-field--wide">
-                <span>Padres del novio (una línea por persona)</span>
+                <span>{features.padresNovioLabel}</span>
                 <textarea value={values.padresNovio} onChange={(e) => updateField('padresNovio', e.target.value)} rows={2} />
               </label>
               <label className="panel-field panel-field--wide">
-                <span>Padres de la novia (una línea por persona)</span>
+                <span>{features.padresNoviaLabel}</span>
                 <textarea value={values.padresNovia} onChange={(e) => updateField('padresNovia', e.target.value)} rows={2} />
               </label>
             </>
@@ -279,10 +303,10 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
           </label>
           {features.editableCronograma ? (
             <label className="panel-field panel-field--wide">
-              <span>Plan de la noche (una línea por momento: hora - actividad)</span>
+              <span>{features.cronogramaLabel}</span>
               <textarea
                 value={values.cronogramaTexto}
-                placeholder={'18:00 - Llegada y brindis\n19:00 - Juegos y retos\n20:00 - Cena'}
+                placeholder={features.cronogramaPlaceholder}
                 onChange={(e) => updateField('cronogramaTexto', e.target.value)}
                 rows={5}
               />

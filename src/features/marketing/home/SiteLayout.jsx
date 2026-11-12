@@ -1,25 +1,9 @@
 import { MotionConfig } from 'framer-motion'
-import { useEffect } from 'react'
 import { HomeFooter } from './HomeFooter.jsx'
 import { HomeHeader } from './HomeHeader.jsx'
-import { HOME_FONTS_HREF } from './homeMedia.js'
+import { useSiteFonts } from './useSiteFonts.js'
 import './home.css'
 import './site-pages.css'
-
-function useSiteFonts() {
-  useEffect(() => {
-    if (document.getElementById('home-fonts')) return
-    const preconnect = document.createElement('link')
-    preconnect.rel = 'preconnect'
-    preconnect.href = 'https://fonts.gstatic.com'
-    preconnect.crossOrigin = ''
-    const link = document.createElement('link')
-    link.id = 'home-fonts'
-    link.rel = 'stylesheet'
-    link.href = HOME_FONTS_HREF
-    document.head.append(preconnect, link)
-  }, [])
-}
 
 /**
  * Estructura pública del sitio (home, acceso y páginas legales): header, contenido y footer.

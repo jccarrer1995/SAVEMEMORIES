@@ -1,0 +1,428 @@
+/* Simulación de mesas · estilo del home (aislado bajo .msim) */
+
+.msim {
+  --paper: #f4efe6;
+  --paper-2: #ebe3d5;
+  --card: #fbf8f2;
+  --ink: #1d211b;
+  --ink-soft: #5b5f55;
+  --olive-deep: #252c21;
+  --clay: #b0603b;
+  --line: rgba(29, 33, 27, 0.12);
+  --line-light: rgba(244, 239, 230, 0.16);
+  --serif: 'Instrument Serif', 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Geist', 'Outfit', system-ui, sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  color: var(--ink);
+  font-family: var(--sans);
+}
+
+:where(.msim) button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.msim :focus-visible {
+  outline: 2px solid var(--clay);
+  outline-offset: 2px;
+}
+
+/* ── Resumen ────────────────────────────────────────────── */
+.msim-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--card);
+  overflow: hidden;
+}
+
+.msim-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 1rem 1.25rem;
+}
+
+.msim-stat + .msim-stat {
+  border-left: 1px solid var(--line);
+}
+
+.msim-stat-value {
+  font-family: var(--serif);
+  font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+  line-height: 1;
+}
+
+.msim-stat-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.msim-stat.is-warn .msim-stat-value {
+  color: var(--clay);
+}
+
+/* ── Invitados por lado ─────────────────────────────────── */
+.msim-sides {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.msim-side {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--card);
+  overflow: hidden;
+}
+
+.msim-side-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 1rem 1.15rem;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  text-align: left;
+}
+
+.msim-side-title {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  line-height: 1.1;
+}
+
+.msim-side-total {
+  margin-left: auto;
+  min-width: 2.4rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: var(--olive-deep);
+  color: var(--paper);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.msim-side-icon {
+  position: relative;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+.msim-side-icon::before,
+.msim-side-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 1.5px;
+  background: var(--ink);
+  transform: translate(-50%, -50%);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.msim-side-icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.msim-side.is-open .msim-side-icon::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.msim-side-panel {
+  padding: 0 1.15rem 1rem;
+}
+
+.msim-side-panel dl {
+  display: grid;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.msim-side-panel dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.9rem;
+}
+
+.msim-side-panel dt,
+.msim-side-panel dd {
+  margin: 0;
+}
+
+.msim-side-panel dt {
+  color: var(--ink-soft);
+}
+
+.msim-side-panel dd {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.msim-side-note {
+  margin: 0.6rem 0 0;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.msim-hint,
+.msim-footnote {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+/* ── Mesas ──────────────────────────────────────────────── */
+.msim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18.5rem), 1fr));
+  gap: 1rem;
+}
+
+.msim-card {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: var(--card);
+}
+
+.msim-stage {
+  position: relative;
+  padding: 1rem 1rem 1.25rem;
+  border-radius: 20px;
+  background: var(--olive-deep);
+  color: var(--paper);
+}
+
+.msim-stage-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.msim-tag {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--line-light);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 230, 0.8);
+}
+
+.msim-stage-total {
+  font-size: 0.8rem;
+  color: rgba(244, 239, 230, 0.7);
+}
+
+.msim-round {
+  position: relative;
+  width: min(100%, 240px);
+  aspect-ratio: 1;
+  margin: 0.75rem auto 0;
+}
+
+.msim-table {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-light);
+  border-radius: 50%;
+  background: rgba(244, 239, 230, 0.06);
+  box-shadow: 0 0 0 10px rgba(244, 239, 230, 0.025);
+}
+
+.msim-table-kicker {
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 230, 0.55);
+}
+
+.msim-table-number {
+  max-width: 90%;
+  overflow: hidden;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.msim-seat {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--olive-deep);
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+}
+
+.msim-seat.is-dimmed {
+  opacity: 0.22;
+}
+
+.msim-seat.is-focus {
+  box-shadow:
+    0 0 0 2px var(--olive-deep),
+    0 0 0 4px rgba(244, 239, 230, 0.85);
+}
+
+/* ── Lista de invitados de la mesa ──────────────────────── */
+.msim-guests {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 8px 0 0;
+  list-style: none;
+}
+
+.msim-guest {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  transition: background-color 0.25s ease;
+}
+
+.msim-guest:hover,
+.msim-guest.is-focus {
+  background: var(--paper-2);
+}
+
+.msim-guest-dot {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(29, 33, 27, 0.12);
+}
+
+.msim-guest-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.msim-guest-name {
+  overflow: hidden;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.msim-guest .mesa-simulation-guest-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.msim-guest .panel-pill--tag {
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.66rem;
+}
+
+.msim-guest-count {
+  flex: none;
+  min-width: 1.9rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  line-height: 1.3;
+  text-align: center;
+}
+
+/* ── Vacío ──────────────────────────────────────────────── */
+.msim-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 2.5rem 1.5rem;
+  border: 1px dashed rgba(29, 33, 27, 0.22);
+  border-radius: 24px;
+  background: var(--card);
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.msim-empty p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.msim-empty .msim-empty-title {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  color: var(--ink);
+}
+
+.msim-empty-art {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 0.5rem;
+  color: var(--ink-soft);
+}
+
+@media (min-width: 700px) {
+  .msim-sides {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .msim-stat {
+    padding: 0.85rem 0.8rem;
+  }
+
+  .msim-stat-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msim * {
+    transition-duration: 0.001ms !important;
+  }
+}

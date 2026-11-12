@@ -20,7 +20,6 @@ export function createDefaultDespedidaContent() {
       { id: 'llegada', hora: '20:00', label: 'Llegada y brindis', icon: 'glasses' },
       { id: 'juegos', hora: '21:00', label: 'Juegos y retos', icon: 'people' },
       { id: 'cena', hora: '22:00', label: 'Cena', icon: 'dinner' },
-      { id: 'baile', hora: '23:30', label: 'A bailar', icon: 'music' },
       { id: 'after', hora: '02:00', label: 'After (si aguantas)', icon: 'clock' },
     ],
     regalos: {
@@ -29,7 +28,6 @@ export function createDefaultDespedidaContent() {
         'Tu bebida favorita 🍾',
         'Un accesorio rosa 💖',
         'Batería del celular al 100% 🔋',
-        'Ganas de bailar toda la noche 💃',
       ].join('\n'),
     },
     dressCode: { estilo: '', detalle: '' },

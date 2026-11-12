@@ -30,7 +30,7 @@ export function HeroSection() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.15 }}
         >
-          Noche de chicas
+          Noche de chic@s
         </motion.span>
 
         <motion.p
@@ -89,7 +89,7 @@ export function HeroSection() {
 
       <Marquee
         className="relative z-[3] -mb-px rotate-[-2deg] scale-[1.06] bg-[#2a0f2e] text-[#cdf564]"
-        items={['Soltera hasta el final', 'Lo que pasa aquí, se queda aquí', 'Noche de chicas']}
+        items={['Soltera hasta el final', 'Lo que pasa aquí, se queda aquí', 'Noche de chic@s']}
       />
     </header>
   )

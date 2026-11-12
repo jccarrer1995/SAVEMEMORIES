@@ -277,6 +277,17 @@ export function ProjectForm({ initialValues, isNew, onSubmit }) {
               rows={features.showPadres ? 2 : 5}
             />
           </label>
+          {features.editableCronograma ? (
+            <label className="panel-field panel-field--wide">
+              <span>Plan de la noche (una línea por momento: hora - actividad)</span>
+              <textarea
+                value={values.cronogramaTexto}
+                placeholder={'18:00 - Llegada y brindis\n19:00 - Juegos y retos\n20:00 - Cena'}
+                onChange={(e) => updateField('cronogramaTexto', e.target.value)}
+                rows={5}
+              />
+            </label>
+          ) : null}
           {features.showDressCode ? (
           <>
           <label className="panel-field">

@@ -20,6 +20,7 @@ export function getTemplateFormFeatures(templateId) {
       showDressCode: false,
       showNinos: false,
       regalosLabel: 'Traer (una cosa por línea: snacks, bebidas…)',
+      editableCronograma: true,
     }
   }
 
@@ -29,6 +30,7 @@ export function getTemplateFormFeatures(templateId) {
     showDressCode: true,
     showNinos: true,
     regalosLabel: 'Regalos',
+    editableCronograma: false,
   }
 }
 

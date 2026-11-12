@@ -38,6 +38,7 @@
  * @property {string} recepcionDireccion
  * @property {string} recepcionMapsUrl
  * @property {string} regalosTexto
+ * @property {string} cronogramaTexto
  * @property {string} dressCodeEstilo
  * @property {string} dressCodeDetalle
  * @property {string} dressCodeMujeres

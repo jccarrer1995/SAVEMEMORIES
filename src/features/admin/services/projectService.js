@@ -8,6 +8,8 @@ import { asText } from '../../../shared/utils/asText.js'
 import { createDefaultBabyShowerContent } from '../data/defaultBabyShowerContent.js'
 import { createDefaultBodaContent } from '../data/defaultBodaContent.js'
 import { createDefaultDespedidaContent } from '../data/defaultDespedidaContent.js'
+import { getTemplateFormFeatures } from '../data/templateOptions.js'
+import { cronogramaToText, textToCronograma } from '../utils/cronogramaText.js'
 import { joinFechaIso, splitFechaIso } from '../utils/eventDateTime.js'
 
 /**
@@ -32,7 +34,9 @@ function buildContentFromForm(values) {
       direccion: values.recepcionDireccion.trim(),
       mapsUrl: values.recepcionMapsUrl.trim(),
     },
-    cronograma: getDefaultContentForTemplate(values.templateId).cronograma,
+    cronograma: getTemplateFormFeatures(values.templateId).editableCronograma
+      ? textToCronograma(values.cronogramaTexto ?? '')
+      : getDefaultContentForTemplate(values.templateId).cronograma,
     regalos: { texto: values.regalosTexto.trim() },
     dressCode: {
       estilo: values.dressCodeEstilo.trim(),
@@ -93,6 +97,7 @@ export function projectToFormValues(project) {
     recepcionDireccion: recepcion.direccion ?? '',
     recepcionMapsUrl: recepcion.mapsUrl ?? '',
     regalosTexto: regalos.texto ?? '',
+    cronogramaTexto: cronogramaToText(content.cronograma),
     dressCodeEstilo: dressCode.estilo ?? '',
     dressCodeDetalle: dressCode.detalle ?? '',
     dressCodeMujeres: dressCode.mujeres ?? '',

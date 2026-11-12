@@ -6,6 +6,7 @@ import { getAuthErrorMessage } from '../utils/authErrors.js'
 export function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -31,44 +32,53 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="login-email" className="block text-left text-xs tracking-wide text-[#8b5e4b]">
-          Correo
-        </label>
+    <form onSubmit={handleSubmit} className="sm-form" noValidate>
+      <div className="sm-field">
+        <label htmlFor="login-email">Correo</label>
         <input
           id="login-email"
           type="email"
           autoComplete="email"
-          className="mt-1 w-full rounded-xl border border-[rgba(201,123,92,0.25)] bg-white/80 px-4 py-2.5 text-sm text-[#5c3a2e] outline-none focus:border-[#c97b5c]"
+          inputMode="email"
+          placeholder="tu@correo.com"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
+          aria-invalid={Boolean(error) || undefined}
           required
         />
       </div>
 
-      <div>
-        <label htmlFor="login-password" className="block text-left text-xs tracking-wide text-[#8b5e4b]">
-          Contraseña
-        </label>
-        <input
-          id="login-password"
-          type="password"
-          autoComplete="current-password"
-          className="mt-1 w-full rounded-xl border border-[rgba(201,123,92,0.25)] bg-white/80 px-4 py-2.5 text-sm text-[#5c3a2e] outline-none focus:border-[#c97b5c]"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          required
-        />
+      <div className="sm-field">
+        <label htmlFor="login-password">Contraseña</label>
+        <div className="sm-field-row">
+          <input
+            id="login-password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            aria-invalid={Boolean(error) || undefined}
+            required
+          />
+          <button
+            type="button"
+            className="sm-field-toggle"
+            onClick={() => setShowPassword((value) => !value)}
+            aria-pressed={showPassword}
+          >
+            {showPassword ? 'Ocultar' : 'Mostrar'}
+          </button>
+        </div>
       </div>
 
-      {error ? <p className="text-left text-xs text-red-700">{error}</p> : null}
+      {error ? (
+        <p className="sm-form-error" role="alert">
+          {error}
+        </p>
+      ) : null}
 
-      <button
-        type="submit"
-        disabled={submitting}
-        className="marketing-btn-primary w-full rounded-full px-6 py-3 text-sm font-medium disabled:opacity-60"
-      >
+      <button type="submit" disabled={submitting} className="sm-btn sm-btn--block">
         {submitting ? 'Ingresando…' : 'Iniciar sesión'}
       </button>
     </form>

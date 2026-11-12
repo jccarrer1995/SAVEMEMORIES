@@ -1,13 +1,18 @@
+import { motion } from 'framer-motion'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { LEGAL_MENU_LINKS } from '../../marketing/data/legalMeta.js'
 import { MarketingLayout } from '../../marketing/components/MarketingLayout.jsx'
+import { Photo, SplitText } from '../../marketing/home/HomeMotion.jsx'
+import { EASE, IMAGES } from '../../marketing/home/homeMedia.js'
 import { useMarketingFonts } from '../../marketing/hooks/useMarketingFonts.js'
 import { LoginForm } from '../components/LoginForm.jsx'
 import { AuthLoadingScreen } from '../components/AuthLoadingScreen.jsx'
 import { useAuth } from '../hooks/useAuth.js'
 import { getHomePathForRole, isPathAllowedForRole } from '../utils/roleRedirects.js'
+
+const PANEL_POINTS = ['Enlaces por invitado', 'Confirmaciones en vivo', 'Mesas y exportación a Excel']
 
 export function LoginPage() {
   useMarketingFonts('Acceso · SAVEMEMORIES')
@@ -39,40 +44,73 @@ export function LoginPage() {
 
   return (
     <MarketingLayout>
-      <section className="mx-auto flex min-h-[70dvh] max-w-md flex-col justify-center px-6 py-16">
-        <div className="marketing-card rounded-2xl p-8">
-          <p className="marketing-kicker text-xs uppercase">Acceso</p>
-          <h1 className="marketing-serif mt-3 text-3xl text-[#5c3a2e]">Inicia sesión</h1>
-          <p className="marketing-muted mt-3 text-sm leading-relaxed">
-            Panel para administradores y clientes con invitaciones activas.
-          </p>
-
-          {!isConfigured ? (
-            <p className="marketing-muted mt-6 rounded-xl border border-dashed border-[rgba(201,123,92,0.35)] bg-white/50 p-4 text-sm">
-              Firebase no está configurado en este entorno. En local usa <code>.env</code>; en
-              producción configura los secrets <code>VITE_FIREBASE_*</code> en GitHub y vuelve a
-              desplegar.
-            </p>
-          ) : (
-            <div className="mt-8">
-              <LoginForm />
-            </div>
-          )}
-
-          <div className="mt-6 flex flex-col items-center gap-3 text-center">
-            <Link
-              to="/"
-              className="marketing-link text-sm font-medium underline-offset-2 hover:underline"
+      <section className="sm-auth">
+        <div className="sm-container sm-auth-grid">
+          <motion.aside
+            className="sm-auth-media"
+            initial={{ clipPath: 'inset(100% 0 0 0 round 999px 999px 28px 28px)' }}
+            animate={{ clipPath: 'inset(0% 0 0 0 round 999px 999px 28px 28px)' }}
+            transition={{ duration: 1.3, ease: EASE }}
+          >
+            <Photo img={IMAGES.bouquet} eager sizes="(min-width: 1024px) 40vw, 90vw" />
+            <motion.div
+              className="sm-auth-note"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: EASE, delay: 0.7 }}
             >
-              Volver al inicio
-            </Link>
-            <p className="marketing-muted flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs">
-              {LEGAL_MENU_LINKS.map((link) => (
-                <Link key={link.to} to={link.to} className="marketing-link">
-                  {link.label}
+              <p className="sm-display">Todo tu evento, en un solo panel.</p>
+              <ul>
+                {PANEL_POINTS.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+            </motion.div>
+          </motion.aside>
+
+          <div className="sm-auth-panel">
+            <motion.p
+              className="sm-eyebrow"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: EASE }}
+            >
+              <span className="sm-dot" /> Acceso clientes
+            </motion.p>
+            <h1 className="sm-display sm-h2">
+              <SplitText text="Bienvenido *de vuelta.*" delay={0.1} />
+            </h1>
+            <motion.div
+              className="sm-auth-body"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: EASE, delay: 0.45 }}
+            >
+              <p className="sm-lead">Panel para administradores y clientes con invitaciones activas.</p>
+
+              {!isConfigured ? (
+                <p className="sm-notice">
+                  Firebase no está configurado en este entorno. En local usa <code>.env</code>; en
+                  producción configura los secrets <code>VITE_FIREBASE_*</code> en GitHub y vuelve a
+                  desplegar.
+                </p>
+              ) : (
+                <LoginForm />
+              )}
+
+              <div className="sm-auth-links">
+                <Link to="/" className="sm-inline-link">
+                  ← Volver al inicio
                 </Link>
-              ))}
-            </p>
+                <span>
+                  {LEGAL_MENU_LINKS.map((link) => (
+                    <Link key={link.to} to={link.to}>
+                      {link.label}
+                    </Link>
+                  ))}
+                </span>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>

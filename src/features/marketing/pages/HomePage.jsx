@@ -1,31 +1,34 @@
-import { MarketingContact } from '../components/MarketingContact.jsx'
-import { MarketingFaq } from '../components/MarketingFaq.jsx'
-import { MarketingFeatures } from '../components/MarketingFeatures.jsx'
-import { MarketingHero } from '../components/MarketingHero.jsx'
-import { MarketingLayout } from '../components/MarketingLayout.jsx'
-import { MarketingProcess } from '../components/MarketingProcess.jsx'
-import { MarketingTemplates } from '../components/MarketingTemplates.jsx'
-import { scrollToSection, useMarketingFonts } from '../hooks/useMarketingFonts.js'
 import { useEffect } from 'react'
+import { HomeContact } from '../home/HomeContact.jsx'
+import { HomeFaq } from '../home/HomeFaq.jsx'
+import { HomeFeatures } from '../home/HomeFeatures.jsx'
+import { HomeGallery } from '../home/HomeGallery.jsx'
+import { HomeHero } from '../home/HomeHero.jsx'
+import { HomeMarquee } from '../home/HomeMarquee.jsx'
+import { HomeProcess } from '../home/HomeProcess.jsx'
+import { HomeTemplates } from '../home/HomeTemplates.jsx'
+import { SiteLayout } from '../home/SiteLayout.jsx'
+import { scrollToSection } from '../hooks/useMarketingFonts.js'
 
 export function HomePage() {
-  useMarketingFonts('SAVEMEMORIES · Invitaciones digitales')
-
   useEffect(() => {
+    document.title = 'SAVEMEMORIES · Invitaciones digitales para bodas, XV años y baby shower'
     const hash = window.location.hash.replace('#', '')
     if (!hash) return
-    const timer = window.setTimeout(() => scrollToSection(hash), 120)
+    const timer = window.setTimeout(() => scrollToSection(hash), 160)
     return () => window.clearTimeout(timer)
   }, [])
 
   return (
-    <MarketingLayout>
-      <MarketingHero />
-      <MarketingFeatures />
-      <MarketingTemplates />
-      <MarketingProcess />
-      <MarketingFaq />
-      <MarketingContact />
-    </MarketingLayout>
+    <SiteLayout>
+      <HomeHero />
+      <HomeMarquee />
+      <HomeFeatures />
+      <HomeProcess />
+      <HomeTemplates />
+      <HomeGallery />
+      <HomeFaq />
+      <HomeContact />
+    </SiteLayout>
   )
 }

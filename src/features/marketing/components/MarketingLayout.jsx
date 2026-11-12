@@ -1,18 +1,10 @@
-import { MarketingDecor } from './MarketingDecor.jsx'
-import { MarketingFooter } from './MarketingFooter.jsx'
-import { MarketingHeader } from './MarketingHeader.jsx'
+import { SiteLayout } from '../home/SiteLayout.jsx'
 import '../styles/marketing.css'
 
 /**
+ * Layout público (acceso, legales). Usa la misma cabecera y pie que el home.
  * @param {{ children: import('react').ReactNode }} props
  */
 export function MarketingLayout({ children }) {
-  return (
-    <div className="marketing-page relative overflow-hidden font-[Outfit,sans-serif]">
-      <MarketingDecor />
-      <MarketingHeader />
-      <main className="relative z-10">{children}</main>
-      <MarketingFooter />
-    </div>
-  )
+  return <SiteLayout className="sm-subpage">{children}</SiteLayout>
 }

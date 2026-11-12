@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+  <head><script type="text/javascript">
+  var pathSegmentsToKeep = 1;
+  var l = window.location;
+  l.replace(
+    l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+    l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+    l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+    (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+    l.hash
+  );
+</script>
+    <meta charset="UTF-8" />
+    <script type="text/javascript">
+      (function (location) {
+        if (location.search[1] === '/') {
+          var decoded = location.search
+            .slice(1)
+            .split('&')
+            .map(function (segment) {
+              return segment.replace(/~and~/g, '&')
+            })
+            .join('?')
+          window.history.replaceState(null, null, location.pathname.slice(0, -1) + decoded + location.hash)
+        }
+      })(window.location)
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#24344d" />
+    <meta
+      name="description"
+      content="Invitaciones digitales para bodas, XV años y baby shower: enlace personal por invitado, confirmación de asistencia en vivo y panel para organizar tus mesas."
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>SAVEMEMORIES · Invitaciones digitales</title>
+
+    <!-- Vista previa al compartir (WhatsApp, Facebook, LinkedIn, X) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SAVEMEMORIES" />
+    <meta property="og:locale" content="es_EC" />
+    <meta property="og:url" content="https://savememories-prd.web.app/" />
+    <meta property="og:title" content="SAVEMEMORIES · Invitaciones digitales que nadie olvida" />
+    <meta
+      property="og:description"
+      content="Bodas, XV años y baby shower. Enlace personal por invitado, confirmación de asistencia en vivo y panel para organizar tus mesas."
+    />
+    <meta property="og:image" content="https://savememories-prd.web.app/og-image.jpg" />
+    <meta property="og:image:secure_url" content="https://savememories-prd.web.app/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SAVEMEMORIES: invitación digital de boda en un teléfono junto a una pareja de novios" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SAVEMEMORIES · Invitaciones digitales que nadie olvida" />
+    <meta
+      name="twitter:description"
+      content="Bodas, XV años y baby shower. Enlace personal por invitado y confirmación de asistencia en vivo."
+    />
+    <meta name="twitter:image" content="https://savememories-prd.web.app/og-image.jpg" />
+    <script type="module" crossorigin src="/SAVEMEMORIES/assets/index-MUnc5MpB.js"></script>
+    <link rel="stylesheet" crossorigin href="/SAVEMEMORIES/assets/index-CSuBfnWq.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

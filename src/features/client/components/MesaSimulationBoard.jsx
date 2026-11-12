@@ -1,48 +1,49 @@
-import { MotionConfig, motion } from 'framer-motion'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
 import { useId, useMemo, useState } from 'react'
 import { GuestLinkEtiquetasPills } from '../../admin/components/GuestLinkEtiquetasPills.jsx'
-import {
-  formatMesaSimulationHeading,
-  groupLinksByMesa,
-} from '../../admin/utils/guestLinkTableHelpers.js'
+import { groupLinksByMesa } from '../../admin/utils/guestLinkTableHelpers.js'
 import { summarizeGuestLinkTags } from '../../invitations/core/constants/guestLinkTags.js'
 import { useSiteFonts } from '../../marketing/home/useSiteFonts.js'
+import {
+  EMPTY_FILTERS,
+  GRUPO_FILTERS,
+  LADO_FILTERS,
+  buildToneMap,
+  countFilterOptions,
+  filterLinks,
+  hasActiveFilters,
+  mesaHeading,
+  mesaNumber,
+  peopleLabel,
+} from '../utils/mesaSimulationModel.js'
+import { PrintMesasButton } from './PrintMesasButton.jsx'
 import './mesa-simulation.css'
 
 const EASE = [0.22, 1, 0.36, 1]
-
-/** Tonos para distinguir cada grupo de invitados alrededor de la mesa. */
-const SEAT_TONES = ['#a8b096', '#c97a52', '#d8c7a6', '#8fa3ad', '#c99a8f', '#c9a55a', '#7f8c6a', '#b7a7c4']
-
-/** @param {number} count */
-function peopleLabel(count) {
-  return `${count} ${count === 1 ? 'persona' : 'personas'}`
-}
 
 /**
  * @param {{
  *   mesaLabel: string,
  *   guests: import('../../invitations/core/types/guestLink.js').GuestLinkRecord[],
  *   totalCupos: number,
- *   index: number,
+ *   tones: Record<string, string>,
  * }} props
  */
-function MesaCard({ mesaLabel, guests, totalCupos, index }) {
+function MesaCard({ mesaLabel, guests, totalCupos, tones }) {
   const [focusId, setFocusId] = useState(/** @type {string | null} */ (null))
-  const heading = formatMesaSimulationHeading(mesaLabel).replace('#', ' ')
-  const tableNumber = heading.replace(/^Mesa\s*/i, '') || mesaLabel
+  const heading = mesaHeading(mesaLabel)
 
   /** Un asiento por persona, agrupados por enlace de invitado. */
   const seats = useMemo(() => {
     const list = []
-    guests.forEach((guest, guestIndex) => {
+    for (const guest of guests) {
       const count = Math.max(0, Number(guest.cupos) || 0)
       for (let seat = 0; seat < count; seat += 1) {
-        list.push({ guestId: guest.id, tone: SEAT_TONES[guestIndex % SEAT_TONES.length] })
+        list.push({ guestId: guest.id, tone: tones[guest.id] })
       }
-    })
+    }
     return list
-  }, [guests])
+  }, [guests, tones])
 
   const total = seats.length
   const seatSize = Math.min(13, ((2 * Math.PI * 42) / Math.max(total, 1)) * 0.68)
@@ -50,11 +51,12 @@ function MesaCard({ mesaLabel, guests, totalCupos, index }) {
 
   return (
     <motion.article
+      layout
       className="msim-card"
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '0px 0px -8% 0px' }}
-      transition={{ duration: 0.7, ease: EASE, delay: Math.min(index, 6) * 0.05 }}
+      initial={{ opacity: 0, y: 24, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.25 } }}
+      transition={{ duration: 0.55, ease: EASE }}
     >
       <div className="msim-stage">
         <div className="msim-stage-head">
@@ -65,7 +67,7 @@ function MesaCard({ mesaLabel, guests, totalCupos, index }) {
         <div className="msim-round" role="img" aria-label={`${heading}: ${peopleLabel(totalCupos)}`}>
           <span className="msim-table" style={{ inset: `${tableInset}%` }}>
             <span className="msim-table-kicker">Mesa</span>
-            <span className="msim-table-number">{tableNumber}</span>
+            <span className="msim-table-number">{mesaNumber(mesaLabel)}</span>
           </span>
           {seats.map((seat, seatIndex) => {
             const angle = (seatIndex / total) * Math.PI * 2 - Math.PI / 2
@@ -75,17 +77,19 @@ function MesaCard({ mesaLabel, guests, totalCupos, index }) {
                 key={`${seat.guestId}-${seatIndex}`}
                 className={`msim-seat ${dimmed ? 'is-dimmed' : ''} ${focusId === seat.guestId ? 'is-focus' : ''}`}
                 style={{
-                  left: `${50 + Math.cos(angle) * 42}%`,
-                  top: `${50 + Math.sin(angle) * 42}%`,
                   width: `${seatSize}%`,
                   background: seat.tone,
                   x: '-50%',
                   y: '-50%',
                 }}
                 initial={{ scale: 0, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.15 + seatIndex * 0.035, duration: 0.45, ease: EASE }}
+                animate={{
+                  scale: 1,
+                  opacity: 1,
+                  left: `${50 + Math.cos(angle) * 42}%`,
+                  top: `${50 + Math.sin(angle) * 42}%`,
+                }}
+                transition={{ delay: 0.1 + seatIndex * 0.03, duration: 0.45, ease: EASE }}
               />
             )
           })}
@@ -93,7 +97,7 @@ function MesaCard({ mesaLabel, guests, totalCupos, index }) {
       </div>
 
       <ul className="msim-guests" onMouseLeave={() => setFocusId(null)}>
-        {guests.map((guest, guestIndex) => (
+        {guests.map((guest) => (
           <li key={guest.id}>
             <button
               type="button"
@@ -104,7 +108,7 @@ function MesaCard({ mesaLabel, guests, totalCupos, index }) {
               onClick={() => setFocusId((value) => (value === guest.id ? null : guest.id))}
               aria-pressed={focusId === guest.id}
             >
-              <span className="msim-guest-dot" style={{ background: SEAT_TONES[guestIndex % SEAT_TONES.length] }} />
+              <span className="msim-guest-dot" style={{ background: tones[guest.id] }} />
               <span className="msim-guest-body">
                 <span className="msim-guest-name">{guest.guestLabel}</span>
                 <GuestLinkEtiquetasPills link={guest} hideWhenEmpty variant="simulation" />
@@ -161,20 +165,61 @@ function TagSideCard({ title, total, ambos, rows }) {
 }
 
 /**
- * Simulación visual de mesas (presentación). Recibe los enlaces ya cargados.
- * @param {{ links: import('../../invitations/core/types/guestLink.js').GuestLinkRecord[] }} props
+ * @param {{
+ *   label: string,
+ *   count: number,
+ *   active: boolean,
+ *   onClick: () => void,
+ * }} props
  */
-export function MesaSimulationBoard({ links }) {
+function FilterChip({ label, count, active, onClick }) {
+  return (
+    <button
+      type="button"
+      className={`msim-chip ${active ? 'is-active' : ''} ${count === 0 && !active ? 'is-empty' : ''}`}
+      aria-pressed={active}
+      onClick={onClick}
+    >
+      {label}
+      <span className="msim-chip-count">{count}</span>
+    </button>
+  )
+}
+
+/**
+ * Simulación visual de mesas (presentación). Recibe los enlaces ya cargados.
+ * @param {{
+ *   links: import('../../invitations/core/types/guestLink.js').GuestLinkRecord[],
+ *   event?: { title: string, subtitle?: string, fileName: string },
+ * }} props
+ */
+export function MesaSimulationBoard({ links, event }) {
   useSiteFonts()
-  const mesaGroups = useMemo(() => groupLinksByMesa(links), [links])
+  const [filters, setFilters] = useState(EMPTY_FILTERS)
+
+  const tones = useMemo(() => buildToneMap(links), [links])
   const tagSummary = useMemo(() => summarizeGuestLinkTags(links), [links])
+  const optionCounts = useMemo(() => countFilterOptions(links, filters), [links, filters])
+  const visibleLinks = useMemo(() => filterLinks(links, filters), [links, filters])
+  const mesaGroups = useMemo(() => groupLinksByMesa(visibleLinks), [visibleLinks])
+
+  const isFiltered = hasActiveFilters(filters)
+  const totalMesas = useMemo(() => groupLinksByMesa(links).length, [links])
   const seated = mesaGroups.reduce((sum, group) => sum + group.totalCupos, 0)
   const linksWithoutMesa = links.filter((link) => !link.mesa?.trim()).length
   const hasTagSummary = tagSummary.novia.total > 0 || tagSummary.novio.total > 0
 
+  const toggleGrupo = (id) =>
+    setFilters((current) => ({
+      ...current,
+      grupos: current.grupos.includes(id)
+        ? current.grupos.filter((value) => value !== id)
+        : [...current.grupos, id],
+    }))
+
   const stats = [
-    { label: 'Mesas', value: mesaGroups.length },
-    { label: 'Personas ubicadas', value: seated },
+    { label: isFiltered ? `Mesas (de ${totalMesas})` : 'Mesas', value: mesaGroups.length },
+    { label: isFiltered ? 'Personas filtradas' : 'Personas ubicadas', value: seated },
     { label: 'Enlaces sin mesa', value: linksWithoutMesa, warn: linksWithoutMesa > 0 },
   ]
 
@@ -197,7 +242,63 @@ export function MesaSimulationBoard({ links }) {
           </div>
         ) : null}
 
-        {mesaGroups.length === 0 ? (
+        {totalMesas > 0 ? (
+          <div className="msim-toolbar">
+            <div className="msim-filters" role="group" aria-label="Filtros de invitados">
+              <div className="msim-filter-row">
+                <span className="msim-filter-label">Lado</span>
+                <div className="msim-segment">
+                  {LADO_FILTERS.map((option) => (
+                    <FilterChip
+                      key={option.id}
+                      label={option.label}
+                      count={optionCounts.lado[option.id] ?? 0}
+                      active={filters.lado === option.id}
+                      onClick={() => setFilters((current) => ({ ...current, lado: option.id }))}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="msim-filter-row">
+                <span className="msim-filter-label">Grupo</span>
+                <div className="msim-segment">
+                  <FilterChip
+                    label="Todos"
+                    count={optionCounts.grupo.todos ?? 0}
+                    active={filters.grupos.length === 0}
+                    onClick={() => setFilters((current) => ({ ...current, grupos: [] }))}
+                  />
+                  {GRUPO_FILTERS.map((option) => (
+                    <FilterChip
+                      key={option.id}
+                      label={option.label}
+                      count={optionCounts.grupo[option.id] ?? 0}
+                      active={filters.grupos.includes(option.id)}
+                      onClick={() => toggleGrupo(option.id)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="msim-toolbar-actions">
+              {isFiltered ? (
+                <button type="button" className="msim-clear" onClick={() => setFilters(EMPTY_FILTERS)}>
+                  Limpiar filtros
+                </button>
+              ) : null}
+              <PrintMesasButton
+                groups={mesaGroups}
+                tones={tones}
+                filters={filters}
+                event={event}
+                disabled={mesaGroups.length === 0}
+              />
+            </div>
+          </div>
+        ) : null}
+
+        {totalMesas === 0 ? (
           <div className="msim-empty">
             <svg className="msim-empty-art" viewBox="0 0 64 64" aria-hidden>
               <circle cx="32" cy="32" r="13" fill="none" stroke="currentColor" strokeWidth="1.2" />
@@ -223,24 +324,36 @@ export function MesaSimulationBoard({ links }) {
               Cada punto es una persona; los colores agrupan a cada enlace. Pasa el cursor o toca un
               invitado para resaltar sus lugares.
             </p>
-            <div className="msim-grid">
-              {mesaGroups.map((group, index) => (
-                <MesaCard
-                  key={group.mesaLabel}
-                  index={index}
-                  mesaLabel={group.mesaLabel}
-                  guests={group.guests}
-                  totalCupos={group.totalCupos}
-                />
-              ))}
-            </div>
+            {mesaGroups.length === 0 ? (
+              <div className="msim-empty">
+                <p className="msim-empty-title">Nadie coincide con estos filtros</p>
+                <p>Prueba con otra combinación o limpia los filtros.</p>
+                <button type="button" className="msim-clear" onClick={() => setFilters(EMPTY_FILTERS)}>
+                  Limpiar filtros
+                </button>
+              </div>
+            ) : null}
+            <motion.div layout className="msim-grid">
+              <AnimatePresence mode="popLayout" initial={false}>
+                {mesaGroups.map((group) => (
+                  <MesaCard
+                    key={group.mesaLabel}
+                    mesaLabel={group.mesaLabel}
+                    guests={group.guests}
+                    totalCupos={group.totalCupos}
+                    tones={tones}
+                  />
+                ))}
+              </AnimatePresence>
+            </motion.div>
           </>
         )}
 
-        {linksWithoutMesa > 0 && mesaGroups.length > 0 ? (
+        {linksWithoutMesa > 0 && totalMesas > 0 ? (
           <p className="msim-footnote">
-            {linksWithoutMesa} {linksWithoutMesa === 1 ? 'enlace sin mesa no aparece' : 'enlaces sin mesa no aparecen'}{' '}
-            en esta simulación.
+            {linksWithoutMesa}{' '}
+            {linksWithoutMesa === 1 ? 'enlace sin mesa no aparece' : 'enlaces sin mesa no aparecen'} en
+            esta simulación.
           </p>
         ) : null}
       </div>

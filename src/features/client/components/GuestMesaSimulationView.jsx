@@ -4,9 +4,13 @@ import { listGuestLinks } from '../services/clientProjectService.js'
 import { MesaSimulationBoard } from './MesaSimulationBoard.jsx'
 
 /**
- * @param {{ projectId: string, backHref: string }} props
+ * @param {{
+ *   projectId: string,
+ *   backHref: string,
+ *   event?: { title: string, subtitle?: string, fileName: string },
+ * }} props
  */
-export function GuestMesaSimulationView({ projectId, backHref }) {
+export function GuestMesaSimulationView({ projectId, backHref, event }) {
   const [links, setLinks] = useState(
     /** @type {import('../../invitations/core/types/guestLink.js').GuestLinkRecord[]} */ ([]),
   )
@@ -32,7 +36,7 @@ export function GuestMesaSimulationView({ projectId, backHref }) {
 
       {error ? <p className="panel-form-error">{error}</p> : null}
       {loading ? <p className="marketing-muted text-sm">Cargando simulación…</p> : null}
-      {!loading && !error ? <MesaSimulationBoard links={links} /> : null}
+      {!loading && !error ? <MesaSimulationBoard links={links} event={event} /> : null}
     </div>
   )
 }
